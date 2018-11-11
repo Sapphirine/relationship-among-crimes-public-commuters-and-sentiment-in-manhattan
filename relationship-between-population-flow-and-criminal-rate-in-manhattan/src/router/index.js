@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import CriminalMap from '@/components/CriminalMap'
+import HomePage from '@/components/index'
+
+import UsStateDemo from '@/_demo/us_state/index'
 
 Vue.use(Router)
 
@@ -9,13 +10,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'home Page',
+      component: HomePage
     },
     {
-      path: '/criminalmap',
-      name: 'CriminalMap',
-      component: CriminalMap
+      path: '/index',
+      name: 'Index Page',
+      component: HomePage
+    },
+    {
+      path: '/demo/us-state',
+      name: 'Us Map Demo',
+      component: UsStateDemo
     },
   ]
 })

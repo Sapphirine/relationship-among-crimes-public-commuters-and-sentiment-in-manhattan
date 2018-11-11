@@ -10,8 +10,13 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "ajv-keywords": "^3.2.0",
     "d3": "^5.7.0",
+    "d3-queue": "^3.0.7",
+    "lodash": "^4.17.11",
+    "topojson": "^3.0.2",
     "vue": "^2.5.2",
+    "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
