@@ -17,7 +17,7 @@ export default {
     var projection = d3.geoAlbersUsa();
     var path = d3.geoPath().projection(projection);
 
-    d3.json("static/data/us.json")
+    d3.json("static/demo_data/us-state/us.json")
       .then(function(us) {
       var g = svg.append('g');
         g

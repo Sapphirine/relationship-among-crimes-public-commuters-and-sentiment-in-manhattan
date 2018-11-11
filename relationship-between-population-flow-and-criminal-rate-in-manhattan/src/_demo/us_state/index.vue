@@ -30,7 +30,7 @@ Data:
 const map = require('./map.vue').default;
 const tooltip = require('./tooltip.vue').default;
 
-const STATES_DATA_PATH = 'static/data/states-data.csv';
+const STATES_DATA_PATH = 'static/demo_data/us-state/states-data.csv';
 
 // lets load with vue-resource, but parse with d3
 // just because we can
