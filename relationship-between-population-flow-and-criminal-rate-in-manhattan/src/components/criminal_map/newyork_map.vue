@@ -36,13 +36,21 @@ export default {
           .attr("d", path)
           .classed("precinct", true)
           .on('mouseover', function(d) {
+            d3.select(this).transition().duration(500).style("stroke-width", 3).style("stroke-opacity", .5);
             that.$emit('precinctSelected', +d.properties.Precinct)
           })
           .on('mouseout', function(d) {
+            d3.select(this).transition().duration(500).style("stroke-width", 1).style("stroke-opacity", 1);
             that.$emit('precinctDeselected', +d.properties.Precinct)
           })
+        var coordinates = projection([-73.94, 40.70]);
+        svg.append('svg:circle')
+            .attr('cx', coordinates[0])
+            .attr('cy', coordinates[1])
+            .attr('r', 100);
         that.$emit('mapIsReady', 'ready');
-    });
+      }
+    );
   }
   // TODO: fire events
 }
@@ -51,6 +59,6 @@ export default {
 <style>
 .precinct{ 
   stroke: grey;
-  stroke-width: 2px;
+  stroke-width: 1px;
 }
 </style>
