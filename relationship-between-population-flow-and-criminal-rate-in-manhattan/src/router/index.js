@@ -23,5 +23,6 @@ export default new Router({
       name: 'Us Map Demo',
       component: UsStateDemo
     },
-  ]
+  ],
+  mode: 'history'
 })

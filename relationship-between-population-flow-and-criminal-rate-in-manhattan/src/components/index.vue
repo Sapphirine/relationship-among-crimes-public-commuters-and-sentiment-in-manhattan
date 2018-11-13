@@ -3,9 +3,10 @@
     <h1>{{ msg }}</h1>
     </br>
     <CriminalMap/>
-    @TODO
+    </br>
     <TrafficeFlow/>
     @TODO
+    </br>
     <TwitterSentiment/>
     @TODO
   </div>
