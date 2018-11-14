@@ -57,6 +57,10 @@ export default {
                }
                geoCenter[0]["center"]["coordinates"][0] = -74.006973
                geoCenter[0]["center"]["coordinates"][1] = 40.720382
+
+              geoCenter[74]["center"]["coordinates"][0] = -74.106616
+              geoCenter[74]["center"]["coordinates"][1] = 40.588817
+
                40.720382
                console.log(geoCenter)
                return geoCenter;
