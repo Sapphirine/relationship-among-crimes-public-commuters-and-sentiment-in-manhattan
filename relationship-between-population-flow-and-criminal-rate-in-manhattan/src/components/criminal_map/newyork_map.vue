@@ -6,6 +6,8 @@
 </template>
 
 <script>
+const polygonCenter = require('geojson-polygon-center')
+// var gju = require('geojson-utils');
 const d3 = require('d3');
 const topojson = require('topojson');
 
@@ -42,12 +44,41 @@ export default {
           .on('mouseout', function(d) {
             d3.select(this).transition().duration(500).style("stroke-width", 1).style("stroke-opacity", 1);
             that.$emit('precinctDeselected', +d.properties.Precinct)
-          })
-        var coordinates = projection([-73.94, 40.70]);
-        svg.append('svg:circle')
-            .attr('cx', coordinates[0])
-            .attr('cy', coordinates[1])
-            .attr('r', 100);
+          });
+
+        var bars = svg.selectAll(".precinctCenter")
+            .data(function(){
+               var geoCenter = [];
+               for(var i = 0; i < geoJson.features.length; i++) {
+                 var dic = {}
+                 dic["precinct"] = geoJson.features[i].properties.Precinct;
+                 dic["center"] = (polygonCenter(geoJson.features[i]));
+                 geoCenter.push(dic);
+               }
+               geoCenter[0]["center"]["coordinates"][0] = -74.006973
+               geoCenter[0]["center"]["coordinates"][1] = 40.720382
+               40.720382
+               console.log(geoCenter)
+               return geoCenter;
+            })
+            .enter()
+            .append("g")
+            .attr("class", "bars")
+            .attr("transform", function(d) {
+              return "translate(" + projection(d.center.coordinates) + ")";
+             });
+        console.log(bars)
+        bars.append("rect")
+            .attr('height',  function(d) {return 50})
+            .attr('width', 5)
+            .attr('y', function(d) {return -(50)})
+            .attr("class", "bars")
+            .style("fill", "blue")
+            .style("stroke", "white")
+            .style("stroke-width", 1)
+            .style("opacity", 0.7)
+            ;
+
         that.$emit('mapIsReady', 'ready');
       }
     );

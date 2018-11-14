@@ -121,6 +121,44 @@ export default {
     },
     onMapIsReady: function(signal){
       this.$refs.slider.setIndex(1);
+      this.appendBarOnMap();
+    },
+    appendBarOnMap: function(){
+      var svg = d3.select(".mapHolder")
+      svg = svg.select("svg")
+      var width = +svg.attr('width');
+      var height = +svg.attr('height');
+      const projection = d3.geoMercator()
+                          .center([-73.94, 40.70])
+                          .scale(50000)
+                          .translate([width/2, height/2]);
+
+      var criminalBarData = [
+        {"name": "Precinct", "coordinates": [-73.94, 40.70], "barheight": 100}
+      ]
+
+      var bars = svg.selectAll("precinct")
+        .data(criminalBarData)
+        .enter()
+        .append("g")
+        .attr("class", "bars")
+        .attr("transform", function(d) {return "translate(" + projection(d.coordinates) + ")";});
+  
+      bars.append("rect")
+          .attr('height',  function(d) {return d.barheight})
+          .attr('width', 5)
+          .attr('y', function(d) {return -(d.barheight)})
+          .attr("class", "bars")
+          .style("fill", "blue")
+          .style("stroke", "white")
+          .style("stroke-width", 1)
+          .style("opacity", 0.7)
+          ;
+
+      // svg.append('svg:circle')
+      //     .attr('cx', coordinates[0])
+      //     .attr('cy', coordinates[1])
+      //     .attr('r', 100);
     },
     animation: function(){
       var that = this;
