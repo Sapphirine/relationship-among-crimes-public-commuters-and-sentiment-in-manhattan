@@ -109,22 +109,39 @@ export default {
     );
 
     that.trafficFlowData = {};
-    d3.csv("static/data/final_table_test.csv", function(data){
+    // d3.csv("static/data/final_table_test.csv", function(data){
+    //   var total = +data.HOURLY_ENTRIES + (+data.HOURLY_EXITS);
+    //   if(that.maxNbTraffic < +total){
+    //     that.maxNbTraffic = +total;
+    //   }
+
+    //   if(that.trafficFlowData[+1] === undefined){
+    //     that.trafficFlowData[+1] = {}
+    //   }
+
+    //   if(that.trafficFlowData[+1][+data.HOUR] === undefined){
+    //     that.trafficFlowData[+1][+data.HOUR] = {}
+    //   }
+
+    //   that.trafficFlowData[+1][+data.HOUR][(data.Latitude + ":" +data.Longitude)] = total;
+    // });
+
+    d3.csv("static/data/final_table_complete_subset.csv", function(data){ 
       var total = +data.HOURLY_ENTRIES + (+data.HOURLY_EXITS);
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
       }
 
-      if(that.trafficFlowData[+1] === undefined){
-        that.trafficFlowData[+1] = {}
+      if(that.trafficFlowData[+data.Month] === undefined){
+        that.trafficFlowData[+data.Month] = {}
       }
 
-      if(that.trafficFlowData[+1][+data.HOUR] === undefined){
-        that.trafficFlowData[+1][+data.HOUR] = {}
+      if(that.trafficFlowData[+data.Month][+data.HOUR_modified] === undefined){
+        that.trafficFlowData[+data.Month][+data.HOUR_modified] = {}
       }
 
-      that.trafficFlowData[+1][+data.HOUR][(data.Latitude + ":" +data.Longitude)] = total;
-    })
+      that.trafficFlowData[+data.Month][+data.HOUR_modified][(data.Latitude + ":" +data.Longitude)] = total;
+    });
   },
   computed:{
     currentPrecinctTitle: function(){
@@ -178,6 +195,7 @@ export default {
           s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
         });
         this.updateCriminalDataBar();
+        this.updateTrafficFlow();
       }
     },
     immediate: true,
@@ -223,6 +241,10 @@ export default {
           .style("opacity", 0.7);
       })
     },
+    removeCircles: function(){
+      d3.selectAll("circle")
+        .remove();
+    },
     updateTrafficFlow: function(){
       var that = this;
       var svg = d3.select(".mapHolder")
@@ -233,7 +255,10 @@ export default {
                           .center([-73.94, 40.70])
                           .scale(50000)
                           .translate([width/2, height/2]);
+      console.log(that.currMonth, that.currHour)
       var keys = Object.keys(that.trafficFlowData[that.currMonth][that.currHour])
+      
+      that.removeCircles();
       keys.forEach(function(key){
         var lat = +key.split(":")[0];
         var long = +key.split(":")[1];
@@ -242,7 +267,7 @@ export default {
         svg.append('circle')
             .attr('cx', coord[0])
             .attr('cy', coord[1])
-            .attr('r', +that.trafficFlowData[that.currMonth][that.currHour][key] / that.maxNbCriminal * 0.05);
+            .attr('r', +that.trafficFlowData[that.currMonth][that.currHour][key] / that.maxNbCriminal * 0.1);
       })
 
      var test = projection([-73.94, 40.70])
@@ -342,6 +367,11 @@ export default {
 
 }
 
+circle{
+	fill: green;
+  opacity: 0.8;
+  fill-opacity: .5;
+}
 .q0 { fill:rgb(247,251,255) }
 .q1 { fill:rgb(222,235,247) }
 .q2 { fill:rgb(198,219,239) }
