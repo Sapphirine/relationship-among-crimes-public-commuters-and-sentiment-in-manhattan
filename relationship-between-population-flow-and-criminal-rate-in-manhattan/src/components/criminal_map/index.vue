@@ -17,9 +17,15 @@
       </div>
       <div class="sliderHolder">
         <vue-slider 
-          ref="slider"
-          v-model="sliderValue"
-          v-bind="vueSliderOption"
+          ref="hourSlider"
+          v-model="hourSliderValue"
+          v-bind="hourSliderOption"
+        >
+        </vue-slider>
+        <vue-slider 
+          ref="monthSlider"
+          v-model="monthSliderValue"
+          v-bind="monthSliderOption"
         >
         </vue-slider>
       </div>
@@ -44,39 +50,59 @@ export default {
   data: function() {
     return {
       title: 'Criminal Map',
-      precinctData: undefined,
+      criminalData: undefined,
       currPrecinct: undefined,
-      currYear: undefined,
+      currMonth: 1,
+      currHour: 0,
       maxNbCriminal: 0,
-      sliderValue: undefined,
+      hourSliderValue: undefined,
+      monthSliderValue: undefined,
 
-      vueSliderOption:{
+      monthSliderOption:{
         width: 'auto',
         tooltip: "always",
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
         startAnimation: true,
-        data:[2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014]
+        data:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      },
+      hourSliderOption:{
+        width: 'auto',
+        tooltip: "always",
+        disable: false,
+        piecewise: true,
+        piecewiseLabel: true,
+        startAnimation: true,
+        data:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
       }
     }
   },
   created: function(){
     console.log("created")
     var that = this;
-    that.precinctData = {2007:{}, 2008:{}, 2009:{}, 2010:{}, 2011:{}, 2012:{}, 2013:{}, 2014:{}};
-    d3.csv("static/data/clean-summons-data.csv", function(data) {
-      if(that.maxNbCriminal === 0){
-        that.maxNbCriminal = parseInt(data["Max"]);
+    that.criminalData = {};
+    d3.csv("static/data/NYPD_crime_daily_aggregation.csv", function(data) {
+      if(that.maxNbCriminal < +data.totalNumber){
+        that.maxNbCriminal = +data.totalNumber;
       }
-      that.precinctData[2007][data["Precinct"]] = +data["2007"]
-      that.precinctData[2008][data["Precinct"]] = +data["2008"]
-      that.precinctData[2009][data["Precinct"]] = +data["2009"]
-      that.precinctData[2010][data["Precinct"]] = +data["2010"]
-      that.precinctData[2011][data["Precinct"]] = +data["2011"]
-      that.precinctData[2012][data["Precinct"]] = +data["2012"]
-      that.precinctData[2013][data["Precinct"]] = +data["2013"]
-      that.precinctData[2014][data["Precinct"]] = +data["2014"]
+
+      if(that.criminalData[+data.month] === undefined){
+        that.criminalData[+data.month] = {}
+      }
+
+      if(that.criminalData[+data.month][+data.hour] === undefined){
+        that.criminalData[+data.month][+data.hour] = {}
+      }
+      
+      if(that.criminalData[+data.month][+data.hour][+data.precinct] === undefined){
+        that.criminalData[+data.month][+data.hour][+data.precinct] = {}
+      }
+      
+      that.criminalData[+data.month][+data.hour][+data.precinct] ["totalNumber"] = +data["totalNumber"];
+      that.criminalData[+data.month][+data.hour][+data.precinct] ["felony"] = +data["felony"];
+      that.criminalData[+data.month][+data.hour][+data.precinct] ["misdemeanor"] = +data["misdemeanor"];
+      that.criminalData[+data.month][+data.hour][+data.precinct] ["violation"] = +data["violation"];
       }
     );
   },
@@ -85,15 +111,15 @@ export default {
       return "Precinct: " + this.currPrecinct;
     },
     currentPrecinctDescription: function(){
-      return "Number of Crime: " + this.precinctData[this.currYear][this.currPrecinct];
+      return "Number of Crime: " + this.criminalData[this.currMonth][this.currHour][this.currPrecinct]["totalNumber"];
     },
   },
   watch: {
-    sliderValue: {
+    hourSliderValue: {
       handler: function(){
-        console.log("sliderValue change")
+        console.log("hour sliderValue change")
         var that = this;
-        that.currYear = that.sliderValue;
+        that.currHour = that.hourSliderValue;
         const quantize = d3.scaleQuantize()
                             .domain([0, that.maxNbCriminal])
                             .range(d3.range(9).map(i => "q" + i));
@@ -106,7 +132,28 @@ export default {
           var precinctContext = precinctFullContext.split(" ")[0];
           var precinctSuffix = precinctFullContext.split(" ")[1];
           var precinctNum = precinctContext.substring(2, precinctContext.length);
-          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.precinctData[that.currYear][precinctNum]))
+          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
+        });
+      }
+    },
+    monthSliderValue: {
+      handler: function(){
+        console.log("hour sliderValue change")
+        var that = this;
+        that.currMonth = that.monthSliderValue;
+        const quantize = d3.scaleQuantize()
+                            .domain([0, that.maxNbCriminal])
+                            .range(d3.range(9).map(i => "q" + i));
+
+        var svg = d3.select("svg");
+        var selections = svg.selectAll(".precinct");
+        selections.each(function() {
+          var s = d3.select(this);
+          var precinctFullContext = s.attr("class")
+          var precinctContext = precinctFullContext.split(" ")[0];
+          var precinctSuffix = precinctFullContext.split(" ")[1];
+          var precinctNum = precinctContext.substring(2, precinctContext.length);
+          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
         });
       }
     },
@@ -120,10 +167,11 @@ export default {
       this.currPrecinct = undefined;
     },
     onMapIsReady: function(signal){
-      this.$refs.slider.setIndex(1);
-      this.appendBarOnMap();
+      this.$refs.hourSlider.setIndex(12);
+      this.appendCriminalDataBarOnMap();
     },
-    appendBarOnMap: function(){
+    appendCriminalDataBarOnMap: function(){
+      var that = this;
       var svg = d3.select(".mapHolder")
       svg = svg.select("svg")
       var width = +svg.attr('width');
@@ -133,51 +181,75 @@ export default {
                           .scale(50000)
                           .translate([width/2, height/2]);
 
-      var criminalBarData = [
-        {"name": "Precinct", "coordinates": [-73.94, 40.70], "barheight": 100}
-      ]
+      var bars = svg.selectAll(".bars");
+      bars.each(function(){
+        var bar = d3.select(this);
+        var precinctNum = bar.attr("class").split(" ")[1];
 
-      var bars = svg.selectAll("precinct")
-        .data(criminalBarData)
-        .enter()
-        .append("g")
-        .attr("class", "bars")
-        .attr("transform", function(d) {return "translate(" + projection(d.coordinates) + ")";});
-  
-      bars.append("rect")
-          .attr('height',  function(d) {return d.barheight})
-          .attr('width', 5)
-          .attr('y', function(d) {return -(d.barheight)})
+        bar.append("rect")
+          .attr('height', function() {
+            return that.criminalData[that.currMonth][that.currHour][precinctNum]["totalNumber"];
+          })
+          .attr('width', 3)
+          .attr('y', function() {
+            return -that.criminalData[that.currMonth][that.currHour][precinctNum]["totalNumber"];
+          })
           .attr("class", "bars")
           .style("fill", "blue")
           .style("stroke", "white")
-          .style("stroke-width", 1)
-          .style("opacity", 0.7)
-          ;
+          .style("stroke-width", 0.5)
+          .style("opacity", 0.7);
+      })
+      
 
-      // svg.append('svg:circle')
-      //     .attr('cx', coordinates[0])
-      //     .attr('cy', coordinates[1])
-      //     .attr('r', 100);
+      // var criminalBarData = [
+      //   {"name": "Precinct", "coordinates": [-73.94, 40.70], "barheight": 100}
+      // ]
+
+      // var bars = svg.selectAll("precinct")
+      //   .data(criminalBarData)
+      //   .enter()
+      //   .append("g")
+      //   .attr("class", "bars")
+      //   .attr("transform", function(d) {return "translate(" + projection(d.coordinates) + ")";});
+  
+      // bars.append("rect")
+      //     .attr('height',  function(d) {return d.barheight})
+      //     .attr('width', 5)
+      //     .attr('y', function(d) {return -(d.barheight)})
+      //     .attr("class", "bars")
+      //     .style("fill", "blue")
+      //     .style("stroke", "white")
+      //     .style("stroke-width", 1)
+      //     .style("opacity", 0.7);
     },
     animation: function(){
       var that = this;
       setTimeout(function(){ 
-        that.$refs.slider.setValue(2007);
+        that.$refs.hourSlider.setValue(0);
         setTimeout(function(){ 
-          that.$refs.slider.setValue(2008);
+          that.$refs.hourSlider.setValue(1);
           setTimeout(function(){ 
-            that.$refs.slider.setValue(2009);
+            that.$refs.hourSlider.setValue(2);
             setTimeout(function(){ 
-              that.$refs.slider.setValue(2010);
+              that.$refs.hourSlider.setValue(3);
               setTimeout(function(){ 
-                that.$refs.slider.setValue(2011);
+                that.$refs.hourSlider.setValue(4);
                 setTimeout(function(){ 
-                  that.$refs.slider.setValue(2012);
+                  that.$refs.hourSlider.setValue(5);
                   setTimeout(function(){ 
-                    that.$refs.slider.setValue(2013);
+                    that.$refs.hourSlider.setValue(6);
                     setTimeout(function(){ 
-                      that.$refs.slider.setValue(2014);
+                      that.$refs.hourSlider.setValue(7);
+                      setTimeout(function(){ 
+                        that.$refs.hourSlider.setValue(8);
+                        setTimeout(function(){ 
+                          that.$refs.hourSlider.setValue(9);
+                          setTimeout(function(){ 
+                            that.$refs.hourSlider.setValue(10);
+                          }, 1000);
+                        }, 1000);
+                      }, 1000);
                     }, 1000);
                   }, 1000);
                 }, 1000);
