@@ -7,7 +7,6 @@
 
 <script>
 const polygonCenter = require('geojson-polygon-center')
-// var gju = require('geojson-utils');
 const d3 = require('d3');
 const topojson = require('topojson');
 
@@ -133,7 +132,6 @@ export default {
       }
     );
   }
-  // TODO: fire events
 }
 
 </script>

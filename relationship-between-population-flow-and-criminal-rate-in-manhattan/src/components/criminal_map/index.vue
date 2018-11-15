@@ -51,10 +51,12 @@ export default {
     return {
       title: 'Criminal Map',
       criminalData: undefined,
+      trafficFlowData: undefined,
       currPrecinct: undefined,
       currMonth: 1,
       currHour: 0,
       maxNbCriminal: 0,
+      maxNbTraffic: 0,
       hourSliderValue: undefined,
       monthSliderValue: undefined,
 
@@ -105,6 +107,24 @@ export default {
       that.criminalData[+data.month][+data.hour][+data.precinct] ["violation"] = +data["violation"];
       }
     );
+
+    that.trafficFlowData = {};
+    d3.csv("static/data/final_table_test.csv", function(data){
+      var total = +data.HOURLY_ENTRIES + (+data.HOURLY_EXITS);
+      if(that.maxNbTraffic < +total){
+        that.maxNbTraffic = +total;
+      }
+
+      if(that.trafficFlowData[+1] === undefined){
+        that.trafficFlowData[+1] = {}
+      }
+
+      if(that.trafficFlowData[+1][+data.HOUR] === undefined){
+        that.trafficFlowData[+1][+data.HOUR] = {}
+      }
+
+      that.trafficFlowData[+1][+data.HOUR][(data.Latitude + ":" +data.Longitude)] = total;
+    })
   },
   computed:{
     currentPrecinctTitle: function(){
@@ -135,6 +155,7 @@ export default {
           s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
         });
         this.updateCriminalDataBar();
+        this.updateTrafficFlow();
       }
     },
     monthSliderValue: {
@@ -202,6 +223,34 @@ export default {
           .style("opacity", 0.7);
       })
     },
+    updateTrafficFlow: function(){
+      var that = this;
+      var svg = d3.select(".mapHolder")
+      svg = svg.select("svg")
+      var width = +svg.attr('width');
+      var height = +svg.attr('height');
+      const projection = d3.geoMercator()
+                          .center([-73.94, 40.70])
+                          .scale(50000)
+                          .translate([width/2, height/2]);
+      var keys = Object.keys(that.trafficFlowData[that.currMonth][that.currHour])
+      keys.forEach(function(key){
+        var lat = +key.split(":")[0];
+        var long = +key.split(":")[1];
+        var coord = projection([long, lat])
+
+        svg.append('circle')
+            .attr('cx', coord[0])
+            .attr('cy', coord[1])
+            .attr('r', +that.trafficFlowData[that.currMonth][that.currHour][key] / that.maxNbCriminal * 0.05);
+      })
+
+     var test = projection([-73.94, 40.70])
+      svg.append('svg:circle')
+          .attr('cx', test[0])
+          .attr('cy', test[1])
+          .attr('r', 3);
+    },
     animation: function(){
       var that = this;
       var pauseSec = 500;
@@ -225,34 +274,34 @@ export default {
                         that.$refs.hourSlider.setValue(8);
                         setTimeout(function(){ 
                           that.$refs.hourSlider.setValue(9);
+                          setTimeout(function(){ 
+                            that.$refs.hourSlider.setValue(10);
                             setTimeout(function(){ 
-                              that.$refs.hourSlider.setValue(10);
+                              that.$refs.hourSlider.setValue(11);
                               setTimeout(function(){ 
-                                that.$refs.hourSlider.setValue(11);
+                                that.$refs.hourSlider.setValue(12);
                                 setTimeout(function(){ 
-                                  that.$refs.hourSlider.setValue(12);
+                                  that.$refs.hourSlider.setValue(13);
                                   setTimeout(function(){ 
-                                    that.$refs.hourSlider.setValue(13);
+                                    that.$refs.hourSlider.setValue(14);
                                     setTimeout(function(){ 
-                                      that.$refs.hourSlider.setValue(14);
+                                      that.$refs.hourSlider.setValue(15);
                                       setTimeout(function(){ 
-                                        that.$refs.hourSlider.setValue(15);
+                                        that.$refs.hourSlider.setValue(16);
                                         setTimeout(function(){ 
-                                          that.$refs.hourSlider.setValue(16);
+                                          that.$refs.hourSlider.setValue(17);
                                           setTimeout(function(){ 
-                                            that.$refs.hourSlider.setValue(17);
+                                            that.$refs.hourSlider.setValue(18);
                                             setTimeout(function(){ 
-                                              that.$refs.hourSlider.setValue(18);
+                                              that.$refs.hourSlider.setValue(19);
                                               setTimeout(function(){ 
-                                                that.$refs.hourSlider.setValue(19);
+                                                that.$refs.hourSlider.setValue(20);
                                                 setTimeout(function(){ 
-                                                  that.$refs.hourSlider.setValue(20);
+                                                  that.$refs.hourSlider.setValue(21);
                                                   setTimeout(function(){ 
-                                                    that.$refs.hourSlider.setValue(21);
+                                                    that.$refs.hourSlider.setValue(22);
                                                     setTimeout(function(){ 
-                                                      that.$refs.hourSlider.setValue(22);
-                                                      setTimeout(function(){ 
-                                                        that.$refs.hourSlider.setValue(23);
+                                                      that.$refs.hourSlider.setValue(23);
                                                     }, pauseSec);
                                                   }, pauseSec);
                                                 }, pauseSec);
