@@ -134,6 +134,7 @@ export default {
           var precinctNum = precinctContext.substring(2, precinctContext.length);
           s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
         });
+        this.updateCriminalDataBar();
       }
     },
     monthSliderValue: {
@@ -155,6 +156,7 @@ export default {
           var precinctNum = precinctContext.substring(2, precinctContext.length);
           s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
         });
+        this.updateCriminalDataBar();
       }
     },
     immediate: true,
@@ -168,9 +170,8 @@ export default {
     },
     onMapIsReady: function(signal){
       this.$refs.hourSlider.setIndex(12);
-      this.appendCriminalDataBarOnMap();
     },
-    appendCriminalDataBarOnMap: function(){
+    updateCriminalDataBar: function(){
       var that = this;
       var svg = d3.select(".mapHolder")
       svg = svg.select("svg")
@@ -186,7 +187,7 @@ export default {
         var bar = d3.select(this);
         var precinctNum = bar.attr("class").split(" ")[1];
 
-        bar.append("rect")
+        bar.select("rect")
           .attr('height', function() {
             return that.criminalData[that.currMonth][that.currHour][precinctNum]["totalNumber"];
           })
@@ -200,31 +201,10 @@ export default {
           .style("stroke-width", 0.5)
           .style("opacity", 0.7);
       })
-      
-
-      // var criminalBarData = [
-      //   {"name": "Precinct", "coordinates": [-73.94, 40.70], "barheight": 100}
-      // ]
-
-      // var bars = svg.selectAll("precinct")
-      //   .data(criminalBarData)
-      //   .enter()
-      //   .append("g")
-      //   .attr("class", "bars")
-      //   .attr("transform", function(d) {return "translate(" + projection(d.coordinates) + ")";});
-  
-      // bars.append("rect")
-      //     .attr('height',  function(d) {return d.barheight})
-      //     .attr('width', 5)
-      //     .attr('y', function(d) {return -(d.barheight)})
-      //     .attr("class", "bars")
-      //     .style("fill", "blue")
-      //     .style("stroke", "white")
-      //     .style("stroke-width", 1)
-      //     .style("opacity", 0.7);
     },
     animation: function(){
       var that = this;
+      var pauseSec = 500;
       setTimeout(function(){ 
         that.$refs.hourSlider.setValue(0);
         setTimeout(function(){ 
@@ -245,19 +225,58 @@ export default {
                         that.$refs.hourSlider.setValue(8);
                         setTimeout(function(){ 
                           that.$refs.hourSlider.setValue(9);
-                          setTimeout(function(){ 
-                            that.$refs.hourSlider.setValue(10);
-                          }, 1000);
-                        }, 1000);
-                      }, 1000);
-                    }, 1000);
-                  }, 1000);
-                }, 1000);
-              }, 1000);
-            }, 1000);
-          }, 1000);
-        }, 1000);
-      }, 1000);
+                            setTimeout(function(){ 
+                              that.$refs.hourSlider.setValue(10);
+                              setTimeout(function(){ 
+                                that.$refs.hourSlider.setValue(11);
+                                setTimeout(function(){ 
+                                  that.$refs.hourSlider.setValue(12);
+                                  setTimeout(function(){ 
+                                    that.$refs.hourSlider.setValue(13);
+                                    setTimeout(function(){ 
+                                      that.$refs.hourSlider.setValue(14);
+                                      setTimeout(function(){ 
+                                        that.$refs.hourSlider.setValue(15);
+                                        setTimeout(function(){ 
+                                          that.$refs.hourSlider.setValue(16);
+                                          setTimeout(function(){ 
+                                            that.$refs.hourSlider.setValue(17);
+                                            setTimeout(function(){ 
+                                              that.$refs.hourSlider.setValue(18);
+                                              setTimeout(function(){ 
+                                                that.$refs.hourSlider.setValue(19);
+                                                setTimeout(function(){ 
+                                                  that.$refs.hourSlider.setValue(20);
+                                                  setTimeout(function(){ 
+                                                    that.$refs.hourSlider.setValue(21);
+                                                    setTimeout(function(){ 
+                                                      that.$refs.hourSlider.setValue(22);
+                                                      setTimeout(function(){ 
+                                                        that.$refs.hourSlider.setValue(23);
+                                                    }, pauseSec);
+                                                  }, pauseSec);
+                                                }, pauseSec);
+                                              }, pauseSec);
+                                            }, pauseSec);
+                                          }, pauseSec);
+                                        }, pauseSec);
+                                      }, pauseSec);
+                                    }, pauseSec);
+                                  }, pauseSec);
+                                }, pauseSec);
+                              }, pauseSec);
+                            }, pauseSec);
+                          }, pauseSec);
+                        }, pauseSec);
+                      }, pauseSec);
+                    }, pauseSec);
+                  }, pauseSec);
+                }, pauseSec);
+              }, pauseSec);
+            }, pauseSec);
+          }, pauseSec);
+        }, pauseSec);
+      }, pauseSec);
     }
   },
 }

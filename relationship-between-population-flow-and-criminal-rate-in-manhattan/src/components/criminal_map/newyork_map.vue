@@ -126,7 +126,8 @@ export default {
           })
           .attr("transform", function(d) {
             return "translate(" + projection(d.center.coordinates) + ")";
-          });
+          })
+          .append("rect");
 
         that.$emit('mapIsReady', 'ready');
       }
