@@ -4,19 +4,15 @@
     </br>
     <CriminalMap/>
     </br>
-    <TwitterSentiment/>
-    @TODO
   </div>
 </template>
 
 <script>
 const criminalMap = require('./criminal_map/index.vue').default;
-const twitterSentiment = require('./twitter_sentiment/index.vue').default;
 
 export default {
   components: {
     CriminalMap: criminalMap,
-    TwitterSentiment: twitterSentiment
   },
   name: 'index-page',
   data () {
