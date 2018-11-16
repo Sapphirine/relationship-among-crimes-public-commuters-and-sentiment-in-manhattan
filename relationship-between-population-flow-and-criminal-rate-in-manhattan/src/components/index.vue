@@ -4,9 +4,6 @@
     </br>
     <CriminalMap/>
     </br>
-    <TrafficeFlow/>
-    @TODO
-    </br>
     <TwitterSentiment/>
     @TODO
   </div>
@@ -14,13 +11,11 @@
 
 <script>
 const criminalMap = require('./criminal_map/index.vue').default;
-const trafficeFlow = require('./traffic_flow/index.vue').default;
 const twitterSentiment = require('./twitter_sentiment/index.vue').default;
 
 export default {
   components: {
     CriminalMap: criminalMap,
-    TrafficeFlow: trafficeFlow,
     TwitterSentiment: twitterSentiment
   },
   name: 'index-page',

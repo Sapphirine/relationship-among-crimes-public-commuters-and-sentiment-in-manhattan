@@ -209,6 +209,7 @@ export default {
     },
     onMapIsReady: function(signal){
       this.$refs.hourSlider.setIndex(12);
+      this.$refs.monthSlider.setIndex(1);
     },
     updateCriminalDataBar: function(){
       var that = this;
