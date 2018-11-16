@@ -109,23 +109,6 @@ export default {
     );
 
     that.trafficFlowData = {};
-    // d3.csv("static/data/final_table_test.csv", function(data){
-    //   var total = +data.HOURLY_ENTRIES + (+data.HOURLY_EXITS);
-    //   if(that.maxNbTraffic < +total){
-    //     that.maxNbTraffic = +total;
-    //   }
-
-    //   if(that.trafficFlowData[+1] === undefined){
-    //     that.trafficFlowData[+1] = {}
-    //   }
-
-    //   if(that.trafficFlowData[+1][+data.HOUR] === undefined){
-    //     that.trafficFlowData[+1][+data.HOUR] = {}
-    //   }
-
-    //   that.trafficFlowData[+1][+data.HOUR][(data.Latitude + ":" +data.Longitude)] = total;
-    // });
-
     d3.csv("static/data/final_table_complete_subset.csv", function(data){ 
       var total = +data.HOURLY_ENTRIES + (+data.HOURLY_EXITS);
       if(that.maxNbTraffic < +total){
