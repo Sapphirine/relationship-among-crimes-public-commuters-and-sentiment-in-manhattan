@@ -1,6 +1,5 @@
 <template>
   <div id="newyork_map">
-    <h2>New York Map</h2>
     <svg width="800" height="800"></svg>
   </div>
 </template>

@@ -360,80 +360,48 @@ export default {
     },
     animation: function(){
       var that = this;
-      var pauseSec = 500;
-      setTimeout(function(){ 
-        that.$refs.hourSlider.setValue(0);
-        setTimeout(function(){ 
-          that.$refs.hourSlider.setValue(1);
-          setTimeout(function(){ 
-            that.$refs.hourSlider.setValue(2);
-            setTimeout(function(){ 
-              that.$refs.hourSlider.setValue(3);
-              setTimeout(function(){ 
-                that.$refs.hourSlider.setValue(4);
-                setTimeout(function(){ 
-                  that.$refs.hourSlider.setValue(5);
-                  setTimeout(function(){ 
-                    that.$refs.hourSlider.setValue(6);
-                    setTimeout(function(){ 
-                      that.$refs.hourSlider.setValue(7);
-                      setTimeout(function(){ 
-                        that.$refs.hourSlider.setValue(8);
-                        setTimeout(function(){ 
-                          that.$refs.hourSlider.setValue(9);
-                          setTimeout(function(){ 
-                            that.$refs.hourSlider.setValue(10);
-                            setTimeout(function(){ 
-                              that.$refs.hourSlider.setValue(11);
-                              setTimeout(function(){ 
-                                that.$refs.hourSlider.setValue(12);
-                                setTimeout(function(){ 
-                                  that.$refs.hourSlider.setValue(13);
-                                  setTimeout(function(){ 
-                                    that.$refs.hourSlider.setValue(14);
-                                    setTimeout(function(){ 
-                                      that.$refs.hourSlider.setValue(15);
-                                      setTimeout(function(){ 
-                                        that.$refs.hourSlider.setValue(16);
-                                        setTimeout(function(){ 
-                                          that.$refs.hourSlider.setValue(17);
-                                          setTimeout(function(){ 
-                                            that.$refs.hourSlider.setValue(18);
-                                            setTimeout(function(){ 
-                                              that.$refs.hourSlider.setValue(19);
-                                              setTimeout(function(){ 
-                                                that.$refs.hourSlider.setValue(20);
-                                                setTimeout(function(){ 
-                                                  that.$refs.hourSlider.setValue(21);
-                                                  setTimeout(function(){ 
-                                                    that.$refs.hourSlider.setValue(22);
-                                                    setTimeout(function(){ 
-                                                      that.$refs.hourSlider.setValue(23);
-                                                    }, pauseSec);
-                                                  }, pauseSec);
-                                                }, pauseSec);
-                                              }, pauseSec);
-                                            }, pauseSec);
-                                          }, pauseSec);
-                                        }, pauseSec);
-                                      }, pauseSec);
-                                    }, pauseSec);
-                                  }, pauseSec);
-                                }, pauseSec);
-                              }, pauseSec);
-                            }, pauseSec);
-                          }, pauseSec);
-                        }, pauseSec);
-                      }, pauseSec);
-                    }, pauseSec);
-                  }, pauseSec);
-                }, pauseSec);
-              }, pauseSec);
-            }, pauseSec);
-          }, pauseSec);
-        }, pauseSec);
+      var pauseSec = 250;
+      // that.animationHour(0, pauseSec);
+      // that.animationMonth(0, pauseSec);
+      that.animationSet1(1, 0, pauseSec)
+    },
+    animationSet1: function(month, hour, pauseSec){
+      var that = this;
+      console.log(month, hour )
+      that.$refs.hourSlider.setValue(hour);
+      that.$refs.monthSlider.setValue(month);
+      if(hour >= 24 && month >= 12){
+        return;
+      }
+      setTimeout(function(){
+        hour += 1;
+        if(hour >= 24 && month < 12){
+          hour = 0;
+          month += 1;
+        }
+        that.animationSet1(month, hour, pauseSec);
       }, pauseSec);
-    }
+    },
+    animationMonth: function(monthIdx, pauseSec){
+      var that = this;
+      if(monthIdx <= 12){
+        setTimeout(function(){
+          that.$refs.monthSlider.setValue(monthIdx);
+          monthIdx += 1;
+          that.animationMonth(monthIdx, pauseSec);
+        }, pauseSec);
+      }
+    },
+    animationHour: function(hourIdx, pauseSec){
+      var that = this;
+      if(hourIdx < 24){
+        setTimeout(function(){
+          that.$refs.hourSlider.setValue(hourIdx);
+          hourIdx += 1;
+          that.animationHour(hourIdx, pauseSec);
+        }, pauseSec);
+      }
+    },
   },
 }
 </script>
