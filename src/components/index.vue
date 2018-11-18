@@ -4,7 +4,7 @@
       <div class="row">
         <h1>{{title}}</h1>
       </div>
-      <div class="row">
+      <div class="row my-4">
         <div class="col">
           <div class="card mx-auto" style="width: 25rem;">
             <img class="card-img-top" src="https://via.placeholder.com/150" alt="Card image cap">
