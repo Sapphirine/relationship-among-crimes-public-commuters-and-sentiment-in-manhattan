@@ -23,7 +23,7 @@ export default {
   name: 'chart-plot-page',
   data: function() {
     return {
-      currYear: 1800,
+      currYear: undefined,
       title: "Chart Plot",
       width: 960 - margin.right,
       height: 500 - margin.top - margin.bottom,
@@ -31,262 +31,155 @@ export default {
       marginBottom: margin.bottom,
       marginLeft: margin.left,
       marginRight: margin.right,
-      yearList: undefined,
+
+      xScale: undefined,
+      yScale: undefined,
+      radiusScale: undefined,
+      colorScale: undefined,
+      
+      bisector: undefined,
+      label: undefined,
+
+      nationData: undefined,
+      dot: undefined,
     }
   },
   mounted: function(){
+    var that = this;
+
+    that.xScale = d3.scaleLog().domain([300, 1e5]).range([0, that.width]);
+    that.yScale = d3.scaleLinear().domain([10, 85]).range([that.height, 0]);
+    that.radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]);
+    that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var xAxis = d3.axisBottom().scale(that.xScale).ticks(12, d3.format(",d"));
+    var yAxis = d3.axisLeft().scale(that.yScale);
+
+    var svg = d3.select(".chartHolder")
+                .append("svg")
+                .attr("width", that.width + that.marginLeft + that.marginRight)
+                .attr("height", that.height + that.marginTop + that.marginBottom + 130);
+    svg = d3.select("svg")
+            .append("g")
+            .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
+
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + that.height + ")")
+      .call(xAxis);
+
+    // Add the y-axis.
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+    // Add an x-axis label.
+    svg.append("text")
+      .attr("class", "x label")
+      .attr("text-anchor", "end")
+      .attr("x", that.width)
+      .attr("y", that.height - 6)
+      .text("income per capita, inflation-adjusted (dollars)");
+
+    // Add a y-axis label.
+    svg.append("text")
+      .attr("class", "y label")
+      .attr("text-anchor", "end")
+      .attr("y", 6)
+      .attr("dy", ".75em")
+      .attr("transform", "rotate(-90)")
+      .text("life expectancy (years)");
+
+    // Add the year label; the value is set on transition.
+    that.label = svg.append("text")
+      .attr("class", "year label")
+      .attr("text-anchor", "end")
+      .attr("y", that.height + 130)
+      .attr("x", that.width)
+      .text(1800);
+
+    d3.json("static/demo_data/data/nations.json").then(function(nations) {
+      that.nationData = {}
+      for(var i = 0; i < nations.length; i++){
+        var population = nations[i].population;
+        for(var j = 0; j < population.length; j++){
+          if(that.nationData[population[j][0]] === undefined){
+            that.nationData[population[j][0]] = []
+          }
+          var nation = {}
+          nation["population"] = nations[i]["population"][j][1];
+          nation["income"] = nations[i]["income"][j][1];
+          nation["lifeExpectancy"] = nations[i]["lifeExpectancy"][j][1];
+          nation["region"] = nations[i]["region"];
+          nation["name"] = nations[i]["name"];
+
+          that.nationData[population[j][0]].push(nation)
+        }
+      }
+    });
+
   },
   created: function(){
   },
   methods:{
     increase: function(){
-      this.currYear += 1;
-      this.updateGraph(this.currYear)
-    },
-    updateGraph: function(currYear) {
       var that = this;
-      var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5};
-
-      var marginLeft = that.marginLeft;
-      var marginRight = that.marginRight;
-      var marginTop = that.marginTop;
-      var marginBottom = that.marginBottom;
-      var svg = d3.select(".chartHolder")
-      .append("svg")
-      .attr("width", that.width + marginLeft + marginRight)
-      .attr("height", that.height + marginTop + marginBottom + 130);
-
+      setTimeout(function(){
+        that.updateGraph(1800);
+        setTimeout(function(){
+          that.updateGraph(1820);
+        }, 1000);
+      }, 1000);
+      // that.updateGraph(1800);
+    },
+    updateGraph: function(currYear){
+      var that = this;
       function x(d) { return d.income; }
       function y(d) { return d.lifeExpectancy; }
       function radius(d) { return d.population; }
       function color(d) { return d.region; }
-      function key(d) { return d.name; }
 
-      var height = that.height;
-      var width = that.width;
-      var margin = {top: that.marginTop,
-                    right: that.marginRight,
-                    bottom: that.marginBottom,
-                    left: that.marginLeft
-                   };
+      function order(a, b) { return radius(b) - radius(a); }
+      function position(dot) {
+        dot.attr("cx", function(d) { return that.xScale(x(d)); })
+          .attr("cy", function(d) { return that.yScale(y(d)); })
+          .attr("r", function(d) { return that.radiusScale(radius(d)); });
+      }
 
-      var xScale = d3.scaleLog().domain([300, 1e5]).range([0, width]),
-          yScale = d3.scaleLinear().domain([10, 85]).range([height, 0]),
-          radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]),
-          colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+      var svg = d3.select("svg");
+      that.label.text(currYear);
+      if(that.dot === undefined){
+        that.dot = svg.append("g")
+          .attr("class", "dots")
+          .selectAll(".dot")
+          .data(that.nationData[currYear])
+          .enter()
+          .append("circle")
+          .attr("class", "dot")
+          .attr("id", function(d) { 
+            return (d.name)
+                  .replace(/\s/g, '').replace(/\./g,'').replace(/\,/g,'')
+                  .replace(/\'/g,''); 
+          })
+          .style("fill", function(d) { return that.colorScale(color(d)); })
+          .call(position)
+          .sort(order);
 
-      var xAxis = d3.axisBottom().scale(xScale).ticks(12, d3.format(",d"));
-      var yAxis = d3.axisLeft().scale(yScale);
-
-      var svg = d3.select("svg")
-                  .append("g")
-                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-      // Add the y-axis.
-      svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-      // Add an x-axis label.
-      svg.append("text")
-        .attr("class", "x label")
-        .attr("text-anchor", "end")
-        .attr("x", width)
-        .attr("y", height - 6)
-        .text("income per capita, inflation-adjusted (dollars)");
-
-      // Add a y-axis label.
-      svg.append("text")
-        .attr("class", "y label")
-        .attr("text-anchor", "end")
-        .attr("y", 6)
-        .attr("dy", ".75em")
-        .attr("transform", "rotate(-90)")
-        .text("life expectancy (years)");
-
-
-      // Add the year label; the value is set on transition.
-      var label = svg.append("text")
-                    .attr("class", "year label")
-                    .attr("text-anchor", "end")
-                    .attr("y", height + 130)
-                    .attr("x", width)
-                    .text(currYear);
-
-      // Load the data.
-      d3.json("static/demo_data/data/nations.json").then(function(nations) {
-
-        // A bisector since many nation's data is sparsely-defined.
-        var bisect = d3.bisector(function(d) {
-            return d[0];
-        });
-
-        function interpolateValues(values, year) {
-          var i = bisect.left(values, year, 0, values.length - 1),
-              a = values[i];
-          if (i > 0) {
-          var b = values[i - 1],
-              t = (year - a[0]) / (b[0] - a[0]);
-            return a[1] * (1 - t) + b[1] * t;
-          }
-          return a[1];
-        }
-        function interpolateData(year) {
-          return nations.map(function(d) {
-            return {
-                name: d.name,
-                region: d.region,
-                income: interpolateValues(d.income, year),
-                population: interpolateValues(d.population, year),
-                lifeExpectancy: interpolateValues(d.lifeExpectancy, year)
-            };
-	        });
-      	}
-
-        function position(dot) {
-            dot.attr("cx", function(d) { return xScale(x(d)); })
-              .attr("cy", function(d) { return yScale(y(d)); })
-              .attr("r", function(d) { return radiusScale(radius(d)); });
-        }
-
-        function order(a, b) {
-            return radius(b) - radius(a);
-        }
-
-        var dot = svg.append("g")
-            .attr("class", "dots")
-            .selectAll(".dot")
-            .data(interpolateData(currYear))
-            .enter().append("circle")
-            .attr("class", "dot")
-            .attr("id", function(d) { return (d.name)
-                    .replace(/\s/g, '').replace(/\./g,'').replace(/\,/g,'')
-                    .replace(/\'/g,''); })
-            .style("fill", function(d) { return colorScale(color(d)); })
-            .call(position)
-            .sort(order);
-
-        var voronoi = d3.voronoi()
-          .x(function(d) { return xScale(x(d)); })
-          .y(function(d) { return yScale(y(d)); })
-          .clipExtent([[0, 0], [width, height]]);
-
-        var voronoiTiling =  svg.selectAll("path")
-            .data(voronoi(interpolateData(currYear))) //Use voronoi() with your dataset inside
-            .enter().append("path")
-            .attr("d", function(d, i) {return "M" + d.join("L") + "Z"; })
-            .datum(function(d, i) { return d.point; })
-            .attr("id", function(d,i) { return "voronoi" + d.name.replace(/\s/g, '')
-                .replace(/\./g,'')
-                .replace(/\,/g,'')
-                .replace(/\'/g,''); })
-            .style("stroke", "rgb(0,128,128)")
-            .style("visibility", d3.select("input").property("checked") ? "hidden" : "visible" )
-            .style("fill", "none")
-            .style("opacity", 0.5)
-            .style("pointer-events", "all")
-            .on("mouseover", showTooltip)
-            .on("mouseout", removeTooltip);
-
-        dot.append("title")
-            .text(function(d) { return d.name; });
-
-        var box = label.node().getBBox();
-
-        var overlay = svg.append("rect")
-          .attr("class", "overlay")
-          .attr("x", box.x)
-          .attr("y", box.y)
-          .attr("width", box.width)
-          .attr("height", box.height)
-          .on("mouseover", enableInteraction);
-
-        svg.transition()
-            .duration(30000)
-            .ease("linear")
-            .tween("year", tweenYear)
-            .each("end", enableInteraction);
-
-        function showTooltip(d, i) {
-            d3.select("#countryname").remove();
-            d3.selectAll(".dot").style("opacity", 0.2);
-            var circle = d3.select("#" + d.name.replace(/\s/g, '')
-                .replace(/\./g,'')
-                .replace(/\,/g,'')
-                .replace(/\'/g,''));
-            circle.style("opacity", 1);
-            svg.append("text")
-              .attr("id", "countryname")
-              .attr("y", height - 10)
-              .attr("x", 10)
-              .text(d.name)
-              .style("font-family", "Helvetica Neue")
-              .style("font-size", 24)
-              .style("fill", colorScale(color(d)));
-        }
-        function removeTooltip(d, i) {
-            d3.selectAll(".dot").style("opacity", 1);
-            d3.select("#countryname").remove();
-        }
-        function tweenYear() {
-          return function(t) { displayYear(year(t)); };
-        }
-        function displayYear(year) {
-          dot.data(interpolateData(year), key).call(position).sort(order);
-          label.text(Math.round(year));
-
-          //redraw voronoi
-          d3.selectAll("path").remove();
-          //		voronoiTiling.data(voronoi(interpolateData(year)));
-          svg.selectAll("path")
-            .data(voronoi(interpolateData(year))) //Use voronoi() with your dataset inside
-            .enter().append("path")
-            .attr("d", function(d, i) {return "M" + d.join("L") + "Z"; })
-            .datum(function(d, i) { return d.point; })
-              //give each cell a unique id where the unique part corresponds to the dot ids
-            .attr("id", function(d,i) { return "voronoi" + d.name.replace(/\s/g, '').replace(/\./g,'').replace(/\,/g,''); })
-            .style("stroke", "rgb(0,128,128)")
-            .style("visibility", d3.select("input").property("checked") ? "hidden" : "visible" )
-            .style("fill", "none")
-            .style("opacity", 0.5)
-            .style("pointer-events", "all")
-            .on("mouseover", showTooltip)
-            .on("mouseout", removeTooltip);
-        }
-
-        function enableInteraction() {
-          var yearScale = d3.scaleLinear()
-            .domain([1800, 2009])
-            .range([box.x + 10, box.x + box.width - 10])
-            .clamp(true);
-
-          // Cancel the current transition, if any.
-          svg.transition().duration(0);
-
-          overlay
-            .on("mouseover", mouseover)
-            .on("mouseout", mouseout)
-            .on("mousemove", mousemove)
-            .on("touchmove", mousemove);
-
-          function mouseover() {
-            label.classed("active", true);
-          }
-          function mouseout() {
-            label.classed("active", false);
-          }
-          function mousemove() {
-            displayYear(yearScale.invert(d3.mouse(this)[0]));
-          }
-        }
-
-      });
+        that.dot.append("title").text(function(d) { return d.name; });
+        that.dot.data(that.nationData[currYear]).call(position).sort(order);
+        that.label.text(Math.round(currYear));
+      }
+      else{
+        that.dot.data(that.nationData[currYear])
+                .transition()
+                .attr("duration", 40000)
+                .attr("cx", function(d) { return that.xScale(x(d)); })
+                .attr("cy", function(d) { return that.yScale(y(d)); })
+                .attr("r", function(d) { return that.radiusScale(radius(d)); })
+      }
     }
+  },
+  watch:{
   }
 }
 </script>
