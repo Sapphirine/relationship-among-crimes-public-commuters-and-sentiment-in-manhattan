@@ -1,7 +1,12 @@
 [{"name":"Angola","region":"Sub-Saharan Africa","income":[[1800,359.93],[1820,1359.93]],"population":[[1800,1567028],[1820,11567028]],"lifeExpectancy":[[1800,26.98],[1820,80.98]]},
+
 {"name":"Benin","region":"Sub-Saharan Africa","income":[[1800,553.72],[1820,1553.72]],"population":[[1800,636559],[1820,1636559]],"lifeExpectancy":[[1800,31],[1820,60]]},
+
 {"name":"Botswana","region":"Sub-Saharan Africa","income":[[1800,407.36],[1820,1407.36]],"population":[[1800,121000],[1820,1121000]],"lifeExpectancy":[[1800,33.6],[1820,74.6]]},
+
 {"name":"Burkina Faso","region":"Sub-Saharan Africa","income":[[1800,454.33],[1820,1454.33]],"population":[[1800,1665421],[1820,11665421]],"lifeExpectancy":[[1800,29.2],[1820,69.2]]},
+
 {"name":"Chad","region":"Sub-Saharan Africa","income":[[1800,400.69],[1820,1400.69]],"population":[[1800,1432000],[1820,11432000]],"lifeExpectancy":[[1800,30.9],[1820,57.9]]},
+
 {"name":"Honduras","region":"America","income":[[1800,583.8],[1820,583.8]],"population":[[1800,130000],[1820,11135000]],"lifeExpectancy":[[1800,33.9],[1820,56.9]]}
 ]

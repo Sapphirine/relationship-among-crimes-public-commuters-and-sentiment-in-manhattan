@@ -68,12 +68,10 @@ export default {
       .attr("transform", "translate(0," + that.height + ")")
       .call(xAxis);
 
-    // Add the y-axis.
     svg.append("g")
       .attr("class", "y axis")
       .call(yAxis);
 
-    // Add an x-axis label.
     svg.append("text")
       .attr("class", "x label")
       .attr("text-anchor", "end")
@@ -81,7 +79,6 @@ export default {
       .attr("y", that.height - 6)
       .text("income per capita, inflation-adjusted (dollars)");
 
-    // Add a y-axis label.
     svg.append("text")
       .attr("class", "y label")
       .attr("text-anchor", "end")
@@ -90,7 +87,6 @@ export default {
       .attr("transform", "rotate(-90)")
       .text("life expectancy (years)");
 
-    // Add the year label; the value is set on transition.
     that.label = svg.append("text")
       .attr("class", "year label")
       .attr("text-anchor", "end")
@@ -107,9 +103,9 @@ export default {
             that.nationData[population[j][0]] = []
           }
           var nation = {}
-          nation["population"] = nations[i]["population"][j][1];
-          nation["income"] = nations[i]["income"][j][1];
-          nation["lifeExpectancy"] = nations[i]["lifeExpectancy"][j][1];
+          nation["population"] = +nations[i]["population"][j][1];
+          nation["income"] = +nations[i]["income"][j][1];
+          nation["lifeExpectancy"] = +nations[i]["lifeExpectancy"][j][1];
           nation["region"] = nations[i]["region"];
           nation["name"] = nations[i]["name"];
 
@@ -151,10 +147,12 @@ export default {
     },
     updateGraph: function(currYear){
       var that = this;
-      
-      var svg = d3.select("svg");
-      that.label.text(currYear);
 
+      var svg = d3.select("svg")
+                  .append("g")
+                  .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
+      that.label.text(currYear);
+    
       if(that.dot === undefined){
         that.dot = svg.append("g")
           .attr("class", "dots")
@@ -196,61 +194,38 @@ export default {
 </script>
 
 <style>
-.chart {
-    height: 506px;
-}
 
 text {
-    font: 10px sans-serif;
+  font: 10px sans-serif;
 }
 
 .dot {
-    stroke: #000;
+  stroke: #000;
 }
 
 .axis path, .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 .label {
-    fill: #777;
+  fill: #777;
 }
 
 .year.label {
-    font: 500 146px "Helvetica Neue";
-    fill: #ddd;
+  font: 500 146px "Helvetica Neue";
+  fill: #ddd;
 }
 
 .year.label.active {
-    fill: #aaa;
+  fill: #aaa;
 }
 
 .overlay {
-    fill: none;
-    pointer-events: all;
-    cursor: ew-resize;
+  fill: none;
+  pointer-events: all;
+  cursor: ew-resize;
 }
 
-.checkbox {
-    position: absolute;
-    dispay: inline;
-    left: 1005px;
-    top: 30px;
-    font-family: "Helvetica Neue";
-    font-size: 14px;
-    color: rgb(0,128,128);
-}
-
-.explan-text {
-    position: absolute;
-    dispay: inline;
-    left: 45px;
-    top: 540px;
-    width: 570px;
-    font-family: "Helvetica Neue";
-    font-size: "12px";
-    color: black;
-}
 </style>
