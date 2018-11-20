@@ -17,24 +17,24 @@
           />
         </div>
         <div class="sliderHolder">
-          <vue-slider 
-            ref="hourSlider"
-            v-model="hourSliderValue"
-            v-bind="hourSliderOption"
-          >
-          </vue-slider>
-          <vue-slider 
-            ref="daySlider"
-            v-model="daySliderValue"
-            v-bind="daySliderOption"
-          >
-          </vue-slider>
+          <div>
+            <vue-slider 
+              ref="hourSlider"
+              v-model="hourSliderValue"
+              v-bind="hourSliderOption"
+            >
+            </vue-slider>
+          </div>
+          <div>
+            <vue-slider 
+              ref="daySlider"
+              v-model="daySliderValue"
+              v-bind="daySliderOption"
+            >
+            </vue-slider>
+          </div>
         </div>
-        <button v-on:click="animation">animation</button>
-
-        <div>
-          <img :src="sentimentEmoji" alt="img">
-        </div>
+        <button class="btn btn-primary" v-on:click="animation">animation</button>
       </div>
     </div>
 </template>
@@ -56,18 +56,23 @@ export default {
   data: function() {
     return {
       title: 'Criminal Map',
-      criminalData: undefined,
-      trafficFlowData: undefined,
-      senmentimentData: undefined,
 
-      currPrecinct: undefined,
+      // Commom
+      projection: undefined,
       currDay: 2,
       currHour: 1,
-      maxNbCriminal: 0,
-      maxNbTraffic: 0,
-      hourSliderValue: undefined,
-      daySliderValue: undefined,
 
+      // Criminal Data
+      criminalData: undefined,
+      currPrecinct: undefined,
+      maxNbCriminal: 0,
+      
+      // Traffic Data
+      trafficFlowData: undefined,
+      maxNbTraffic: 0,
+
+      // Sentiment Data
+      senmentimentData: undefined,
       sentimentEmoji: undefined,
       sentimentEmojis: [
         "static/images/1.png",
@@ -77,14 +82,18 @@ export default {
         "static/images/5.png",
       ],
 
+      // Utils
+      dayIndexMap:{"MON": 0, "TUE": 1, "WED": 2, "THU": 3, "FRI": 4, "SAT": 5, "SUN": 6},
+      hourSliderValue: undefined,
+      daySliderValue: undefined,
       daySliderOption:{
-        width: 'auto',
+        width: '05',
         tooltip: "always",
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
         startAnimation: true,
-        data: [0, 1, 2, 3, 4, 5, 6]
+        data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
       },
       hourSliderOption:{
         width: 'auto',
@@ -109,15 +118,12 @@ export default {
       if(that.criminalData[+data.day] === undefined){
         that.criminalData[+data.day] = {}
       }
-
       if(that.criminalData[+data.day][+data.hour] === undefined){
         that.criminalData[+data.day][+data.hour] = {}
       }
-      
       if(that.criminalData[+data.day][+data.hour][+data.precinct] === undefined){
         that.criminalData[+data.day][+data.hour][+data.precinct] = 0
       }
-      
       that.criminalData[+data.day][+data.hour][+data.precinct] = +data["totalNumber"];
       }
     );
@@ -128,20 +134,18 @@ export default {
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
       }
-      if(that.trafficFlowData[+data.Month] === undefined){
-        that.trafficFlowData[+data.Month] = {}
+      if(that.trafficFlowData[+data.Month-1] === undefined){
+        that.trafficFlowData[+data.Month-1] = {}
       }
-
-      if(that.trafficFlowData[+data.Month][+data.HOUR_modified] === undefined){
-        that.trafficFlowData[+data.Month][+data.HOUR_modified] = {}
+      if(that.trafficFlowData[+data.Month-1][+data.HOUR_modified] === undefined){
+        that.trafficFlowData[+data.Month-1][+data.HOUR_modified] = {}
       }
-
-      that.trafficFlowData[+data.Month][+data.HOUR_modified][(data.Latitude + ":" +data.Longitude)] = total;
+      that.trafficFlowData[+data.Month-1][+data.HOUR_modified][(data.Latitude + ":" +data.Longitude)] = total;
     });
 
     that.senmentimentData = {};
     var fakeData = {
-      1:{
+      0:{
         0:{"Sentiment": -1.0  },
         1:{"Sentiment": -0.9  },
         2:{"Sentiment": -0.8  },
@@ -167,7 +171,7 @@ export default {
         22:{"Sentiment": 0.2  },
         23:{"Sentiment": 0.3  }
       },
-      2:{
+      1:{
         0:{"Sentiment": 0.35 },
         1:{"Sentiment": 0.4  },
         2:{"Sentiment": 0.45 },
@@ -198,6 +202,33 @@ export default {
     // });
     that.senmentimentData = fakeData;
   },
+  mounted: function(){
+    var that = this;
+
+    var svg = d3.select(".mapHolder")
+                .select("svg");
+    var width = +svg.attr('width');
+    var height = +svg.attr('height');
+    that.projection = d3.geoMercator()
+                        .center([-73.94, 40.70])
+                        .scale(50000)
+                        .translate([width/2, height/2]);
+
+    d3.select("svg")
+      .append("g")
+      .attr("transform", function(d) {
+        return "translate(" + "0" + "," + "100" + ")";
+      })
+      .append("svg:image")
+      .attr("width", 200)
+      .attr("height", 200)
+      .attr("xlink:href", that.sentimentEmojis[2])
+      .attr("alt", "img")
+
+
+    that.$refs.hourSlider.setIndex(12);
+    that.$refs.daySlider.setIndex(1);
+  },
   computed:{
     currentPrecinctTitle: function(){
       return "Precinct: " + this.currPrecinct;
@@ -209,7 +240,6 @@ export default {
   watch: {
     hourSliderValue: {
       handler: function(){
-        console.log("hour sliderValue change")
         var that = this;
         that.currHour = +that.hourSliderValue;
         const quantize = d3.scaleQuantize()
@@ -233,9 +263,8 @@ export default {
     },
     daySliderValue: {
       handler: function(){
-        console.log("day slider Value change")
         var that = this;
-        that.currDay = +that.daySliderValue;
+        that.currDay = +that.dayIndexMap[that.daySliderValue];
         const quantize = d3.scaleQuantize()
                             .domain([0, that.maxNbCriminal])
                             .range(d3.range(9).map(i => "q" + i));
@@ -271,13 +300,7 @@ export default {
     updateCriminalDataBar: function(){
       var that = this;
       var svg = d3.select(".mapHolder")
-      svg = svg.select("svg")
-      var width = +svg.attr('width');
-      var height = +svg.attr('height');
-      const projection = d3.geoMercator()
-                           .center([-73.94, 40.70])
-                           .scale(50000)
-                           .translate([width/2, height/2]);
+                  .select("svg")
 
       var bars = svg.selectAll(".bars");
       bars.each(function(){
@@ -302,13 +325,7 @@ export default {
     updateTrafficFlow: function(){
       var that = this;
       var svg = d3.select(".mapHolder")
-      svg = svg.select("svg")
-      var width = +svg.attr('width');
-      var height = +svg.attr('height');
-      const projection = d3.geoMercator()
-                          .center([-73.94, 40.70])
-                          .scale(50000)
-                          .translate([width/2, height/2]);
+                  .select("svg");
 
       var keys = Object.keys(that.trafficFlowData[that.currDay][that.currHour])
       
@@ -317,38 +334,33 @@ export default {
       keys.forEach(function(key){
         var lat = +key.split(":")[0];
         var long = +key.split(":")[1];
-        var coord = projection([long, lat])
+        var coord = that.projection([long, lat])
 
         svg.append('circle')
             .attr('cx', coord[0])
             .attr('cy', coord[1])
             .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
       })
-
-     var test = projection([-73.94, 40.70])
-      svg.append('svg:circle')
-          .attr('cx', test[0])
-          .attr('cy', test[1])
-          .attr('r', 3);
     },
     updateSentiment: function(){
       var that = this;
       var sentimentValue =  that.senmentimentData[that.currDay][that.currHour]["Sentiment"]
 
+
       if(sentimentValue >= -1.0 && sentimentValue < -0.75){
-        that.sentimentEmoji = that.sentimentEmojis[4];
+        d3.select("image").attr("xlink:href", that.sentimentEmojis[4])
       }
       else if(sentimentValue >= -0.75 && sentimentValue < -0.25){
-        that.sentimentEmoji = that.sentimentEmojis[3];
+        d3.select("image").attr("xlink:href", that.sentimentEmojis[3])
       }
       else if(sentimentValue >= -0.25 && sentimentValue < 0.25){
-        that.sentimentEmoji = that.sentimentEmojis[2];
+        d3.select("image").attr("xlink:href", that.sentimentEmojis[2])
       }
       else if(sentimentValue >= 0.25 && sentimentValue < 0.75){
-        that.sentimentEmoji = that.sentimentEmojis[1];
+        d3.select("image").attr("xlink:href", that.sentimentEmojis[1])
       }
       else if(sentimentValue >= 0.75 && sentimentValue < 1.0){
-        that.sentimentEmoji = that.sentimentEmojis[0];
+        d3.select("image").attr("xlink:href", that.sentimentEmojis[0])
       }
     },
     animation: function(){
@@ -356,13 +368,12 @@ export default {
       var pauseSec = 250;
       // that.animationHour(0, pauseSec);
       // that.animationDay(0, pauseSec);
-      that.animationSet1(1, 0, pauseSec)
+      that.animationSet1(0, 0, pauseSec)
     },
     animationSet1: function(day, hour, pauseSec){
       var that = this;
-      console.log(day, hour )
-      that.$refs.hourSlider.setValue(hour);
-      that.$refs.daySlider.setValue(day);
+      that.$refs.hourSlider.setIndex(hour);
+      that.$refs.daySlider.setIndex(day);
       if(hour >= 24 && day >= 6){
         return;
       }
@@ -377,7 +388,7 @@ export default {
     },
     animationDay: function(dayIdx, pauseSec){
       var that = this;
-      if(dayIdx <= 12){
+      if(dayIdx <= 6){
         setTimeout(function(){
           that.$refs.daySlider.setValue(dayIdx);
           dayIdx += 1;
