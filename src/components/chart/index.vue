@@ -13,11 +13,11 @@ import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 
 const margin = {
-        top: 19.5,
-        right: 19.5,
-        bottom:19.5,
-        left:39.5
-      }
+  top: 19.5,
+  right: 19.5,
+  bottom:19.5,
+  left:39.5
+}
 
 export default {
   name: 'chart-plot-page',
@@ -130,24 +130,31 @@ export default {
           that.updateGraph(1820);
         }, 1000);
       }, 1000);
-      // that.updateGraph(1800);
+    },
+    getXData: function(d){
+      return d.income;
+    },
+    getYData: function(d){
+      return d.lifeExpectancy;
+    },
+    getRadiusData: function(d){
+      return d.population;
+    },
+    getColorData: function(d){
+      return d.region;
+    },
+    sortASC: function(a, b){
+      return this.getRadiusData(b) - this.getRadiusData(a);
+    },
+    sortDESC: function(a, b){
+      return this.getRadiusData(a) - this.getRadiusData(b);
     },
     updateGraph: function(currYear){
       var that = this;
-      function x(d) { return d.income; }
-      function y(d) { return d.lifeExpectancy; }
-      function radius(d) { return d.population; }
-      function color(d) { return d.region; }
-
-      function order(a, b) { return radius(b) - radius(a); }
-      function position(dot) {
-        dot.attr("cx", function(d) { return that.xScale(x(d)); })
-          .attr("cy", function(d) { return that.yScale(y(d)); })
-          .attr("r", function(d) { return that.radiusScale(radius(d)); });
-      }
-
+      
       var svg = d3.select("svg");
       that.label.text(currYear);
+
       if(that.dot === undefined){
         that.dot = svg.append("g")
           .attr("class", "dots")
@@ -161,21 +168,25 @@ export default {
                   .replace(/\s/g, '').replace(/\./g,'').replace(/\,/g,'')
                   .replace(/\'/g,''); 
           })
-          .style("fill", function(d) { return that.colorScale(color(d)); })
-          .call(position)
-          .sort(order);
+          .style("fill", function(d) { return that.colorScale(that.getColorData(d)); })
+          .attr("cx", function(d) { return that.xScale(that.getXData(d)); })
+          .attr("cy", function(d) { return that.yScale(that.getYData(d)); })
+          .attr("r", function(d) { return that.radiusScale(that.getRadiusData(d)); })
 
         that.dot.append("title").text(function(d) { return d.name; });
-        that.dot.data(that.nationData[currYear]).call(position).sort(order);
-        that.label.text(Math.round(currYear));
       }
       else{
         that.dot.data(that.nationData[currYear])
-                .transition()
-                .attr("duration", 40000)
-                .attr("cx", function(d) { return that.xScale(x(d)); })
-                .attr("cy", function(d) { return that.yScale(y(d)); })
-                .attr("r", function(d) { return that.radiusScale(radius(d)); })
+          .transition()
+          .attr("cx", function(d){
+            return that.xScale(that.getXData(d));
+          })
+          .attr("cy", function(d){
+            return that.yScale(that.getYData(d));
+          })
+          .attr("r", function(d){
+            return that.radiusScale(that.getRadiusData(d));
+          })
       }
     }
   },
