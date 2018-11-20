@@ -61,41 +61,35 @@ def group_by_date_to_daily_aggregation():
     df = pd.read_csv("NYPD_crime_group_by_date.csv")
     dailyMap = {}
 
-    for i in range(1, 13):
+    for i in range(0, 7):
         dailyMap[i] = {}
         for j in range(24):
             dailyMap[i][j] = {}
 
     for idx, row in df.iterrows():
         datetimeObj = datetime.datetime.strptime(row["datetime"], '%m/%d/%Y')
-        currMonth = datetimeObj.month
+        currDay = datetimeObj.weekday()
         currHour = int(row["time"])
         precinct = int(row["precinct"])
-        if(precinct not in dailyMap[currMonth][currHour]):
-            dailyMap[currMonth][currHour][precinct] = {}
-            dailyMap[currMonth][currHour][precinct]["totalNumber"] = 0
-            dailyMap[currMonth][currHour][precinct]["felony"] = 0
-            dailyMap[currMonth][currHour][precinct]["misdemeanor"] = 0
-            dailyMap[currMonth][currHour][precinct]["violation"] = 0
+        if(precinct not in dailyMap[currDay][currHour]):
+            dailyMap[currDay][currHour][precinct] = 0
 
-        dailyMap[currMonth][currHour][precinct]["totalNumber"] += row["totalNumber"]
-        dailyMap[currMonth][currHour][precinct]["felony"] += row["felony"]
-        dailyMap[currMonth][currHour][precinct]["misdemeanor"] += row["misdemeanor"]
-        dailyMap[currMonth][currHour][precinct]["violation"] += row["violation"]
+        dailyMap[currDay][currHour][precinct] += row["totalNumber"]
 
     tmpMap = {}
     for key1, value1 in dailyMap.items():
         for key2, value2 in value1.items():
             for key3, value3 in value2.items():
                 tmpMap[len(tmpMap)] = {
-                    "month": key1, "hour": key2, "precinct": key3,
-                    "totalNumber": value3["totalNumber"], "felony": value3["felony"],
-                    "misdemeanor": value3["misdemeanor"], "violation": value3["violation"],
-                    }
+                    "day": key1,
+                    "hour": key2,
+                    "precinct": key3,
+                    "totalNumber": value3,
+                }
     newDf = pd.DataFrame.from_dict(tmpMap, orient="index")
-    newDf.columns = ["month", "hour", "precinct", "totalNumber", "felony", "misdemeanor", "violation"]  
-    newDf.to_csv("NYPD_crime_daily_aggregation.csv", columns=["month", "hour", "precinct", "totalNumber", "felony", "misdemeanor", "violation"])
+    newDf.columns = ["day", "hour", "precinct", "totalNumber"]  
+    newDf.to_csv("NYPD_crime_daily_aggregation.csv", columns=["day", "hour", "precinct", "totalNumber"])
 
 if __name__ == "__main__":
-    #ori_groupby_date()
+    # ori_groupby_date()
     group_by_date_to_daily_aggregation()

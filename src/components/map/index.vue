@@ -24,9 +24,9 @@
           >
           </vue-slider>
           <vue-slider 
-            ref="monthSlider"
-            v-model="monthSliderValue"
-            v-bind="monthSliderOption"
+            ref="daySlider"
+            v-model="daySliderValue"
+            v-bind="daySliderOption"
           >
           </vue-slider>
         </div>
@@ -61,12 +61,12 @@ export default {
       senmentimentData: undefined,
 
       currPrecinct: undefined,
-      currMonth: 1,
-      currHour: 0,
+      currDay: 2,
+      currHour: 1,
       maxNbCriminal: 0,
       maxNbTraffic: 0,
       hourSliderValue: undefined,
-      monthSliderValue: undefined,
+      daySliderValue: undefined,
 
       sentimentEmoji: undefined,
       sentimentEmojis: [
@@ -77,14 +77,14 @@ export default {
         "static/images/5.png",
       ],
 
-      monthSliderOption:{
+      daySliderOption:{
         width: 'auto',
         tooltip: "always",
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
         startAnimation: true,
-        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        data: [0, 1, 2, 3, 4, 5, 6]
       },
       hourSliderOption:{
         width: 'auto',
@@ -106,23 +106,19 @@ export default {
       if(that.maxNbCriminal < +data.totalNumber){
         that.maxNbCriminal = +data.totalNumber;
       }
-
-      if(that.criminalData[+data.month] === undefined){
-        that.criminalData[+data.month] = {}
+      if(that.criminalData[+data.day] === undefined){
+        that.criminalData[+data.day] = {}
       }
 
-      if(that.criminalData[+data.month][+data.hour] === undefined){
-        that.criminalData[+data.month][+data.hour] = {}
+      if(that.criminalData[+data.day][+data.hour] === undefined){
+        that.criminalData[+data.day][+data.hour] = {}
       }
       
-      if(that.criminalData[+data.month][+data.hour][+data.precinct] === undefined){
-        that.criminalData[+data.month][+data.hour][+data.precinct] = {}
+      if(that.criminalData[+data.day][+data.hour][+data.precinct] === undefined){
+        that.criminalData[+data.day][+data.hour][+data.precinct] = 0
       }
       
-      that.criminalData[+data.month][+data.hour][+data.precinct] ["totalNumber"] = +data["totalNumber"];
-      that.criminalData[+data.month][+data.hour][+data.precinct] ["felony"] = +data["felony"];
-      that.criminalData[+data.month][+data.hour][+data.precinct] ["misdemeanor"] = +data["misdemeanor"];
-      that.criminalData[+data.month][+data.hour][+data.precinct] ["violation"] = +data["violation"];
+      that.criminalData[+data.day][+data.hour][+data.precinct] = +data["totalNumber"];
       }
     );
 
@@ -132,7 +128,6 @@ export default {
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
       }
-
       if(that.trafficFlowData[+data.Month] === undefined){
         that.trafficFlowData[+data.Month] = {}
       }
@@ -208,7 +203,7 @@ export default {
       return "Precinct: " + this.currPrecinct;
     },
     currentPrecinctDescription: function(){
-      return "Number of Crime: " + this.criminalData[this.currMonth][this.currHour][this.currPrecinct]["totalNumber"];
+      return "Number of Crime: " + this.criminalData[this.currDay][this.currHour][this.currPrecinct];
     },
   },
   watch: {
@@ -229,18 +224,18 @@ export default {
           var precinctContext = precinctFullContext.split(" ")[0];
           var precinctSuffix = precinctFullContext.split(" ")[1];
           var precinctNum = precinctContext.substring(2, precinctContext.length);
-          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
+          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
         });
         this.updateCriminalDataBar();
         this.updateTrafficFlow();
         this.updateSentiment();
       }
     },
-    monthSliderValue: {
+    daySliderValue: {
       handler: function(){
-        console.log("hour sliderValue change")
+        console.log("day slider Value change")
         var that = this;
-        that.currMonth = +that.monthSliderValue;
+        that.currDay = +that.daySliderValue;
         const quantize = d3.scaleQuantize()
                             .domain([0, that.maxNbCriminal])
                             .range(d3.range(9).map(i => "q" + i));
@@ -253,7 +248,7 @@ export default {
           var precinctContext = precinctFullContext.split(" ")[0];
           var precinctSuffix = precinctFullContext.split(" ")[1];
           var precinctNum = precinctContext.substring(2, precinctContext.length);
-          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currMonth][that.currHour][+precinctNum]["totalNumber"]))
+          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
         });
         this.updateCriminalDataBar();
         this.updateTrafficFlow();
@@ -270,8 +265,8 @@ export default {
       this.currPrecinct = undefined;
     },
     onMapIsReady: function(signal){
-      this.$refs.hourSlider.setIndex(12);
-      this.$refs.monthSlider.setIndex(1);
+      this.$refs.hourSlider.setIndex(0);
+      this.$refs.daySlider.setIndex(0);
     },
     updateCriminalDataBar: function(){
       var that = this;
@@ -291,11 +286,11 @@ export default {
 
         bar.select("rect")
           .attr('height', function() {
-            return that.criminalData[that.currMonth][that.currHour][precinctNum]["totalNumber"];
+            return that.criminalData[that.currDay][that.currHour][precinctNum];
           })
           .attr('width', 3)
           .attr('y', function() {
-            return -that.criminalData[that.currMonth][that.currHour][precinctNum]["totalNumber"];
+            return -that.criminalData[that.currDay][that.currHour][precinctNum];
           })
           .attr("class", "bars")
           .style("fill", "blue")
@@ -315,7 +310,7 @@ export default {
                           .scale(50000)
                           .translate([width/2, height/2]);
 
-      var keys = Object.keys(that.trafficFlowData[that.currMonth][that.currHour])
+      var keys = Object.keys(that.trafficFlowData[that.currDay][that.currHour])
       
       d3.selectAll("circle")
         .remove();
@@ -327,7 +322,7 @@ export default {
         svg.append('circle')
             .attr('cx', coord[0])
             .attr('cy', coord[1])
-            .attr('r', +that.trafficFlowData[that.currMonth][that.currHour][key] / that.maxNbCriminal * 0.1);
+            .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
       })
 
      var test = projection([-73.94, 40.70])
@@ -338,7 +333,7 @@ export default {
     },
     updateSentiment: function(){
       var that = this;
-      var sentimentValue =  that.senmentimentData[that.currMonth][that.currHour]["Sentiment"]
+      var sentimentValue =  that.senmentimentData[that.currDay][that.currHour]["Sentiment"]
 
       if(sentimentValue >= -1.0 && sentimentValue < -0.75){
         that.sentimentEmoji = that.sentimentEmojis[4];
@@ -360,33 +355,33 @@ export default {
       var that = this;
       var pauseSec = 250;
       // that.animationHour(0, pauseSec);
-      // that.animationMonth(0, pauseSec);
+      // that.animationDay(0, pauseSec);
       that.animationSet1(1, 0, pauseSec)
     },
-    animationSet1: function(month, hour, pauseSec){
+    animationSet1: function(day, hour, pauseSec){
       var that = this;
-      console.log(month, hour )
+      console.log(day, hour )
       that.$refs.hourSlider.setValue(hour);
-      that.$refs.monthSlider.setValue(month);
-      if(hour >= 24 && month >= 12){
+      that.$refs.daySlider.setValue(day);
+      if(hour >= 24 && day >= 6){
         return;
       }
       setTimeout(function(){
         hour += 1;
-        if(hour >= 24 && month < 12){
+        if(hour >= 24 && day < 6){
           hour = 0;
-          month += 1;
+          day += 1;
         }
-        that.animationSet1(month, hour, pauseSec);
+        that.animationSet1(day, hour, pauseSec);
       }, pauseSec);
     },
-    animationMonth: function(monthIdx, pauseSec){
+    animationDay: function(dayIdx, pauseSec){
       var that = this;
-      if(monthIdx <= 12){
+      if(dayIdx <= 12){
         setTimeout(function(){
-          that.$refs.monthSlider.setValue(monthIdx);
-          monthIdx += 1;
-          that.animationMonth(monthIdx, pauseSec);
+          that.$refs.daySlider.setValue(dayIdx);
+          dayIdx += 1;
+          that.animationDay(dayIdx, pauseSec);
         }, pauseSec);
       }
     },

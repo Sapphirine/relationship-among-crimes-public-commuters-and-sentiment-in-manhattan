@@ -184,7 +184,7 @@ export default {
           })
           .attr("r", function(d){
             return that.radiusScale(that.getRadiusData(d));
-          })
+          });
       }
     }
   },
@@ -226,6 +226,13 @@ text {
   fill: none;
   pointer-events: all;
   cursor: ew-resize;
+}
+
+path {
+  pointer-events: all;
+  fill: none;
+  stroke: #666;
+  stroke-opacity: 0.2;
 }
 
 </style>
