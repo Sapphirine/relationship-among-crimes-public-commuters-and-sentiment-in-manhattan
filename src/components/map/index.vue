@@ -58,6 +58,7 @@
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
+import x3dom from 'x3dom';
 
 const manhattanMap = require("./manhattan_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
@@ -82,6 +83,7 @@ export default {
       criminalData: undefined,
       currPrecinct: undefined,
       maxNbCriminal: 0,
+      scene: undefined,
       
       // Traffic Data
       trafficFlowData: undefined,
@@ -228,10 +230,15 @@ export default {
                 .select("svg");
     var width = +svg.attr('width');
     var height = +svg.attr('height');
+    // that.projection = d3.geoMercator()
+    //                     .center([-73.94, 40.70])
+    //                     .scale(50000)
+    //                     .translate([width/2, height/2]);
+
     that.projection = d3.geoMercator()
-                        .center([-73.94, 40.70])
-                        .scale(50000)
-                        .translate([width/2, height/2]);
+                         .center([-73.94, 40.73])
+                         .scale(80000)
+                         .translate([width/2, height/2]);
 
     var canvasLayer = d3.select("#manhattan_map")
                         .append('canvas')
@@ -257,6 +264,19 @@ export default {
       .attr("xlink:href", that.sentimentEmojis[2])
       .attr("alt", "img")
 
+    var x3dCanvas = d3.select("#manhattan_map")
+                      .append("x3d")
+                      .attr("id", "x3dcanvas")
+                      .attr( "height", height.toString()+"px")
+                      .attr( "width", width.toString()+"px")
+                      .style("position", "absolute")
+                      .style("top", svg_offset.top.toString() + "px")
+                      .style("left", svg_offset.left.toString() + "px")
+    that.scene = x3dCanvas.append("scene");
+    that.scene.append("viewpoint")
+          .attr( "centerOfRotation", "3.75 0 10")
+          .attr( "position", "13.742265188709691 -27.453522975182366 16.816062840792625" )
+          .attr( "orientation", "0.962043810961999 0.1696342804961945 0.21376603254551874 1.379433089729343" );
 
     that.$refs.hourSlider.setIndex(12);
     that.$refs.daySlider.setIndex(1);
@@ -335,6 +355,7 @@ export default {
                   .select("svg")
 
       var bars = svg.selectAll(".bars");
+
       bars.each(function(){
         var bar = d3.select(this);
         var precinctNum = bar.attr("class").split(" ")[1];
@@ -350,8 +371,8 @@ export default {
           .attr("class", "bars")
           .style("fill", "Coral")
           .style("stroke", "white")
-          .style("stroke-width", 0.5)
-          .style("opacity", 0.6);
+          .style("stroke-width", 1)
+          .style("opacity", 0.8);
       })
     },
     updateTrafficFlow: function(){
