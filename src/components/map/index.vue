@@ -3,7 +3,7 @@
     <div class="container">
       <h1>{{title}}</h1>
       <div class="mapHolder">
-        <NewyorkMap
+        <ManhattanMap
           @precinctSelected="onPrecinctSelected"
           @precinctDeselected="onPrecinctDeselected"
           @mapIsReady="onMapIsReady"
@@ -57,17 +57,18 @@
 <script>
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
+import simpleheat from 'simpleheat';
 
-const newyorkMap = require("./newyork_map.vue").default;
+const manhattanMap = require("./manhattan_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
 
 export default {
   components: {
-    NewyorkMap: newyorkMap,
+    ManhattanMap: manhattanMap,
     Tooltip: tooltip,
     vueSlider,
   },
-  name: 'Map Plot Page',
+  name: 'map-plot-page',
   data: function() {
     return {
       title: 'Criminal Map',
@@ -85,6 +86,7 @@ export default {
       // Traffic Data
       trafficFlowData: undefined,
       maxNbTraffic: 0,
+      canvas: undefined,
 
       // Sentiment Data
       senmentimentData: undefined,
@@ -124,7 +126,7 @@ export default {
   created: function(){
     console.log("created")
     var that = this;
-
+      
     that.criminalData = {};
     d3.csv("static/data/NYPD_crime_daily_aggregation.csv", function(data) {
       if(that.maxNbCriminal < +data.totalNumber){
@@ -220,6 +222,8 @@ export default {
   mounted: function(){
     var that = this;
 
+    var svg_offset = that.getOffset( document.getElementById('map_svg'));
+
     var svg = d3.select(".mapHolder")
                 .select("svg");
     var width = +svg.attr('width');
@@ -228,6 +232,19 @@ export default {
                         .center([-73.94, 40.70])
                         .scale(50000)
                         .translate([width/2, height/2]);
+
+    var canvasLayer = d3.select("#manhattan_map")
+                        .append('canvas')
+                        .attr('id', 'heatmap')
+                        .attr('width', width)
+                        .attr('height', height)
+                        .style("position", "absolute")
+                        .style("top", svg_offset.top.toString() + "px")
+                        .style("left", svg_offset.left.toString() + "px")
+
+    that.canvas = canvasLayer.node();
+    var context = that.canvas.getContext("2d");
+    context.globalAlpha = 0.7;
 
     d3.select("svg")
       .append("g")
@@ -339,23 +356,44 @@ export default {
     },
     updateTrafficFlow: function(){
       var that = this;
+
       var svg = d3.select(".mapHolder")
                   .select("svg");
 
+      var heat = simpleheat(that.canvas);
       var keys = Object.keys(that.trafficFlowData[that.currDay][that.currHour])
-      
+
       d3.selectAll("circle")
         .remove();
+
+      var heatData = []
       keys.forEach(function(key){
         var lat = +key.split(":")[0];
         var long = +key.split(":")[1];
         var coord = that.projection([long, lat])
+        
+        var keyData = [];
+        keyData.push(coord[0])
+        keyData.push(coord[1])
+        keyData.push(+that.trafficFlowData[that.currDay][that.currHour][key])
+        heatData.push(keyData);
 
-        svg.append('circle')
-            .attr('cx', coord[0])
-            .attr('cy', coord[1])
-            .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
+        // svg.append('circle')
+        //     .attr('cx', coord[0])
+        //     .attr('cy', coord[1])
+        //     .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
       })
+      heat.data(heatData);
+      // set point radius and blur radius (25 and 15 by default)
+      heat.radius(10, 10);
+      // optionally customize gradient colors, e.g. below
+      // (would be nicer if d3 color scale worked here)
+      // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
+
+      // set maximum for domain
+      heat.max(that.maxNbTraffic / 2);
+      // draw into canvas, with minimum opacity threshold
+      heat.draw(0.05);
     },
     updateSentiment: function(){
       var that = this;
@@ -421,11 +459,19 @@ export default {
         }, pauseSec);
       }
     },
+    getOffset: function(el) {
+      const rect = el.getBoundingClientRect();
+      return {
+        left: rect.left + window.scrollX,
+        top: rect.top + window.scrollY
+      };
+    }
   },
 }
 </script>
 
 <style>
+
 circle{
 	fill: green;
   opacity: 0.8;
