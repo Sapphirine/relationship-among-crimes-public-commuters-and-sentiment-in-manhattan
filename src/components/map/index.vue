@@ -16,14 +16,21 @@
           :description="currentPrecinctDescription"
         />
       </div>
-      <div class="sliderHolder my-2 mb-2">
-
+      <div class="sliderHolder my-2 mb-2 container">
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-1">
+            <div class="row">
+              <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5>
+            </div>
+            <div class="row">
+              <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5>
+            </div>
           </div>
           <div class="col-md-7">
             <div class="row">
-              <div class="col-md-12 ml-auto mr-auto">
+              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
                 <vue-slider 
                   ref="hourSlider"
                   v-model="hourSliderValue"
@@ -33,7 +40,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 ml-auto mr-auto">
+              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
                 <vue-slider 
                   ref="daySlider"
                   v-model="daySliderValue"
@@ -44,7 +51,7 @@
             </div>
           </div>
           <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary my-2" v-on:click="animation"><font-awesome-icon icon="play" /></button>
+            <button id="playBtn" class="btn btn-primary  btn-lg my-1" v-on:click="animation"><font-awesome-icon icon="play" /></button>
           </div> 
           <div class="col-md-2">
           </div>
