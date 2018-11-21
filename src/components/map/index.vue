@@ -65,7 +65,6 @@
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
-import x3dom from 'x3dom';
 
 const manhattanMap = require("./manhattan_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
@@ -90,7 +89,6 @@ export default {
       criminalData: undefined,
       currPrecinct: undefined,
       maxNbCriminal: 0,
-      scene: undefined,
       
       // Traffic Data
       trafficFlowData: undefined,
@@ -243,8 +241,8 @@ export default {
     //                     .translate([width/2, height/2]);
 
     that.projection = d3.geoMercator()
-                         .center([-73.94, 40.73])
-                         .scale(80000)
+                         .center([-73.94, 40.78])
+                         .scale(130000)
                          .translate([width/2, height/2]);
 
     var canvasLayer = d3.select("#manhattan_map")
@@ -258,7 +256,7 @@ export default {
 
     that.canvas = canvasLayer.node();
     var context = that.canvas.getContext("2d");
-    context.globalAlpha = 0.7;
+    context.globalAlpha = 0.0;
 
     d3.select("svg")
       .append("g")
@@ -270,20 +268,6 @@ export default {
       .attr("height", 200)
       .attr("xlink:href", that.sentimentEmojis[2])
       .attr("alt", "img")
-
-    var x3dCanvas = d3.select("#manhattan_map")
-                      .append("x3d")
-                      .attr("id", "x3dcanvas")
-                      .attr( "height", height.toString()+"px")
-                      .attr( "width", width.toString()+"px")
-                      .style("position", "absolute")
-                      .style("top", svg_offset.top.toString() + "px")
-                      .style("left", svg_offset.left.toString() + "px")
-    that.scene = x3dCanvas.append("scene");
-    that.scene.append("viewpoint")
-          .attr( "centerOfRotation", "3.75 0 10")
-          .attr( "position", "13.742265188709691 -27.453522975182366 16.816062840792625" )
-          .attr( "orientation", "0.962043810961999 0.1696342804961945 0.21376603254551874 1.379433089729343" );
 
     that.$refs.hourSlider.setIndex(12);
     that.$refs.daySlider.setIndex(1);
@@ -363,20 +347,24 @@ export default {
 
       var bars = svg.selectAll(".bars");
 
+      var quantize = d3.scaleLinear()
+        .domain([0, that.maxNbCriminal])
+        .range([0, 80]);
+
       bars.each(function(){
         var bar = d3.select(this);
         var precinctNum = bar.attr("class").split(" ")[1];
 
         bar.select("rect")
           .attr('height', function() {
-            return that.criminalData[that.currDay][that.currHour][precinctNum];
+            return quantize(that.criminalData[that.currDay][that.currHour][precinctNum]);
           })
-          .attr('width', 10)
+          .attr('width', 15)
           .attr('y', function() {
-            return -that.criminalData[that.currDay][that.currHour][precinctNum];
+            return -quantize(that.criminalData[that.currDay][that.currHour][precinctNum]);
           })
           .attr("class", "bars")
-          .style("fill", "Coral")
+          .style("fill", "steelblue")
           .style("stroke", "white")
           .style("stroke-width", 1)
           .style("opacity", 0.8);
@@ -511,13 +499,22 @@ circle{
   border-radius: 25px;
 }
 
-.q0 { fill:rgb(247,251,255) }
-.q1 { fill:rgb(222,235,247) }
-.q2 { fill:rgb(198,219,239) }
-.q3 { fill:rgb(158,202,225) }
-.q4 { fill:rgb(107,174,214) }
-.q5 { fill:rgb(66,146,198) }
-.q6 { fill:rgb(33,113,181) }
-.q7 { fill:rgb(8,81,156) }
-.q8 { fill:rgb(8,48,107) }
+// .q0 { fill:rgb(247,251,255) }
+// .q1 { fill:rgb(222,235,247) }
+// .q2 { fill:rgb(198,219,239) }
+// .q3 { fill:rgb(158,202,225) }
+// .q4 { fill:rgb(107,174,214) }
+// .q5 { fill:rgb(66,146,198) }
+// .q6 { fill:rgb(33,113,181) }
+// .q7 { fill:rgb(8,81,156) }
+// .q8 { fill:rgb(8,48,107) }
+.q0 { fill:rgb(204, 204, 204) }
+.q1 { fill:rgb(204, 178, 178) }
+.q2 { fill:rgb(204, 153, 153) }
+.q3 { fill:rgb(204, 127, 127) }
+.q4 { fill:rgb(204, 102, 102) }
+.q5 { fill:rgb(204, 76, 76) }
+.q6 { fill:rgb(204, 51, 51) }
+.q7 { fill:rgb(204, 25, 25) }
+.q8 { fill:rgb(204, 0, 0) }
 </style>
