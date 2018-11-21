@@ -6,9 +6,17 @@ import router from './router'
 import * as d3 from 'd3'
 import charts from './v-charts'
 import VueResource from 'vue-resource';
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import BootstrapVue from 'bootstrap-vue';
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret, faPlay } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faUserSecret, faPlay)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 Vue.use(charts);

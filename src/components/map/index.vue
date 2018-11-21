@@ -1,42 +1,57 @@
 <template>
-    <div class="criminalMap">
+  <div class="criminalMap">
+    <div class="container">
       <h1>{{title}}</h1>
-      <div class="container">
-        <div class="mapHolder">
-          <NewyorkMap
-            @precinctSelected="onPrecinctSelected"
-            @precinctDeselected="onPrecinctDeselected"
-            @mapIsReady="onMapIsReady"
-          />
-        </div>
-        <div class="tooltipHolder">
-          <Tooltip
-            v-if="currPrecinct"
-            :title="currentPrecinctTitle"
-            :description="currentPrecinctDescription"
-          />
-        </div>
-        <div class="sliderHolder">
-          <div>
-            <vue-slider 
-              ref="hourSlider"
-              v-model="hourSliderValue"
-              v-bind="hourSliderOption"
-            >
-            </vue-slider>
+      <div class="mapHolder">
+        <NewyorkMap
+          @precinctSelected="onPrecinctSelected"
+          @precinctDeselected="onPrecinctDeselected"
+          @mapIsReady="onMapIsReady"
+        />
+      </div>
+      <div class="tooltipHolder">
+        <Tooltip
+          v-if="currPrecinct"
+          :title="currentPrecinctTitle"
+          :description="currentPrecinctDescription"
+        />
+      </div>
+      <div class="sliderHolder my-2 mb-2">
+
+        <div class="row">
+          <div class="col-md-2">
           </div>
-          <div>
-            <vue-slider 
-              ref="daySlider"
-              v-model="daySliderValue"
-              v-bind="daySliderOption"
-            >
-            </vue-slider>
+          <div class="col-md-7">
+            <div class="row">
+              <div class="col-md-12 ml-auto mr-auto">
+                <vue-slider 
+                  ref="hourSlider"
+                  v-model="hourSliderValue"
+                  v-bind="hourSliderOption"
+                >
+                </vue-slider>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 ml-auto mr-auto">
+                <vue-slider 
+                  ref="daySlider"
+                  v-model="daySliderValue"
+                  v-bind="daySliderOption"
+                >
+                </vue-slider>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1">
+            <button id="playBtn" class="btn btn-primary my-2" v-on:click="animation"><font-awesome-icon icon="play" /></button>
+          </div> 
+          <div class="col-md-2">
           </div>
         </div>
-        <button class="btn btn-primary" v-on:click="animation">animation</button>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -87,8 +102,8 @@ export default {
       hourSliderValue: undefined,
       daySliderValue: undefined,
       daySliderOption:{
-        width: '05',
-        tooltip: "always",
+        width: 'auto',
+        tooltip: "hover",
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
@@ -97,7 +112,7 @@ export default {
       },
       hourSliderOption:{
         width: 'auto',
-        tooltip: "always",
+        tooltip: "hover",
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
@@ -217,7 +232,7 @@ export default {
     d3.select("svg")
       .append("g")
       .attr("transform", function(d) {
-        return "translate(" + "0" + "," + "100" + ")";
+        return "translate(" + "0" + "," + "0" + ")";
       })
       .append("svg:image")
       .attr("width", 200)
@@ -311,15 +326,15 @@ export default {
           .attr('height', function() {
             return that.criminalData[that.currDay][that.currHour][precinctNum];
           })
-          .attr('width', 3)
+          .attr('width', 10)
           .attr('y', function() {
             return -that.criminalData[that.currDay][that.currHour][precinctNum];
           })
           .attr("class", "bars")
-          .style("fill", "blue")
+          .style("fill", "Coral")
           .style("stroke", "white")
           .style("stroke-width", 0.5)
-          .style("opacity", 0.7);
+          .style("opacity", 0.6);
       })
     },
     updateTrafficFlow: function(){
@@ -411,24 +426,17 @@ export default {
 </script>
 
 <style>
-.criminalMap{
-}
-
-.mapHolder {
-}
-
-.tooltipHolder{
-
-}
-img{
-  width: 500px;
-  height: 500px;
-}
 circle{
 	fill: green;
   opacity: 0.8;
   fill-opacity: .5;
 }
+
+#playBtn{
+  border: 1px solid black;
+  border-radius: 25px;
+}
+
 .q0 { fill:rgb(247,251,255) }
 .q1 { fill:rgb(222,235,247) }
 .q2 { fill:rgb(198,219,239) }
