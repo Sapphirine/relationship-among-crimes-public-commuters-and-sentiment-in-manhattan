@@ -1,7 +1,7 @@
 <template>
   <div class="criminalMap">
-    <div class="container">
-      <h1>{{title}}</h1>
+    <div class="container" style="width:1280px">
+      <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
       <div class="mapHolder">
         <ManhattanMap
           @precinctSelected="onPrecinctSelected"
@@ -16,7 +16,7 @@
           :description="currentPrecinctDescription"
         />
       </div>
-      <div class="sliderHolder my-2 mb-2 container">
+      <div class="sliderHolder my-4 mb-2 pl-6">
         <div class="row">
           <div class="col-md-1">
           </div>
@@ -28,7 +28,7 @@
               <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5>
             </div>
           </div>
-          <div class="col-md-7">
+          <div class="col-md-8">
             <div class="row">
               <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
                 <vue-slider 
@@ -53,7 +53,7 @@
           <div class="col-md-1">
             <button id="playBtn" class="btn btn-primary  btn-lg my-1" v-on:click="animation"><font-awesome-icon icon="play" /></button>
           </div> 
-          <div class="col-md-2">
+          <div class="col-md-1">
           </div>
         </div>
       </div>
@@ -65,6 +65,7 @@
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
+import simpleheat2 from 'simpleheat';
 
 const manhattanMap = require("./manhattan_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
@@ -87,13 +88,15 @@ export default {
 
       // Criminal Data
       criminalData: undefined,
+      precinctCenter: undefined,
       currPrecinct: undefined,
       maxNbCriminal: 0,
       
       // Traffic Data
       trafficFlowData: undefined,
       maxNbTraffic: 0,
-      canvas: undefined,
+      canvas_criminal: undefined,
+      canvas_traffic: undefined,
 
       // Sentiment Data
       senmentimentData: undefined,
@@ -149,8 +152,13 @@ export default {
         that.criminalData[+data.day][+data.hour][+data.precinct] = 0
       }
       that.criminalData[+data.day][+data.hour][+data.precinct] = +data["totalNumber"];
-      }
-    );
+    });
+
+    that.precinctCenter = [];
+    d3.csv("static/data/precinct_center.csv", function(geoCenter) {
+      var coord = that.projection([+geoCenter.long, +geoCenter.lat]);
+      that.precinctCenter.push([coord[0], coord[1], +geoCenter.precinct]);
+    });
 
     that.trafficFlowData = {};
     d3.csv("static/data/final_table_complete_subset.csv", function(data){ 
@@ -229,12 +237,12 @@ export default {
   mounted: function(){
     var that = this;
 
-    var svg_offset = that.getOffset( document.getElementById('map_svg'));
 
-    var svg = d3.select(".mapHolder")
-                .select("svg");
-    var width = +svg.attr('width');
-    var height = +svg.attr('height');
+    var svg_criminal = d3.select("#map_svg_criminal");
+    var svg_traffic = d3.select("#map_svg_traffic");
+
+    var width = +svg_criminal.attr('width');
+    var height = +svg_criminal.attr('height');
     // that.projection = d3.geoMercator()
     //                     .center([-73.94, 40.70])
     //                     .scale(50000)
@@ -245,29 +253,47 @@ export default {
                          .scale(130000)
                          .translate([width/2, height/2]);
 
-    var canvasLayer = d3.select("#manhattan_map")
-                        .append('canvas')
-                        .attr('id', 'heatmap')
-                        .attr('width', width)
-                        .attr('height', height)
-                        .style("position", "absolute")
-                        .style("top", svg_offset.top.toString() + "px")
-                        .style("left", svg_offset.left.toString() + "px")
+    var svg_offset_criminal = that.getOffset( document.getElementById('map_criminal_col'));
+    var svg_offset_traffic = that.getOffset( document.getElementById('map_traffic_col'));
 
-    that.canvas = canvasLayer.node();
-    var context = that.canvas.getContext("2d");
-    context.globalAlpha = 0.0;
+    console.log(svg_offset_criminal)
+    console.log(svg_offset_traffic)
 
-    d3.select("svg")
-      .append("g")
-      .attr("transform", function(d) {
-        return "translate(" + "0" + "," + "0" + ")";
-      })
-      .append("svg:image")
-      .attr("width", 200)
-      .attr("height", 200)
-      .attr("xlink:href", that.sentimentEmojis[2])
-      .attr("alt", "img")
+    var canvasLayer_criminal = d3.select("#map_criminal_col")
+      .append('canvas')
+      .attr('id', 'heatmap_criminal')
+      .attr('width', width)
+      .attr('height', height)
+      .style("position", "absolute")
+      .style("top", svg_offset_criminal.top.toString() + "px")
+      .style("left", svg_offset_criminal.left.toString() + "px")
+
+    var canvasLayer_traffic = d3.select("#map_traffic_col")
+      .append('canvas')
+      .attr('id', 'heatmap_traffic')
+      .attr('width', width)
+      .attr('height', height)
+      .style("position", "absolute")
+      .style("top", svg_offset_traffic.top.toString() + "px")
+      .style("left", svg_offset_traffic.left.toString() + "px")
+
+    that.canvas_criminal = canvasLayer_criminal.node();
+    that.canvas_traffic = canvasLayer_traffic.node();
+    var context_criminal = that.canvas_criminal.getContext("2d");
+    var context_traffic = that.canvas_traffic.getContext("2d");
+    context_criminal.globalAlpha = 0.8;
+    context_traffic.globalAlpha = 0.8;
+
+    // d3.select("map_svg_criminal")
+    //   .append("g")
+    //   .attr("transform", function(d) {
+    //     return "translate(" + "0" + "," + "0" + ")";
+    //   })
+    //   .append("svg:image")
+    //   .attr("width", 200)
+    //   .attr("height", 200)
+    //   .attr("xlink:href", that.sentimentEmojis[2])
+    //   .attr("alt", "img")
 
     that.$refs.hourSlider.setIndex(12);
     that.$refs.daySlider.setIndex(1);
@@ -289,16 +315,16 @@ export default {
                             .domain([0, that.maxNbCriminal])
                             .range(d3.range(9).map(i => "q" + i));
 
-        var svg = d3.select("svg");
-        var selections = svg.selectAll(".precinct");
-        selections.each(function() {
-          var s = d3.select(this);
-          var precinctFullContext = s.attr("class")
-          var precinctContext = precinctFullContext.split(" ")[0];
-          var precinctSuffix = precinctFullContext.split(" ")[1];
-          var precinctNum = precinctContext.substring(2, precinctContext.length);
-          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
-        });
+        // var svg = d3.select("#map_svg_criminal");
+        // var selections = svg.selectAll(".precinct_criminal");
+        // selections.each(function() {
+        //   var s = d3.select(this);
+        //   var precinctFullContext = s.attr("class")
+        //   var precinctContext = precinctFullContext.split(" ")[0];
+        //   var precinctSuffix = precinctFullContext.split(" ")[1];
+        //   var precinctNum = precinctContext.substring(2, precinctContext.length);
+        //   s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
+        // });
         this.updateCriminalDataBar();
         this.updateTrafficFlow();
         this.updateSentiment();
@@ -312,16 +338,16 @@ export default {
                             .domain([0, that.maxNbCriminal])
                             .range(d3.range(9).map(i => "q" + i));
 
-        var svg = d3.select("svg");
-        var selections = svg.selectAll(".precinct");
-        selections.each(function() {
-          var s = d3.select(this);
-          var precinctFullContext = s.attr("class")
-          var precinctContext = precinctFullContext.split(" ")[0];
-          var precinctSuffix = precinctFullContext.split(" ")[1];
-          var precinctNum = precinctContext.substring(2, precinctContext.length);
-          s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
-        });
+        // var svg = d3.select("#map_svg_criminal");
+        // var selections = svg.selectAll(".precinct_criminal");
+        // selections.each(function() {
+        //   var s = d3.select(this);
+        //   var precinctFullContext = s.attr("class")
+        //   var precinctContext = precinctFullContext.split(" ")[0];
+        //   var precinctSuffix = precinctFullContext.split(" ")[1];
+        //   var precinctNum = precinctContext.substring(2, precinctContext.length);
+        //   s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
+        // });
         this.updateCriminalDataBar();
         this.updateTrafficFlow();
         this.updateSentiment();
@@ -342,45 +368,38 @@ export default {
     },
     updateCriminalDataBar: function(){
       var that = this;
-      var svg = d3.select(".mapHolder")
-                  .select("svg")
+      var svg = d3.select("#map_svg_criminal")
 
-      var bars = svg.selectAll(".bars");
+      var heat = simpleheat(that.canvas_criminal);
 
       var quantize = d3.scaleLinear()
         .domain([0, that.maxNbCriminal])
         .range([0, 80]);
 
-      bars.each(function(){
-        var bar = d3.select(this);
-        var precinctNum = bar.attr("class").split(" ")[1];
-
-        bar.select("rect")
-          .attr('height', function() {
-            return quantize(that.criminalData[that.currDay][that.currHour][precinctNum]);
-          })
-          .attr('width', 15)
-          .attr('y', function() {
-            return -quantize(that.criminalData[that.currDay][that.currHour][precinctNum]);
-          })
-          .attr("class", "bars")
-          .style("fill", "steelblue")
-          .style("stroke", "white")
-          .style("stroke-width", 1)
-          .style("opacity", 0.8);
-      })
+      var heatData = [];
+      for(var i = 0; i < that.precinctCenter.length; i++){
+        var d = that.precinctCenter[i];
+        var keyData = [];
+        keyData.push(d[0]);
+        keyData.push(d[1]);
+        keyData.push(+that.criminalData[that.currDay][that.currHour][d[2]]);
+        heatData.push(keyData);
+      }
+      heat.data(heatData);
+      heat.radius(10, 10);
+      // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
+      heat.max(40);
+      heat.draw(0.05);
     },
     updateTrafficFlow: function(){
       var that = this;
 
-      var svg = d3.select(".mapHolder")
-                  .select("svg");
+      var svg = d3.select("#map_svg_traffic");
 
-      var heat = simpleheat(that.canvas);
+      var heat = simpleheat(that.canvas_traffic);
       var keys = Object.keys(that.trafficFlowData[that.currDay][that.currHour])
-
-      d3.selectAll("circle")
-        .remove();
+      
+      d3.selectAll("circle").remove();
 
       var heatData = []
       keys.forEach(function(key){
@@ -394,21 +413,15 @@ export default {
         keyData.push(+that.trafficFlowData[that.currDay][that.currHour][key])
         heatData.push(keyData);
 
-        // svg.append('circle')
-        //     .attr('cx', coord[0])
-        //     .attr('cy', coord[1])
-        //     .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
+        svg.append('circle')
+            .attr('cx', coord[0])
+            .attr('cy', coord[1])
+            .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
       })
       heat.data(heatData);
-      // set point radius and blur radius (25 and 15 by default)
       heat.radius(10, 10);
-      // optionally customize gradient colors, e.g. below
-      // (would be nicer if d3 color scale worked here)
       // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
-
-      // set maximum for domain
       heat.max(that.maxNbTraffic / 2);
-      // draw into canvas, with minimum opacity threshold
       heat.draw(0.05);
     },
     updateSentiment: function(){

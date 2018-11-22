@@ -1,6 +1,13 @@
 <template>
   <div id="manhattan_map">
-    <svg id="map_svg" width="800" height="600"></svg>
+    <div class="row">
+      <div id="map_criminal_col">
+        <svg id="map_svg_criminal" width="570" height="600"></svg>
+      </div>
+      <div id="map_traffic_col">
+        <svg id="map_svg_traffic" width="570" height="600"></svg>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,9 +19,10 @@ const topojson = require('topojson');
 export default {
   mounted: function() {
     var that = this;
-    var svg = d3.select("svg");
-    var width = +svg.attr('width');
-    var height = +svg.attr('height');
+    var svg_criminal = d3.select("#map_svg_criminal");
+    var svg_traffic = d3.select("#map_svg_traffic");
+    var width = +svg_criminal.attr('width');
+    var height = +svg_criminal.attr('height');
 
     const projection = d3.geoMercator()
                          .center([-73.94, 40.78])
@@ -24,17 +32,37 @@ export default {
 
     d3.json("static/data/police_precincts.geojson")
       .then(function(geoJson) {
-        svg.append('g')
-          .selectAll('.precinct')
+        svg_criminal.append('g')
+          .selectAll('.precinct_criminal')
           .data(geoJson.features)
           .enter()
           .append("path")
-          .attr("class", "precinct")
+          .attr("class", "precinct_criminal")
           .attr("class", function(d){
             return "nb" + d.properties.Precinct;
           })
           .attr("d", path)
-          .classed("precinct", true)
+          .classed("precinct_criminal", true)
+          .on('mouseover', function(d) {
+            d3.select(this).transition().duration(500).style("stroke-width", 3).style("stroke-opacity", .5);
+            that.$emit('precinctSelected', +d.properties.Precinct)
+          })
+          .on('mouseout', function(d) {
+            d3.select(this).transition().duration(500).style("stroke-width", 1).style("stroke-opacity", 1);
+            that.$emit('precinctDeselected', +d.properties.Precinct)
+          });
+
+        svg_traffic.append('g')
+          .selectAll('.precinct_traffic')
+          .data(geoJson.features)
+          .enter()
+          .append("path")
+          .attr("class", "precinct_traffic")
+          .attr("class", function(d){
+            return "nb" + d.properties.Precinct;
+          })
+          .attr("d", path)
+          .classed("precinct_traffic", true)
           .on('mouseover', function(d) {
             d3.select(this).transition().duration(500).style("stroke-width", 3).style("stroke-opacity", .5);
             that.$emit('precinctSelected', +d.properties.Precinct)
@@ -46,8 +74,7 @@ export default {
 
         d3.csv("static/data/precinct_center.csv")
           .then(function(geoCenter) {
-
-            var bars = svg.selectAll(".precinctCenter")
+            var bars = svg_criminal
               .data(geoCenter)
               .enter()
               .append("g")
@@ -58,19 +85,18 @@ export default {
                 return "translate(" + projection([d.long, d.lat]) + ")";
               })
               .append("rect");
-
-          that.$emit('mapIsReady', 'ready');
-        })
-      }
-    );
+          })
+        that.$emit('mapIsReady', 'ready');
+    });
   }
 }
 
 </script>
 
 <style>
-.precinct{ 
+.precinct_criminal, .precinct_traffic{ 
   stroke: grey;
   stroke-width: 1px;
+  fill: white;
 }
 </style>
