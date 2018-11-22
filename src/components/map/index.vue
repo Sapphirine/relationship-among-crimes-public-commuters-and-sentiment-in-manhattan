@@ -56,6 +56,8 @@
           <div class="col-md-1">
           </div>
         </div>
+      <apexchart type=donut width=380 :options="chartOptions" :series="series" />
+
       </div>
     </div>
   </div>
@@ -65,7 +67,11 @@
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
-import simpleheat2 from 'simpleheat';
+
+import Vue from "vue";
+import VueApexCharts from "vue-apexcharts";
+Vue.use(VueApexCharts);
+Vue.component("apexchart", VueApexCharts);
 
 const manhattanMap = require("./manhattan_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
@@ -99,7 +105,7 @@ export default {
       canvas_traffic: undefined,
 
       // Sentiment Data
-      senmentimentData: undefined,
+      sentimentData: undefined,
       sentimentEmoji: undefined,
       sentimentEmojis: [
         "static/images/1.png",
@@ -130,7 +136,27 @@ export default {
         piecewiseLabel: true,
         startAnimation: true,
         data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-      }
+      },
+
+      
+      series: [1, 1, 1],
+      chartOptions: {
+        labels: ["Negative", "Neutral", "Positive"],
+        dataLabels: {
+          enabled: true
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              show: true
+            }
+          }
+        }]
+      },
     }
   },
   created: function(){
@@ -175,68 +201,21 @@ export default {
       that.trafficFlowData[+data.Month-1][+data.HOUR_modified][(data.Latitude + ":" +data.Longitude)] = total;
     });
 
-    that.senmentimentData = {};
-    var fakeData = {
-      0:{
-        0:{"Sentiment": -1.0  },
-        1:{"Sentiment": -0.9  },
-        2:{"Sentiment": -0.8  },
-        3:{"Sentiment": -0.7  },
-        4:{"Sentiment": -0.6  },
-        5:{"Sentiment": -0.55 },
-        6:{"Sentiment": -0.54 },
-        7:{"Sentiment": -0.53 },
-        8:{"Sentiment": -0.52 },
-        9:{"Sentiment": -0.51 },
-        10:{"Sentiment": -0.5 },
-        11:{"Sentiment": -0.49},
-        12:{"Sentiment": -0.48},
-        13:{"Sentiment": -0.4 },
-        14:{"Sentiment": -0.3 },
-        15:{"Sentiment": -0.2 },
-        16:{"Sentiment": -0.1 },
-        17:{"Sentiment": -0.05},
-        18:{"Sentiment": 0.01 },
-        19:{"Sentiment": 0.0  },
-        20:{"Sentiment": 0.05 },
-        21:{"Sentiment": 0.1  },
-        22:{"Sentiment": 0.2  },
-        23:{"Sentiment": 0.3  }
-      },
-      1:{
-        0:{"Sentiment": 0.35 },
-        1:{"Sentiment": 0.4  },
-        2:{"Sentiment": 0.45 },
-        3:{"Sentiment": 0.46 },
-        4:{"Sentiment": 0.47 },
-        5:{"Sentiment": 0.48 },
-        6:{"Sentiment": 0.49 },
-        7:{"Sentiment": 0.50 },
-        8:{"Sentiment": 0.51 },
-        9:{"Sentiment": 0.52 },
-        10:{"Sentiment": 0.53},
-        11:{"Sentiment": 0.6 },
-        12:{"Sentiment": 0.7 },
-        13:{"Sentiment": 0.8 },
-        14:{"Sentiment": 0.9 },
-        15:{"Sentiment": 0.91},
-        16:{"Sentiment": 0.92},
-        17:{"Sentiment": 0.93},
-        18:{"Sentiment": 0.94},
-        19:{"Sentiment": 0.95},
-        20:{"Sentiment": 0.97},
-        21:{"Sentiment": 0.98},
-        22:{"Sentiment": 0.99},
-        23:{"Sentiment": 1.0 }
-      },
-    };
-    // d3.csv("static/data/sentiment.csv", function(data){
-    // });
-    that.senmentimentData = fakeData;
+    that.sentimentData = {};
+    d3.csv("static/data/sentiment_number.csv", function(data){
+      if(that.sentimentData[+data.day] === undefined){
+        that.sentimentData[+data.day] = {};
+      }
+      if(that.sentimentData[+data.day][+data.hour] === undefined){
+        that.sentimentData[+data.day][+data.hour] = {}
+      }
+      that.sentimentData[+data.day][+data.hour]["negative"] = +data.negative;
+      that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
+      that.sentimentData[+data.day][+data.hour]["positive"] = +data.positive;
+    });
   },
   mounted: function(){
     var that = this;
-
 
     var svg_criminal = d3.select("#map_svg_criminal");
     var svg_traffic = d3.select("#map_svg_traffic");
@@ -426,24 +405,11 @@ export default {
     },
     updateSentiment: function(){
       var that = this;
-      var sentimentValue =  that.senmentimentData[that.currDay][that.currHour]["Sentiment"]
 
+      that.series = [that.sentimentData[that.currDay][that.currHour]["negative"],
+                     that.sentimentData[that.currDay][that.currHour]["neutral"],
+                     that.sentimentData[that.currDay][that.currHour]["positive"]]
 
-      if(sentimentValue >= -1.0 && sentimentValue < -0.75){
-        d3.select("image").attr("xlink:href", that.sentimentEmojis[4])
-      }
-      else if(sentimentValue >= -0.75 && sentimentValue < -0.25){
-        d3.select("image").attr("xlink:href", that.sentimentEmojis[3])
-      }
-      else if(sentimentValue >= -0.25 && sentimentValue < 0.25){
-        d3.select("image").attr("xlink:href", that.sentimentEmojis[2])
-      }
-      else if(sentimentValue >= 0.25 && sentimentValue < 0.75){
-        d3.select("image").attr("xlink:href", that.sentimentEmojis[1])
-      }
-      else if(sentimentValue >= 0.75 && sentimentValue < 1.0){
-        d3.select("image").attr("xlink:href", that.sentimentEmojis[0])
-      }
     },
     animation: function(){
       var that = this;
