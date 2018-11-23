@@ -56,7 +56,7 @@
           <div class="col-md-1">
           </div>
         </div>
-      <apexchart type=donut width=380 :options="chartOptions" :series="series" />
+      <apexchart type=donut width=380 :options="chartOptions" :series="series" style="position:absolute;top:50px;left:0px;"/>
 
       </div>
     </div>
@@ -187,18 +187,18 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/final_table_complete_subset.csv", function(data){ 
-      var total = +data.HOURLY_ENTRIES + (+data.HOURLY_EXITS);
+    d3.csv("static/data/taxi_sort_003.csv", function(data){ 
+      var total = +data.sum;
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
       }
-      if(that.trafficFlowData[+data.Month-1] === undefined){
-        that.trafficFlowData[+data.Month-1] = {}
+      if(that.trafficFlowData[+data.weekday] === undefined){
+        that.trafficFlowData[+data.weekday] = {}
       }
-      if(that.trafficFlowData[+data.Month-1][+data.HOUR_modified] === undefined){
-        that.trafficFlowData[+data.Month-1][+data.HOUR_modified] = {}
+      if(that.trafficFlowData[+data.weekday][+data.pick_hour] === undefined){
+        that.trafficFlowData[+data.weekday][+data.pick_hour] = {}
       }
-      that.trafficFlowData[+data.Month-1][+data.HOUR_modified][(data.Latitude + ":" +data.Longitude)] = total;
+      that.trafficFlowData[+data.weekday][+data.pick_hour][(data.lat + ":" +data.long)] = total;
     });
 
     that.sentimentData = {};
@@ -262,17 +262,6 @@ export default {
     var context_traffic = that.canvas_traffic.getContext("2d");
     context_criminal.globalAlpha = 0.8;
     context_traffic.globalAlpha = 0.8;
-
-    // d3.select("map_svg_criminal")
-    //   .append("g")
-    //   .attr("transform", function(d) {
-    //     return "translate(" + "0" + "," + "0" + ")";
-    //   })
-    //   .append("svg:image")
-    //   .attr("width", 200)
-    //   .attr("height", 200)
-    //   .attr("xlink:href", that.sentimentEmojis[2])
-    //   .attr("alt", "img")
 
     that.$refs.hourSlider.setIndex(12);
     that.$refs.daySlider.setIndex(1);
@@ -392,15 +381,15 @@ export default {
         keyData.push(+that.trafficFlowData[that.currDay][that.currHour][key])
         heatData.push(keyData);
 
-        svg.append('circle')
-            .attr('cx', coord[0])
-            .attr('cy', coord[1])
-            .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
+        // svg.append('circle')
+        //     .attr('cx', coord[0])
+        //     .attr('cy', coord[1])
+        //     .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
       })
       heat.data(heatData);
       heat.radius(10, 10);
       // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
-      heat.max(that.maxNbTraffic / 2);
+      heat.max(that.maxNbTraffic);
       heat.draw(0.05);
     },
     updateSentiment: function(){
