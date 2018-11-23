@@ -1,7 +1,11 @@
 <template>
   <div class="criminalMap">
+    <canvas id="sentiment-chart" width="250" height="250"></canvas>
+
     <div class="container" style="width:1280px">
+
       <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
+
       <div class="mapHolder">
         <ManhattanMap
           @precinctSelected="onPrecinctSelected"
@@ -56,8 +60,6 @@
           <div class="col-md-1">
           </div>
         </div>
-      <apexchart type=donut width=380 :options="chartOptions" :series="series" style="position:absolute;top:50px;left:0px;"/>
-
       </div>
     </div>
   </div>
@@ -67,12 +69,9 @@
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
+// import Chart from 'chart.js';
 
-import Vue from "vue";
-import VueApexCharts from "vue-apexcharts";
-Vue.use(VueApexCharts);
-Vue.component("apexchart", VueApexCharts);
-
+const chart = require("./donut_chart.js").default;
 const manhattanMap = require("./manhattan_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
 
@@ -114,8 +113,10 @@ export default {
         "static/images/4.png",
         "static/images/5.png",
       ],
+      sentimentDonutChart: undefined,
 
       // Utils
+      /// Day slider
       dayIndexMap:{"MON": 0, "TUE": 1, "WED": 2, "THU": 3, "FRI": 4, "SAT": 5, "SUN": 6},
       hourSliderValue: undefined,
       daySliderValue: undefined,
@@ -128,6 +129,8 @@ export default {
         startAnimation: true,
         data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
       },
+
+      /// Hour Slider
       hourSliderOption:{
         width: 'auto',
         tooltip: "hover",
@@ -138,24 +141,64 @@ export default {
         data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
       },
 
-      
-      series: [1, 1, 1],
-      chartOptions: {
-        labels: ["Negative", "Neutral", "Positive"],
-        dataLabels: {
-          enabled: true
+      /// Donut chart
+      donut_config: {
+        type: 'doughnutLabels',
+        data: {
+          datasets: [{
+            data: [
+              1,2,1
+            ],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(75, 192, 192)',
+            ],
+            label: 'Sentiment'
+          }],
+          labels: [
+            "Negative",
+            "Neutral",
+            "Positive"
+          ]
         },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
+        options: {
+          responsive: false,
+          maintainAspectRatio: false,
+          legend: {
+            labels:{
+              usePointStyle: true,
             },
-            legend: {
-              show: true
+            position: 'bottom',
+          },
+          title: {
+            display: false,
+            text: 'Sentiment'
+          },
+          animation: {
+            animateScale: true,
+            animateRotate: true
+          },
+          pieceLabel: {
+            mode: 'percentage',
+            precision: 1
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem, data) {
+                var allData = data.datasets[tooltipItem.datasetIndex].data;
+                var tooltipLabel = data.labels[tooltipItem.index];
+                var tooltipData = allData[tooltipItem.index];
+                var total = 0;
+                for (var i in allData) {
+                  total += allData[i];
+                }
+                var tooltipPercentage = Math.round((tooltipData / total) * 100);
+                return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
+              }
             }
           }
-        }]
+        }
       },
     }
   },
@@ -235,9 +278,6 @@ export default {
     var svg_offset_criminal = that.getOffset( document.getElementById('map_criminal_col'));
     var svg_offset_traffic = that.getOffset( document.getElementById('map_traffic_col'));
 
-    console.log(svg_offset_criminal)
-    console.log(svg_offset_traffic)
-
     var canvasLayer_criminal = d3.select("#map_criminal_col")
       .append('canvas')
       .attr('id', 'heatmap_criminal')
@@ -263,6 +303,8 @@ export default {
     context_criminal.globalAlpha = 0.8;
     context_traffic.globalAlpha = 0.8;
 
+    that.createChart("sentiment-chart");
+
     that.$refs.hourSlider.setIndex(12);
     that.$refs.daySlider.setIndex(1);
   },
@@ -279,20 +321,7 @@ export default {
       handler: function(){
         var that = this;
         that.currHour = +that.hourSliderValue;
-        const quantize = d3.scaleQuantize()
-                            .domain([0, that.maxNbCriminal])
-                            .range(d3.range(9).map(i => "q" + i));
 
-        // var svg = d3.select("#map_svg_criminal");
-        // var selections = svg.selectAll(".precinct_criminal");
-        // selections.each(function() {
-        //   var s = d3.select(this);
-        //   var precinctFullContext = s.attr("class")
-        //   var precinctContext = precinctFullContext.split(" ")[0];
-        //   var precinctSuffix = precinctFullContext.split(" ")[1];
-        //   var precinctNum = precinctContext.substring(2, precinctContext.length);
-        //   s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
-        // });
         this.updateCriminalDataBar();
         this.updateTrafficFlow();
         this.updateSentiment();
@@ -302,20 +331,7 @@ export default {
       handler: function(){
         var that = this;
         that.currDay = +that.dayIndexMap[that.daySliderValue];
-        const quantize = d3.scaleQuantize()
-                            .domain([0, that.maxNbCriminal])
-                            .range(d3.range(9).map(i => "q" + i));
 
-        // var svg = d3.select("#map_svg_criminal");
-        // var selections = svg.selectAll(".precinct_criminal");
-        // selections.each(function() {
-        //   var s = d3.select(this);
-        //   var precinctFullContext = s.attr("class")
-        //   var precinctContext = precinctFullContext.split(" ")[0];
-        //   var precinctSuffix = precinctFullContext.split(" ")[1];
-        //   var precinctNum = precinctContext.substring(2, precinctContext.length);
-        //   s.attr("class", precinctContext + " " + precinctSuffix + " " + quantize(that.criminalData[that.currDay][that.currHour][+precinctNum]))
-        // });
         this.updateCriminalDataBar();
         this.updateTrafficFlow();
         this.updateSentiment();
@@ -333,6 +349,14 @@ export default {
     onMapIsReady: function(signal){
       this.$refs.hourSlider.setIndex(0);
       this.$refs.daySlider.setIndex(0);
+    },
+    createChart(chartId) {
+      var canvas = document.getElementById(chartId);
+      this.sentimentDonutChart = new Chart(canvas, {
+        type: this.donut_config.type,
+        data: this.donut_config.data,
+        options: this.donut_config.options,
+      });
     },
     updateCriminalDataBar: function(){
       var that = this;
@@ -381,6 +405,7 @@ export default {
         keyData.push(+that.trafficFlowData[that.currDay][that.currHour][key])
         heatData.push(keyData);
 
+        // Add Circle to traffic map
         // svg.append('circle')
         //     .attr('cx', coord[0])
         //     .attr('cy', coord[1])
@@ -395,9 +420,10 @@ export default {
     updateSentiment: function(){
       var that = this;
 
-      that.series = [that.sentimentData[that.currDay][that.currHour]["negative"],
-                     that.sentimentData[that.currDay][that.currHour]["neutral"],
-                     that.sentimentData[that.currDay][that.currHour]["positive"]]
+      that.donut_config.data.datasets[0].data = [that.sentimentData[that.currDay][that.currHour]["negative"],
+                                                 that.sentimentData[that.currDay][that.currHour]["neutral"],
+                                                 that.sentimentData[that.currDay][that.currHour]["positive"]];
+      that.sentimentDonutChart.update();
 
     },
     animation: function(){
@@ -465,6 +491,12 @@ circle{
 #playBtn{
   border: 1px solid black;
   border-radius: 25px;
+}
+
+#sentiment-chart{
+  position: absolute;
+  left:0px;
+  top: 100px;
 }
 
 // .q0 { fill:rgb(247,251,255) }
