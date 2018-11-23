@@ -187,7 +187,7 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/taxi_sort_003.csv", function(data){ 
+    d3.csv("static/data/taxi_sort_001.csv", function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
