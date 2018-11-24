@@ -212,7 +212,7 @@ export default {
     // });
 
     //############# Aggreagtaion based on lat long.
-    d3.csv("static/data/criminal_lat_long_005.csv", function(data) {
+    d3.csv("static/data/criminal_lat_long_01_clean.csv", function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
         that.maxNbCriminal = total;
