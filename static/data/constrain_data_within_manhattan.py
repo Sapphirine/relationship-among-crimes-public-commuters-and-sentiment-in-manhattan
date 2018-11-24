@@ -43,7 +43,8 @@ for clean_file_name, clean_file_suffix in zip(CLEAN_FILE_NAME_LIST, CLEAN_FILE_S
 
     point_list = []
     for index, row in df.iterrows():
-        print("%d / %d"%(index, len(df)))
+        if(index % 1000 == 0 or index == (len(df))):
+            print("%d / %d"%(index + 1, len(df)))
         if(checkIfPoint(float(row["long"]), float(row["lat"])) == True):
             point_list.append(True)
         else:
