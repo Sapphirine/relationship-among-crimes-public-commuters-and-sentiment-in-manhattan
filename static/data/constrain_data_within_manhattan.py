@@ -20,8 +20,10 @@ for clean_file_name, clean_file_suffix in zip(CLEAN_FILE_NAME_LIST, CLEAN_FILE_S
             # print (feature['geometry']['coordinates'])
             if(feature["geometry"]["type"] == "Polygon"):
                 for polygons in feature['geometry']['coordinates']:
-                    polygon_obj = Polygon(np.array(polygons))
+                    if(len(polygons) <= 4):
+                        continue
                     try:
+                        polygon_obj = Polygon(np.array(polygons))
                         if(point.within(polygon_obj) == True):
                             return True
                     except:
@@ -30,8 +32,10 @@ for clean_file_name, clean_file_suffix in zip(CLEAN_FILE_NAME_LIST, CLEAN_FILE_S
             else:
                 for multipolygons in feature['geometry']['coordinates']:
                     for polygons in multipolygons:
-                        polygon_obj = Polygon(np.array(polygons))
+                        if(len(polygons) <= 4):
+                            continue
                         try:
+                            polygon_obj = Polygon(np.array(polygons))
                             if(point.within(polygon_obj) == True):
                                 return True
                         except:
