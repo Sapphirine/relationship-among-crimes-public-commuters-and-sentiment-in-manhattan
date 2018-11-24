@@ -207,9 +207,34 @@ export default {
     var that = this;
       
     that.criminalData = {};
-    d3.csv("static/data/NYPD_crime_daily_aggregation.csv", function(data) {
-      if(that.maxNbCriminal < +data.totalNumber){
-        that.maxNbCriminal = +data.totalNumber;
+    //############# Aggreagtaion based on precinct area.
+    // d3.csv("static/data/NYPD_crime_daily_aggregation.csv", function(data) {
+    //   if(that.maxNbCriminal < +data.totalNumber){
+    //     that.maxNbCriminal = +data.totalNumber;
+    //   }
+    //   if(that.criminalData[+data.day] === undefined){
+    //     that.criminalData[+data.day] = {}
+    //   }
+    //   if(that.criminalData[+data.day][+data.hour] === undefined){
+    //     that.criminalData[+data.day][+data.hour] = {}
+    //   }
+    //   if(that.criminalData[+data.day][+data.hour][+data.precinct] === undefined){
+    //     that.criminalData[+data.day][+data.hour][+data.precinct] = 0
+    //   }
+    //   that.criminalData[+data.day][+data.hour][+data.precinct] = +data["totalNumber"];
+    // });
+
+    // that.precinctCenter = [];
+    // d3.csv("static/data/precinct_center.csv", function(geoCenter) {
+    //   var coord = that.projection([+geoCenter.long, +geoCenter.lat]);
+    //   that.precinctCenter.push([coord[0], coord[1], +geoCenter.precinct]);
+    // });
+
+    //############# Aggreagtaion based on lat long.
+    d3.csv("static/data/criminal_lat_long_001.csv", function(data) {
+      var total = +data.sum;
+      if(that.maxNbCriminal < total){
+        that.maxNbCriminal = total;
       }
       if(that.criminalData[+data.day] === undefined){
         that.criminalData[+data.day] = {}
@@ -217,16 +242,7 @@ export default {
       if(that.criminalData[+data.day][+data.hour] === undefined){
         that.criminalData[+data.day][+data.hour] = {}
       }
-      if(that.criminalData[+data.day][+data.hour][+data.precinct] === undefined){
-        that.criminalData[+data.day][+data.hour][+data.precinct] = 0
-      }
-      that.criminalData[+data.day][+data.hour][+data.precinct] = +data["totalNumber"];
-    });
-
-    that.precinctCenter = [];
-    d3.csv("static/data/precinct_center.csv", function(geoCenter) {
-      var coord = that.projection([+geoCenter.long, +geoCenter.lat]);
-      that.precinctCenter.push([coord[0], coord[1], +geoCenter.precinct]);
+      that.criminalData[+data.day][+data.hour][(data.lat + ":" +data.long)] = total;
     });
 
     that.trafficFlowData = {};
@@ -364,23 +380,43 @@ export default {
 
       var heat = simpleheat(that.canvas_criminal);
 
-      var quantize = d3.scaleLinear()
-        .domain([0, that.maxNbCriminal])
-        .range([0, 80]);
+      // var quantize = d3.scaleLinear()
+      //   .domain([0, that.maxNbCriminal])
+      //   .range([0, 80]);
 
-      var heatData = [];
-      for(var i = 0; i < that.precinctCenter.length; i++){
-        var d = that.precinctCenter[i];
+      // var heatData = [];
+      // for(var i = 0; i < that.precinctCenter.length; i++){
+      //   var d = that.precinctCenter[i];
+      //   var keyData = [];
+      //   keyData.push(d[0]);
+      //   keyData.push(d[1]);
+      //   keyData.push(+that.criminalData[that.currDay][that.currHour][d[2]]);
+      //   heatData.push(keyData);
+      // }
+      // heat.data(heatData);
+      // heat.radius(10, 10);
+      // // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
+      // heat.max(40);
+      // heat.draw(0.05);
+
+      var keys = Object.keys(that.criminalData[that.currDay][that.currHour])
+
+      var heatData = []
+      keys.forEach(function(key){
+        var lat = +key.split(":")[0];
+        var long = +key.split(":")[1];
+        var coord = that.projection([long, lat])
+        
         var keyData = [];
-        keyData.push(d[0]);
-        keyData.push(d[1]);
-        keyData.push(+that.criminalData[that.currDay][that.currHour][d[2]]);
+        keyData.push(coord[0])
+        keyData.push(coord[1])
+        keyData.push(+that.criminalData[that.currDay][that.currHour][key])
         heatData.push(keyData);
-      }
+      })
       heat.data(heatData);
       heat.radius(10, 10);
       // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
-      heat.max(40);
+      heat.max(that.maxNbCriminal/2);
       heat.draw(0.05);
     },
     updateTrafficFlow: function(){
@@ -391,7 +427,7 @@ export default {
       var heat = simpleheat(that.canvas_traffic);
       var keys = Object.keys(that.trafficFlowData[that.currDay][that.currHour])
       
-      d3.selectAll("circle").remove();
+      // d3.selectAll("circle").remove();
 
       var heatData = []
       keys.forEach(function(key){
