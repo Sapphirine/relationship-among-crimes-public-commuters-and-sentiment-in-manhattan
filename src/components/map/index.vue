@@ -179,25 +179,6 @@ export default {
             animateScale: true,
             animateRotate: true
           },
-          pieceLabel: {
-            mode: 'percentage',
-            precision: 1
-          },
-          tooltips: {
-            callbacks: {
-              label: function(tooltipItem, data) {
-                var allData = data.datasets[tooltipItem.datasetIndex].data;
-                var tooltipLabel = data.labels[tooltipItem.index];
-                var tooltipData = allData[tooltipItem.index];
-                var total = 0;
-                for (var i in allData) {
-                  total += allData[i];
-                }
-                var tooltipPercentage = Math.round((tooltipData / total) * 100);
-                return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
-              }
-            }
-          }
         }
       },
     }
@@ -231,7 +212,7 @@ export default {
     // });
 
     //############# Aggreagtaion based on lat long.
-    d3.csv("static/data/criminal_lat_long_001.csv", function(data) {
+    d3.csv("static/data/criminal_lat_long_005.csv", function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
         that.maxNbCriminal = total;
@@ -246,7 +227,7 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/taxi_sort_001.csv", function(data){ 
+    d3.csv("static/data/taxi_sort_005.csv", function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
@@ -416,7 +397,7 @@ export default {
       heat.data(heatData);
       heat.radius(10, 10);
       // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
-      heat.max(that.maxNbCriminal/2);
+      heat.max(that.maxNbCriminal);
       heat.draw(0.05);
     },
     updateTrafficFlow: function(){
