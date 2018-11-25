@@ -25,6 +25,8 @@ export default {
     return {
       currYear: undefined,
       title: "Chart Plot",
+
+      // Axis property
       width: 960 - margin.right,
       height: 500 - margin.top - margin.bottom,
       marginTop: margin.top,
@@ -36,13 +38,20 @@ export default {
       yScale: undefined,
       radiusScale: undefined,
       colorScale: undefined,
-      
-      bisector: undefined,
-      label: undefined,
 
-      nationData: undefined,
+      // Show properties
+      dayLabel: undefined,
+      hourLabel: undefined,
       dot: undefined,
+      
+      // Data
+      nationData: undefined,
     }
+  },
+  created: function(){
+    console.log("created")
+    var that = this;
+      
   },
   mounted: function(){
     var that = this;
@@ -87,12 +96,19 @@ export default {
       .attr("transform", "rotate(-90)")
       .text("life expectancy (years)");
 
-    that.label = svg.append("text")
-      .attr("class", "year label")
+    that.dayLabel = svg.append("text")
+      .attr("class", "dayLabel label")
       .attr("text-anchor", "end")
       .attr("y", that.height + 130)
       .attr("x", that.width)
-      .text(1800);
+      .text("Mon");
+
+    that.hourLabel = svg.append("text")
+      .attr("class", "hourLabel label")
+      .attr("text-anchor", "end")
+      .attr("y", that.height + 130)
+      .attr("x", that.width)
+      .text("00:00");
 
     d3.json("static/demo_data/data/nations.json").then(function(nations) {
       that.nationData = {}
@@ -114,8 +130,6 @@ export default {
       }
     });
 
-  },
-  created: function(){
   },
   methods:{
     increase: function(){

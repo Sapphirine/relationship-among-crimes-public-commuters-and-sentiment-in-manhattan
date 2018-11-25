@@ -212,7 +212,7 @@ export default {
     // });
 
     //############# Aggreagtaion based on lat long.
-    d3.csv("static/data/criminal_lat_long_01_clean.csv", function(data) {
+    d3.csv("static/data/criminal_lat_long_001.csv", function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
         that.maxNbCriminal = total;
@@ -227,7 +227,7 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/taxi_sort_005.csv", function(data){ 
+    d3.csv("static/data/taxi_sort_001_clean.csv", function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
@@ -429,7 +429,7 @@ export default {
         //     .attr('r', +that.trafficFlowData[that.currDay][that.currHour][key] / that.maxNbCriminal * 0.1);
       })
       heat.data(heatData);
-      heat.radius(10, 10);
+      heat.radius(7, 10);
       // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
       heat.max(that.maxNbTraffic);
       heat.draw(0.05);
