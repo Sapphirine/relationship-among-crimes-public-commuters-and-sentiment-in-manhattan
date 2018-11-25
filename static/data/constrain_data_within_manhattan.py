@@ -7,7 +7,7 @@ from shapely.geometry.polygon import Polygon
 with open('./police_precincts.geojson') as f:
     data = json.load(f)
 
-CLEAN_FILE_NAME_LIST = ["taxi_sort_001"]
+CLEAN_FILE_NAME_LIST = ["taxi_sort_01", "taxi_sort_001", "taxi_sort_002", "taxi_sort_003", "taxi_sort_004", "taxi_sort_005", "taxi_sort_006", "taxi_sort_007", "taxi_sort_008", "taxi_sort_009", "taxi_sort_0006", "taxi_sort_0007", "taxi_sort_0008", "taxi_sort_0009", "criminal_lat_long_01", "criminal_lat_long_001", "criminal_lat_long_002", "criminal_lat_long_003", "criminal_lat_long_004", "criminal_lat_long_005", "criminal_lat_long_006", "criminal_lat_long_007", "criminal_lat_long_008", "criminal_lat_long_009"]
 CLEAN_FILE_SUFFIX_LIST= [".csv" for _ in range(len(CLEAN_FILE_NAME_LIST))]
 
 for clean_file_name, clean_file_suffix in zip(CLEAN_FILE_NAME_LIST, CLEAN_FILE_SUFFIX_LIST):

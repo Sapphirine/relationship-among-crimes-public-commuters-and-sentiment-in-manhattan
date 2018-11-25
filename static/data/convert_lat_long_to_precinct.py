@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 
-PROCESS_FILE_NAME_LIST = ["taxi_sort_001"]
+PROCESS_FILE_NAME_LIST = ["taxi_sort_01", "taxi_sort_001", "taxi_sort_002", "taxi_sort_003", "taxi_sort_004", "taxi_sort_005", "taxi_sort_006", "taxi_sort_007", "taxi_sort_008", "taxi_sort_009", "taxi_sort_0006", "taxi_sort_0007", "taxi_sort_0008", "taxi_sort_0009"]
 PROCESS_FILE_SUFFIX_LIST  = [".csv" for _ in range(len(PROCESS_FILE_NAME_LIST))]
 
 for process_file_name, process_file_suffix in zip(PROCESS_FILE_NAME_LIST, PROCESS_FILE_SUFFIX_LIST):
