@@ -120,7 +120,7 @@ export default {
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
-        startAnimation: true,
+        startAnimation: false,
         data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
       },
 
@@ -131,7 +131,7 @@ export default {
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
-        startAnimation: true,
+        startAnimation: false,
         data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
       },
       /// Donut chart
@@ -180,7 +180,7 @@ export default {
     var that = this;
 
     that.combine_data = {};
-    d3.csv("static/data/combine_precinct.csv", function(data) {
+    d3.csv("static/data/combine_precinct_0006.csv", function(data) {
       var total_criminal = +data.criminal;
       var total_traffic = +data.traffic;
       if(that.maxNbCriminal < total_criminal){
@@ -275,7 +275,7 @@ export default {
   methods:{
     animation: function(){
       var that = this;
-      var pauseSec = 250;
+      var pauseSec = 300;
       that.animationSet1(0, 0, pauseSec)
     },
     animationSet1: function(day, hour, pauseSec){

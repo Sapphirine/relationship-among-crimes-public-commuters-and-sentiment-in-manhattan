@@ -126,7 +126,7 @@ export default {
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
-        startAnimation: true,
+        startAnimation: false,
         data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
       },
 
@@ -137,7 +137,7 @@ export default {
         disable: false,
         piecewise: true,
         piecewiseLabel: true,
-        startAnimation: true,
+        startAnimation: false,
         data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
       },
 
@@ -353,7 +353,7 @@ export default {
       heat.data(heatData);
       heat.radius(10, 10);
       // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
-      heat.max(that.maxNbCriminal);
+      heat.max(that.maxNbCriminal*0.95);
       heat.draw(0.05);
     },
     updateTrafficFlow: function(){
@@ -401,7 +401,7 @@ export default {
     },
     animation: function(){
       var that = this;
-      var pauseSec = 250;
+      var pauseSec = 500;
       // that.animationHour(0, pauseSec);
       // that.animationDay(0, pauseSec);
       that.animationSet1(0, 0, pauseSec)
