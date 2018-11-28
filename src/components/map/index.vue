@@ -71,7 +71,7 @@ import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
 // import Chart from 'chart.js';
 
-const chart = require("./donut_chart.js").default;
+const chart = require("../donut_chart.js").default;
 const manhattanMap = require("./manhattan_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
 
@@ -188,30 +188,6 @@ export default {
     var that = this;
       
     that.criminalData = {};
-    //############# Aggreagtaion based on precinct area.
-    // d3.csv("static/data/NYPD_crime_daily_aggregation.csv", function(data) {
-    //   if(that.maxNbCriminal < +data.totalNumber){
-    //     that.maxNbCriminal = +data.totalNumber;
-    //   }
-    //   if(that.criminalData[+data.day] === undefined){
-    //     that.criminalData[+data.day] = {}
-    //   }
-    //   if(that.criminalData[+data.day][+data.hour] === undefined){
-    //     that.criminalData[+data.day][+data.hour] = {}
-    //   }
-    //   if(that.criminalData[+data.day][+data.hour][+data.precinct] === undefined){
-    //     that.criminalData[+data.day][+data.hour][+data.precinct] = 0
-    //   }
-    //   that.criminalData[+data.day][+data.hour][+data.precinct] = +data["totalNumber"];
-    // });
-
-    // that.precinctCenter = [];
-    // d3.csv("static/data/precinct_center.csv", function(geoCenter) {
-    //   var coord = that.projection([+geoCenter.long, +geoCenter.lat]);
-    //   that.precinctCenter.push([coord[0], coord[1], +geoCenter.precinct]);
-    // });
-
-    //############# Aggreagtaion based on lat long.
     d3.csv("static/data/criminal_lat_long_001.csv", function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
@@ -227,7 +203,7 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/taxi_sort_001.csv", function(data){ 
+    d3.csv("static/data/taxi_sort_001_clean.csv", function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
@@ -256,6 +232,8 @@ export default {
   },
   mounted: function(){
     var that = this;
+
+    that.createChart("sentiment-chart");
 
     var svg_criminal = d3.select("#map_svg_criminal");
     var svg_traffic = d3.select("#map_svg_traffic");
@@ -299,8 +277,6 @@ export default {
     var context_traffic = that.canvas_traffic.getContext("2d");
     context_criminal.globalAlpha = 0.8;
     context_traffic.globalAlpha = 0.8;
-
-    that.createChart("sentiment-chart");
 
     that.$refs.hourSlider.setIndex(12);
     that.$refs.daySlider.setIndex(1);

@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "devpub": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --port 8000",
     "start": "npm run dev",
     "build": "node build/build.js"
   },

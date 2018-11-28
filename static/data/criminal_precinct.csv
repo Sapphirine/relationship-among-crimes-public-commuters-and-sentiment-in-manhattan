@@ -1,4 +1,4 @@
-,day,hour,precinct,totalNumber
+,day,hour,precinct,sum
 0,0,0,44,157
 1,0,0,103,75
 2,0,0,28,40
