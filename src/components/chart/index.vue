@@ -51,6 +51,7 @@
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 const chart = require("../donut_chart.js").default;
+const pearsonCorrelation = require("./ pearsoncorrelation.js");
 
 const margin = {
   top: 19.5,
@@ -86,6 +87,8 @@ export default {
       dayLabel: undefined,
       hourLabel: undefined,
       gdots_dict: {},
+      line: undefined,
+      pearson_text: undefined,
       
       // Commom
       currDay: 2,
@@ -168,7 +171,6 @@ export default {
     }
   },
   created: function(){
-    console.log("created")
     var that = this;
 
     that.combine_data = {};
@@ -208,7 +210,7 @@ export default {
     var that = this;
 
     that.xScale = d3.scaleLog().domain([1, 250000]).range([0, that.width]);
-    that.yScale = d3.scaleLinear().domain([0, 500]).range([that.height, 0]);
+    that.yScale = d3.scaleLinear().domain([0, 450]).range([that.height, 0]);
     that.radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -247,7 +249,20 @@ export default {
       .attr("transform", "rotate(-90)")
       .text("number of crime");
     
-    console.log("mounted!")
+     svg.append("text")
+      .attr("class", "pearson_text")
+      .attr("text-anchor", "end")
+      .attr("x", that.width - 105)
+      .attr("y", 47)
+      .text("Pearson: ")
+
+    that.pearson_text = svg.append("text")
+      .attr("class", "pearson_text")
+      .attr("text-anchor", "end")
+      .attr("x", that.width)
+      .attr("y", 50);
+    
+    that.pearson_text.text("0.00");
   },
   methods:{
     animation: function(){
@@ -270,6 +285,84 @@ export default {
         }
         that.animationSet1(day, hour, pauseSec);
       }, pauseSec);
+    },
+    calcLinear:function(data, x, y, minX, minY, maxX, maxY){
+      var n = data.length;
+      var pts = [];
+      data.forEach(function(d,i){
+        var obj = {};
+        obj.x = d[x];
+        obj.y = d[y];
+        obj.mult = obj.x*obj.y;
+        pts.push(obj);
+      });
+
+      var sum = 0;
+      var xSum = 0;
+      var ySum = 0;
+      var sumSq = 0;
+      pts.forEach(function(pt){
+        sum = sum + pt.mult;
+        xSum = xSum + pt.x;
+        ySum = ySum + pt.y;
+        sumSq = sumSq + (pt.x * pt.x);
+      });
+      var a = sum * n;
+      var b = xSum * ySum;
+      var c = sumSq * n;
+      var d = xSum * xSum;
+
+      var m = (a - b) / (c - d);
+
+      var e = ySum;
+      var f = m * xSum;
+
+      var b = (e - f) / n;
+
+      var res = {};
+
+      if(m < 0){
+        res = {
+          ptA : {
+            x: 0,
+            y: b
+          },
+          ptB : {
+            y: minY,
+            x: (minY - b) / m
+          }
+        };
+      }
+      else{
+        res = {
+          ptA : {
+            x: minX,
+            y: m * minX + b
+          },
+          ptB : {
+            y: 500,
+            x: (500 - b) / m
+          }
+        }
+      }
+      return res;
+    },
+    leastSquares: function(xSeries, ySeries) {
+      var reduceSumFunc = function(prev, cur) { return prev + cur; };
+      
+      var xBar = xSeries.reduce(reduceSumFunc) * 1.0 / xSeries.length;
+      var yBar = ySeries.reduce(reduceSumFunc) * 1.0 / ySeries.length;
+      var ssXX = xSeries.map(function(d) { return Math.pow(d - xBar, 2); })
+        .reduce(reduceSumFunc);
+      var ssYY = ySeries.map(function(d) { return Math.pow(d - yBar, 2); })
+        .reduce(reduceSumFunc);
+      var ssXY = xSeries.map(function(d, i) { return (d - xBar) * (ySeries[i] - yBar); })
+        .reduce(reduceSumFunc);
+      var slope = ssXY / ssXX;
+      var intercept = yBar - (xBar * slope);
+      var rSquare = Math.pow(ssXY, 2) / (ssXX * ssYY);
+      
+      return [slope, intercept, rSquare];
     },
     getXData: function(d){
       return d.traffic;
@@ -304,6 +397,10 @@ export default {
       var svg = d3.select("svg")
                   .append("g")
                   .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
+
+
+      let criminal_arr = [];
+      let traffic_arr = [];
       var gdots = svg.append("g").attr("class", "dots");
       if(that.isEmpty(that.gdots_dict)){
         console.log("undefined")
@@ -318,7 +415,29 @@ export default {
             .attr("r", that.radiusScale(that.getRadiusData(val)));
 
           that.gdots_dict[val.precinct].append("title").text(val.precinct);
+
+          criminal_arr.push(val.criminal);
+          traffic_arr.push(val.traffic);
         }
+
+        var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
+        var slope = leastSquaresCoeff[0];
+        var intercept = leastSquaresCoeff[1];
+        var rSquare = leastSquaresCoeff[2];
+        var xmin = 1;
+        var xmax = 250000;
+        var ymin = intercept;
+        var ymax = 250000 * slope + intercept;
+        if(ymax < 0){
+          var xmax = (0 - intercept) / slope;
+          var ymax = 0;
+        }
+        that.line = svg.append("line")
+          .attr("x1", that.xScale(xmin))
+          .attr("y1", that.yScale(ymin))
+          .attr("x2", that.xScale(xmax))
+          .attr("y2", that.yScale(ymax))
+          .classed("regression", true);
       }
       else{
         console.log("elseelse")
@@ -328,8 +447,36 @@ export default {
             .transition()
             .attr("cx", that.xScale(that.getXData(val)))
             .attr("cy", that.yScale(that.getYData(val)))
+
+          criminal_arr.push(val.criminal);
+          traffic_arr.push(val.traffic);
         }
+
+        var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
+        var slope = leastSquaresCoeff[0];
+        var intercept = leastSquaresCoeff[1];
+        var rSquare = leastSquaresCoeff[2];
+
+        var xmin = 1;
+        var xmax = 250000;
+        var ymin = intercept;
+        var ymax = 250000 * slope + intercept;
+        if(ymax < 0){
+          var xmax = (0 - intercept) / slope;
+          var ymax = 0;
+        }
+        that.line.transition()
+          .attr("x1", that.xScale(xmin))
+          .attr("y1", that.yScale(ymin))
+          .attr("x2", that.xScale(xmax))
+          .attr("y2", that.yScale(ymax))
       }
+      let rho = 0;
+      rho = pearsonCorrelation.pearsonCorrelation(criminal_arr, traffic_arr);
+      that.pearson_text.transition()
+                       .text(rho.toFixed(2));
+      
+      
     }
   },
   watch: {
@@ -367,23 +514,9 @@ text {
   shape-rendering: crispEdges;
 }
 
-.label {
-  fill: #777;
-}
-.day.label {
-  font: 500 146px "Helvetica Neue";
+.pearson_text{
+  font: 500 45px "Helvetica Neue";
   fill: #ddd;
-}
-.hour.label {
-  font: 500 146px "Helvetica Neue";
-  fill: #ddd;
-}
-
-.day.label.active {
-  fill: #aaa;
-}
-.hour.label.active {
-  fill: #aaa;
 }
 
 .overlay {
@@ -402,5 +535,11 @@ path {
 #playBtn{
   border: 1px solid black;
   border-radius: 25px;
+}
+
+.regression {
+  stroke-width: 2px;
+  stroke: steelblue;
+  stroke-dasharray: 10,5;
 }
 </style>
