@@ -60,6 +60,11 @@ const margin = {
   left:39.5
 }
 
+const xMin = 1;
+const xMax = 250000;
+const yMin = 0;
+const yMax = 450;
+
 export default {
   components: {
     vueSlider,
@@ -209,8 +214,8 @@ export default {
   mounted: function(){
     var that = this;
 
-    that.xScale = d3.scaleLog().domain([1, 250000]).range([0, that.width]);
-    that.yScale = d3.scaleLinear().domain([0, 450]).range([that.height, 0]);
+    that.xScale = d3.scaleLog().domain([xMin, xMax]).range([0, that.width]);
+    that.yScale = d3.scaleLinear().domain([yMin, yMax]).range([that.height, 0]);
     that.radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -286,67 +291,6 @@ export default {
         that.animationSet1(day, hour, pauseSec);
       }, pauseSec);
     },
-    calcLinear:function(data, x, y, minX, minY, maxX, maxY){
-      var n = data.length;
-      var pts = [];
-      data.forEach(function(d,i){
-        var obj = {};
-        obj.x = d[x];
-        obj.y = d[y];
-        obj.mult = obj.x*obj.y;
-        pts.push(obj);
-      });
-
-      var sum = 0;
-      var xSum = 0;
-      var ySum = 0;
-      var sumSq = 0;
-      pts.forEach(function(pt){
-        sum = sum + pt.mult;
-        xSum = xSum + pt.x;
-        ySum = ySum + pt.y;
-        sumSq = sumSq + (pt.x * pt.x);
-      });
-      var a = sum * n;
-      var b = xSum * ySum;
-      var c = sumSq * n;
-      var d = xSum * xSum;
-
-      var m = (a - b) / (c - d);
-
-      var e = ySum;
-      var f = m * xSum;
-
-      var b = (e - f) / n;
-
-      var res = {};
-
-      if(m < 0){
-        res = {
-          ptA : {
-            x: 0,
-            y: b
-          },
-          ptB : {
-            y: minY,
-            x: (minY - b) / m
-          }
-        };
-      }
-      else{
-        res = {
-          ptA : {
-            x: minX,
-            y: m * minX + b
-          },
-          ptB : {
-            y: 500,
-            x: (500 - b) / m
-          }
-        }
-      }
-      return res;
-    },
     leastSquares: function(xSeries, ySeries) {
       var reduceSumFunc = function(prev, cur) { return prev + cur; };
       
@@ -403,7 +347,6 @@ export default {
       let traffic_arr = [];
       var gdots = svg.append("g").attr("class", "dots");
       if(that.isEmpty(that.gdots_dict)){
-        console.log("undefined")
         for(var i = 0; i < that.combine_data[that.currDay][that.currHour].length; i++){
           var val = that.combine_data[that.currDay][that.currHour][i];
           that.gdots_dict[val.precinct] = gdots.append("circle")
@@ -424,23 +367,22 @@ export default {
         var slope = leastSquaresCoeff[0];
         var intercept = leastSquaresCoeff[1];
         var rSquare = leastSquaresCoeff[2];
-        var xmin = 1;
-        var xmax = 250000;
-        var ymin = intercept;
-        var ymax = 250000 * slope + intercept;
-        if(ymax < 0){
-          var xmax = (0 - intercept) / slope;
-          var ymax = 0;
+        var x1 = xMin;
+        var x2 = xMax;
+        var y1 = intercept;
+        var y2 = xMax * slope + intercept;
+        if(y2 < 0){
+          x2 = (-intercept) / slope;
+          y2 = 0;
         }
         that.line = svg.append("line")
-          .attr("x1", that.xScale(xmin))
-          .attr("y1", that.yScale(ymin))
-          .attr("x2", that.xScale(xmax))
-          .attr("y2", that.yScale(ymax))
+          .attr("x1", that.xScale(x1))
+          .attr("y1", that.yScale(y1))
+          .attr("x2", that.xScale(x2))
+          .attr("y2", that.yScale(y2))
           .classed("regression", true);
       }
       else{
-        console.log("elseelse")
         for(var i = 0; i < that.combine_data[that.currDay][that.currHour].length; i++){
           var val = that.combine_data[that.currDay][that.currHour][i];
           that.gdots_dict[val.precinct]
@@ -456,27 +398,22 @@ export default {
         var slope = leastSquaresCoeff[0];
         var intercept = leastSquaresCoeff[1];
         var rSquare = leastSquaresCoeff[2];
-
-        var xmin = 1;
-        var xmax = 250000;
-        var ymin = intercept;
-        var ymax = 250000 * slope + intercept;
-        if(ymax < 0){
-          var xmax = (0 - intercept) / slope;
-          var ymax = 0;
+        var x1 = xMin;
+        var x2 = xMax;
+        var y1 = intercept;
+        var y2 = xMax * slope + intercept;
+        if(y2 < 0){
+          x2 = (-intercept) / slope;
+          y2 = 0;
         }
         that.line.transition()
-          .attr("x1", that.xScale(xmin))
-          .attr("y1", that.yScale(ymin))
-          .attr("x2", that.xScale(xmax))
-          .attr("y2", that.yScale(ymax))
+          .attr("x1", that.xScale(x1))
+          .attr("y1", that.yScale(y1))
+          .attr("x2", that.xScale(x2))
+          .attr("y2", that.yScale(y2))
       }
-      let rho = 0;
-      rho = pearsonCorrelation.pearsonCorrelation(criminal_arr, traffic_arr);
-      that.pearson_text.transition()
-                       .text(rho.toFixed(2));
-      
-      
+      let rho = pearsonCorrelation.pearsonCorrelation(criminal_arr, traffic_arr);
+      that.pearson_text.transition().text(rho.toFixed(2));
     }
   },
   watch: {
