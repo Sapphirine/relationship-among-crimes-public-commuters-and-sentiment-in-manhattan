@@ -85,7 +85,7 @@ export default {
       label: undefined,
       dayLabel: undefined,
       hourLabel: undefined,
-      dot: undefined,
+      gdots_dict: {},
       
       // Commom
       currDay: 2,
@@ -291,46 +291,44 @@ export default {
     sortDESC: function(a, b){
       return this.getRadiusData(a) - this.getRadiusData(b);
     },
+    isEmpty: function(obj) {
+      for(var key in obj) {
+          if(obj.hasOwnProperty(key))
+              return false;
+      }
+      return true;
+    },
     updateGraph: function(){
       var that = this;
       console.log('updategraph')
       var svg = d3.select("svg")
                   .append("g")
                   .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
-      
-      //d3.selectAll(".dots").remove();
-      
-      if(that.dot === undefined){
-        that.dot = svg.append("g")
-          .attr("class", "dots")
-          .selectAll(".dot")
-          .data(that.combine_data[that.currDay][that.currHour])
-          .enter()
-          .append("circle")
-          .attr("class", "dot")
-          .attr("id", function(d) { 
-            return d.precinct; 
-          })
-          .style("fill", function(d) { return that.colorScale(that.getColorData(d)); })
-          .attr("cx", function(d) { 
-            return that.xScale(that.getXData(d)); })
-          .attr("cy", function(d) { return that.yScale(that.getYData(d)); })
-          .attr("r", function(d) { return that.radiusScale(that.getRadiusData(d))})
-          .append("title").text(function(d) { return d.precinct; });
+      var gdots = svg.append("g").attr("class", "dots");
+      if(that.isEmpty(that.gdots_dict)){
+        console.log("undefined")
+        for(var i = 0; i < that.combine_data[that.currDay][that.currHour].length; i++){
+          var val = that.combine_data[that.currDay][that.currHour][i];
+          that.gdots_dict[val.precinct] = gdots.append("circle")
+            .attr("class", "dot")
+            .attr("id", val.precinct)
+            .style("fill", that.colorScale(that.getColorData(val)))
+            .attr("cx", that.xScale(that.getXData(val)))
+            .attr("cy", that.yScale(that.getYData(val)))
+            .attr("r", that.radiusScale(that.getRadiusData(val)));
+
+          that.gdots_dict[val.precinct].append("title").text(val.precinct);
+        }
       }
       else{
-         d3.selectAll(".circle")
-          .data(that.combine_data[that.currDay][that.currHour])
-          .transition()
-          .attr("cx", function(d){
-            return that.xScale(that.getXData(d));
-          })
-          .attr("cy", function(d){
-            return that.yScale(that.getYData(d));
-          })
-          .attr("r", function(d){
-            return that.radiusScale(that.getRadiusData(d));
-          });
+        console.log("elseelse")
+        for(var i = 0; i < that.combine_data[that.currDay][that.currHour].length; i++){
+          var val = that.combine_data[that.currDay][that.currHour][i];
+          that.gdots_dict[val.precinct]
+            .transition()
+            .attr("cx", that.xScale(that.getXData(val)))
+            .attr("cy", that.yScale(that.getYData(val)))
+        }
       }
     }
   },
