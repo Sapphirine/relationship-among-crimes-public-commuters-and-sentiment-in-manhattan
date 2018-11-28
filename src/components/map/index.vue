@@ -184,7 +184,6 @@ export default {
     }
   },
   created: function(){
-    console.log("created")
     var that = this;
       
     that.criminalData = {};
@@ -337,25 +336,6 @@ export default {
 
       var heat = simpleheat(that.canvas_criminal);
 
-      // var quantize = d3.scaleLinear()
-      //   .domain([0, that.maxNbCriminal])
-      //   .range([0, 80]);
-
-      // var heatData = [];
-      // for(var i = 0; i < that.precinctCenter.length; i++){
-      //   var d = that.precinctCenter[i];
-      //   var keyData = [];
-      //   keyData.push(d[0]);
-      //   keyData.push(d[1]);
-      //   keyData.push(+that.criminalData[that.currDay][that.currHour][d[2]]);
-      //   heatData.push(keyData);
-      // }
-      // heat.data(heatData);
-      // heat.radius(10, 10);
-      // // heat.gradient({0: '#0000ff', 0.5: '#00ff00', 1: '#ff0000'});
-      // heat.max(40);
-      // heat.draw(0.05);
-
       var keys = Object.keys(that.criminalData[that.currDay][that.currHour])
 
       var heatData = []
@@ -476,7 +456,7 @@ export default {
 <style>
 
 circle{
-	fill: green;
+  fill: green;
   opacity: 0.8;
   fill-opacity: .5;
 }
@@ -492,15 +472,6 @@ circle{
   top: 100px;
 }
 
-// .q0 { fill:rgb(247,251,255) }
-// .q1 { fill:rgb(222,235,247) }
-// .q2 { fill:rgb(198,219,239) }
-// .q3 { fill:rgb(158,202,225) }
-// .q4 { fill:rgb(107,174,214) }
-// .q5 { fill:rgb(66,146,198) }
-// .q6 { fill:rgb(33,113,181) }
-// .q7 { fill:rgb(8,81,156) }
-// .q8 { fill:rgb(8,48,107) }
 .q0 { fill:rgb(204, 204, 204) }
 .q1 { fill:rgb(204, 178, 178) }
 .q2 { fill:rgb(204, 153, 153) }

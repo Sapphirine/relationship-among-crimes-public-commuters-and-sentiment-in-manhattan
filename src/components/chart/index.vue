@@ -1,50 +1,51 @@
 <template>
-    <div class="chart_plot">
-      <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
-      <div class="chartHolder">
-      </div>
-      <div class="sliderHolder my-4 mb-2 pl-6">
-        <div class="row">
-          <div class="col-md-1">
+  <div class="chart_plot">
+    <canvas id="sentiment-chart" width="240" height="240"></canvas>
+    <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
+    <div class="chartHolder">
+    </div>
+    <div class="sliderHolder my-4 mb-2 pl-6">
+      <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-1">
+          <div class="row">
+            <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5>
           </div>
-          <div class="col-md-1">
-            <div class="row">
-              <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5>
-            </div>
-            <div class="row">
-              <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5>
-            </div>
+          <div class="row">
+            <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5>
           </div>
-          <div class="col-md-8">
-            <div class="row">
-              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-                <vue-slider 
-                  ref="hourSlider"
-                  v-model="hourSliderValue"
-                  v-bind="hourSliderOption"
-                >
-                </vue-slider>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-                <vue-slider 
-                  ref="daySlider"
-                  v-model="daySliderValue"
-                  v-bind="daySliderOption"
-                >
-                </vue-slider>
-              </div>
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+              <vue-slider 
+                ref="hourSlider"
+                v-model="hourSliderValue"
+                v-bind="hourSliderOption"
+              >
+              </vue-slider>
             </div>
           </div>
-          <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary  btn-lg my-1" v-on:click="animation"><font-awesome-icon icon="play" /></button>
-          </div> 
-          <div class="col-md-1">
+          <div class="row">
+            <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+              <vue-slider 
+                ref="daySlider"
+                v-model="daySliderValue"
+                v-bind="daySliderOption"
+              >
+              </vue-slider>
+            </div>
           </div>
+        </div>
+        <div class="col-md-1">
+          <button id="playBtn" class="btn btn-primary  btn-lg my-1" v-on:click="animation"><font-awesome-icon icon="play" /></button>
+        </div> 
+        <div class="col-md-1">
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -57,7 +58,7 @@ const margin = {
   top: 19.5,
   right: 19.5,
   bottom:19.5,
-  left:39.5
+  left:50.5
 }
 
 const xMin = 1;
@@ -214,6 +215,8 @@ export default {
   mounted: function(){
     var that = this;
 
+    that.createChart("sentiment-chart");
+
     that.xScale = d3.scaleLog().domain([xMin, xMax]).range([0, that.width]);
     that.yScale = d3.scaleLinear().domain([yMin, yMax]).range([that.height, 0]);
     that.radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]);
@@ -308,11 +311,13 @@ export default {
       
       return [slope, intercept, rSquare];
     },
-    getXData: function(d){
-      return d.traffic;
-    },
-    getYData: function(d){
-      return d.criminal;
+    createChart(chartId) {
+      var canvas = document.getElementById(chartId);
+      this.sentimentDonutChart = new Chart(canvas, {
+        type: this.donut_config.type,
+        data: this.donut_config.data,
+        options: this.donut_config.options,
+      });
     },
     getRadiusData: function(d){
       return 2e6
@@ -322,18 +327,21 @@ export default {
       return 5;
       // return d.region;
     },
-    sortASC: function(a, b){
-      return this.getRadiusData(b) - this.getRadiusData(a);
-    },
-    sortDESC: function(a, b){
-      return this.getRadiusData(a) - this.getRadiusData(b);
-    },
     isEmpty: function(obj) {
       for(var key in obj) {
           if(obj.hasOwnProperty(key))
               return false;
       }
       return true;
+    },
+    updateSentiment: function(){
+      var that = this;
+
+      that.donut_config.data.datasets[0].data = [that.sentimentData[that.currDay][that.currHour]["negative"],
+                                                 that.sentimentData[that.currDay][that.currHour]["neutral"],
+                                                 that.sentimentData[that.currDay][that.currHour]["positive"]];
+      that.sentimentDonutChart.update();
+
     },
     updateGraph: function(){
       var that = this;
@@ -353,8 +361,8 @@ export default {
             .attr("class", "dot")
             .attr("id", val.precinct)
             .style("fill", that.colorScale(that.getColorData(val)))
-            .attr("cx", that.xScale(that.getXData(val)))
-            .attr("cy", that.yScale(that.getYData(val)))
+            .attr("cx", that.xScale(val.traffic))
+            .attr("cy", that.yScale(val.criminal))
             .attr("r", that.radiusScale(that.getRadiusData(val)));
 
           that.gdots_dict[val.precinct].append("title").text(val.precinct);
@@ -387,8 +395,8 @@ export default {
           var val = that.combine_data[that.currDay][that.currHour][i];
           that.gdots_dict[val.precinct]
             .transition()
-            .attr("cx", that.xScale(that.getXData(val)))
-            .attr("cy", that.yScale(that.getYData(val)))
+            .attr("cx", that.xScale(val.traffic))
+            .attr("cy", that.yScale(val.criminal))
 
           criminal_arr.push(val.criminal);
           traffic_arr.push(val.traffic);
@@ -421,14 +429,16 @@ export default {
       handler: function(){
         var that = this;
         that.currHour = +that.hourSliderValue;
-        this.updateGraph();
+        that.updateGraph();
+        that.updateSentiment();
       }
     },
     daySliderValue: {
       handler: function(){
         var that = this;
         that.currDay = +that.dayIndexMap[that.daySliderValue];
-        this.updateGraph();
+        that.updateGraph();
+        that.updateSentiment();
       }
     }
   },
@@ -479,4 +489,11 @@ path {
   stroke: steelblue;
   stroke-dasharray: 10,5;
 }
+
+#sentiment-chart{
+  position: absolute;
+  left:0px;
+  top: 100px;
+}
+
 </style>
