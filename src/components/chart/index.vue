@@ -207,12 +207,12 @@ export default {
   mounted: function(){
     var that = this;
 
-    that.xScale = d3.scaleLinear().domain([0, 250000]).range([0, that.width]);
+    that.xScale = d3.scaleLog().domain([1, 250000]).range([0, that.width]);
     that.yScale = d3.scaleLinear().domain([0, 500]).range([that.height, 0]);
     that.radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-    var xAxis = d3.axisBottom().scale(that.xScale);
+    var xAxis = d3.axisBottom().scale(that.xScale).ticks(12, d3.format(",d"));
     var yAxis = d3.axisLeft().scale(that.yScale);
 
     var svg = d3.select(".chartHolder")
