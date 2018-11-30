@@ -52,19 +52,22 @@
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 const chart = require("../donut_chart.js").default;
+
 const pearsonCorrelation = require("./ pearsoncorrelation.js");
 
 const margin = {
   top: 19.5,
   right: 19.5,
   bottom:19.5,
-  left:50.5
+  left:60.5
 }
 
 const xMin = 1;
-const xMax = 250000;
+const xMax = 200000;
 const yMin = 0;
 const yMax = 450;
+const svgWidth = 1000;
+const svgHeight = 600;
 
 export default {
   components: {
@@ -76,8 +79,8 @@ export default {
       title: "Chart Plot",
 
       // Axis property
-      width: 960 - margin.right,
-      height: 500 - margin.top - margin.bottom,
+      width: svgWidth - margin.right,
+      height: svgHeight - margin.top - margin.bottom,
       marginTop: margin.top,
       marginBottom: margin.bottom,
       marginLeft: margin.left,
@@ -162,7 +165,7 @@ export default {
             labels:{
               usePointStyle: true,
             },
-            position: 'bottom',
+            position: 'top',
           },
           title: {
             display: false,
@@ -180,7 +183,7 @@ export default {
     var that = this;
 
     that.combine_data = {};
-    d3.csv("static/data/combine_precinct_0006.csv", function(data) {
+    d3.csv("static/data/combine_precinct_0006_temp.csv", function(data) {
       var total_criminal = +data.criminal;
       var total_traffic = +data.traffic;
       if(that.maxNbCriminal < total_criminal){
@@ -222,7 +225,7 @@ export default {
     that.radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-    var xAxis = d3.axisBottom().scale(that.xScale).ticks(12, d3.format(",d"));
+    var xAxis = d3.axisBottom().scale(that.xScale);
     var yAxis = d3.axisLeft().scale(that.yScale);
 
     var svg = d3.select(".chartHolder")
@@ -320,7 +323,7 @@ export default {
       });
     },
     getRadiusData: function(d){
-      return 2e6
+      return 2e7
       // return d.population;
     },
     getColorData: function(d){
@@ -371,24 +374,24 @@ export default {
           traffic_arr.push(val.traffic);
         }
 
-        var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
-        var slope = leastSquaresCoeff[0];
-        var intercept = leastSquaresCoeff[1];
-        var rSquare = leastSquaresCoeff[2];
-        var x1 = xMin;
-        var x2 = xMax;
-        var y1 = intercept;
-        var y2 = xMax * slope + intercept;
-        if(y2 < 0){
-          x2 = (-intercept) / slope;
-          y2 = 0;
-        }
-        that.line = svg.append("line")
-          .attr("x1", that.xScale(x1))
-          .attr("y1", that.yScale(y1))
-          .attr("x2", that.xScale(x2))
-          .attr("y2", that.yScale(y2))
-          .classed("regression", true);
+        // var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
+        // var slope = leastSquaresCoeff[0];
+        // var intercept = leastSquaresCoeff[1];
+        // var rSquare = leastSquaresCoeff[2];
+        // var x1 = xMin;
+        // var x2 = xMax;
+        // var y1 = intercept;
+        // var y2 = xMax * slope + intercept;
+        // // if(y2 < 0){
+        // //   x2 = (-intercept) / slope;
+        // //   y2 = 0;
+        // // }
+        // that.line = svg.append("line")
+        //   .attr("x1", that.xScale(x1))
+        //   .attr("y1", that.yScale(y1))
+        //   .attr("x2", that.xScale(x2))
+        //   .attr("y2", that.yScale(y2))
+        //   .classed("regression", true);
       }
       else{
         for(var i = 0; i < that.combine_data[that.currDay][that.currHour].length; i++){
@@ -402,23 +405,24 @@ export default {
           traffic_arr.push(val.traffic);
         }
 
-        var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
-        var slope = leastSquaresCoeff[0];
-        var intercept = leastSquaresCoeff[1];
-        var rSquare = leastSquaresCoeff[2];
-        var x1 = xMin;
-        var x2 = xMax;
-        var y1 = intercept;
-        var y2 = xMax * slope + intercept;
-        if(y2 < 0){
-          x2 = (-intercept) / slope;
-          y2 = 0;
-        }
-        that.line.transition()
-          .attr("x1", that.xScale(x1))
-          .attr("y1", that.yScale(y1))
-          .attr("x2", that.xScale(x2))
-          .attr("y2", that.yScale(y2))
+        // var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
+        // var slope = leastSquaresCoeff[0];
+        // var intercept = leastSquaresCoeff[1];
+        // var rSquare = leastSquaresCoeff[2];
+        // console.log(slope, intercept, rSquare)
+        // var x1 = xMin;
+        // var x2 = xMax;
+        // var y1 = intercept;
+        // var y2 = xMax * slope + intercept;
+        // // if(y2 < 0){
+        // //   x2 = (-intercept) / slope;
+        // //   y2 = 0;
+        // // }
+        // that.line.transition()
+        //   .attr("x1", that.xScale(x1))
+        //   .attr("y1", that.yScale(y1))
+        //   .attr("x2", that.xScale(x2))
+        //   .attr("y2", that.yScale(y2))
       }
       let rho = pearsonCorrelation.pearsonCorrelation(criminal_arr, traffic_arr);
       that.pearson_text.transition().text(rho.toFixed(2));
@@ -453,6 +457,7 @@ text {
 
 .dot {
   stroke: #000;
+  opacity:0.5;
 }
 
 .axis path, .axis line {
