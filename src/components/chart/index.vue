@@ -3,6 +3,9 @@
     <canvas id="sentiment-chart" width="240" height="240"></canvas>
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
     <div class="chartHolder">
+    <h4 style="position:absolute; top:95px; left:375px; color:black">Average Age</h4>
+    <h4 style="position:absolute; top:95px; left:660px; color:black">Number of Residents</h4>
+    <h4 style="position:absolute; top:95px; left:970px; color:black">Pearson Correlation</h4>
     </div>
     <div class="sliderHolder my-4 mb-2 pl-6">
       <div class="row">
@@ -51,6 +54,7 @@
 <script>
 import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
+import * as d3Legend from 'd3-svg-legend';
 const chart = require("../donut_chart.js").default;
 
 const pearsonCorrelation = require("./ pearsoncorrelation.js");
@@ -63,7 +67,7 @@ const margin = {
 }
 
 const xMin = 1;
-const xMax = 200000;
+const xMax = 250000;
 const yMin = 0;
 const yMax = 450;
 const svgWidth = 1000;
@@ -202,6 +206,9 @@ export default {
       }
 
       that.combine_data[+data.day][+data.hour].push({"precinct": +data.precinct, "criminal": total_criminal, "traffic": total_traffic, "population": +data.population, "age": +data.age});
+
+      that.$refs.hourSlider.setIndex(12);
+      that.$refs.daySlider.setIndex(1);
     });
 
     that.sentimentData = {};
@@ -215,6 +222,11 @@ export default {
       that.sentimentData[+data.day][+data.hour]["negative"] = +data.negative;
       that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
       that.sentimentData[+data.day][+data.hour]["positive"] = +data.positive;
+
+      that.$refs.hourSlider.setIndex(5);
+      that.$refs.daySlider.setIndex(0);
+      that.$refs.hourSlider.setIndex(1);
+      that.$refs.daySlider.setIndex(0);
     });
   },
   mounted: function(){
@@ -226,7 +238,6 @@ export default {
     that.yScale = d3.scaleLinear().domain([yMin, yMax]).range([that.height, 0]);
     that.radiusScale = d3.scaleSqrt().domain([0, rMax]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-
 
 
     var xAxis = d3.axisBottom().scale(that.xScale);
@@ -357,6 +368,37 @@ export default {
     updateGraph: function(){
       var that = this;
       console.log('updategraph')
+
+      var svg = d3.select("svg");
+      svg.append("g")
+        .attr("class", "legendSequential")
+        .attr("transform", "translate(100,30)");
+
+      var legendSequential = d3Legend.legendColor()
+          .shapeWidth(30)
+          .cells(10)
+          .orient("horizontal")
+          .scale(that.colorScale) 
+          .labels(["28", "30", "32", "34", "36", "38", "40", "42", "44", "46"]);
+
+      svg.select(".legendSequential")
+        .call(legendSequential);
+
+      svg.append("g")
+        .attr("class", "legendSize")
+        .attr("transform", "translate(460, 20)");
+
+      var legendSize = d3Legend.legendSize()
+        .scale(that.radiusScale)
+        .shape('circle')
+        .shapePadding(15)
+        .labelOffset(20)
+        .orient('horizontal')
+        .labels(["_", "62541", "125081", "187621", "250162"]);
+
+      svg.select(".legendSize")
+        .call(legendSize);
+
       var svg = d3.select("svg")
                   .append("g")
                   .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
@@ -433,6 +475,8 @@ export default {
       }
       let rho = pearsonCorrelation.pearsonCorrelation(criminal_arr, traffic_arr);
       that.pearson_text.transition().text(rho.toFixed(2));
+
+
     }
   },
   watch: {
@@ -508,4 +552,11 @@ path {
   top: 100px;
 }
 
+.legendSequential{
+  fill: black;
+}
+
+.legendSize{
+  fill: #00BFFF;
+}
 </style>
