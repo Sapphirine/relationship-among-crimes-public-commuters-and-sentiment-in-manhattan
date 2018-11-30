@@ -5,6 +5,7 @@
     <div class="container" style="width:1280px">
       <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn">Story1</button>
 
+      <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn">Story2</button>
 
       <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
@@ -327,6 +328,11 @@ export default {
       this.setIdx(10, this.dayIndexMap["WED"]);
     },
 
+    setStory2: function(){
+      this.setIdx(15, this.dayIndexMap["THU"]);
+    },
+
+
     onPrecinctSelected: function(precinctIdx) {
       this.currPrecinct = precinctIdx;
     },
@@ -520,4 +526,9 @@ circle{
   top: 400px;
 }
 
+#story2{
+  position: absolute;
+  left: 0px;
+  top: 450px;
+}
 </style>

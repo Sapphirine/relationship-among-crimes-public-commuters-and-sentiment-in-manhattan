@@ -70,4 +70,23 @@ for GAP in GAPS:
     final_df["criminal"] = final_criminal_se
     final_df["traffic"] = final_traffic_se
 
+    population_df = pd.read_csv("./population.csv", index_col=False)
+    
+    population_arr= []
+    age_arr = []
+    for idx, row in final_df.iterrows():
+        curr_precinct = row["precinct"]
+        for idx2, row2 in population_df.iterrows():
+            target_precinct = row2["precinct"]
+            if(target_precinct == curr_precinct):
+                population_arr.append(row2["population"])
+                age_arr.append(row2["age"])
+                break
+    
+    population_se = pd.Series(population_arr)
+    age_se = pd.Series(age_arr)
+
+    final_df["population"] = population_se
+    final_df["age"] = age_se
+
     final_df.to_csv("combine_precinct_" + GAP + ".csv", index=False)

@@ -68,6 +68,8 @@ const yMin = 0;
 const yMax = 450;
 const svgWidth = 1000;
 const svgHeight = 600;
+const rMax = 250162;
+const rMin = 1;
 
 export default {
   components: {
@@ -199,7 +201,7 @@ export default {
         that.combine_data[+data.day][+data.hour] = []
       }
 
-      that.combine_data[+data.day][+data.hour].push({"precinct": +data.precinct, "criminal": total_criminal, "traffic": total_traffic});
+      that.combine_data[+data.day][+data.hour].push({"precinct": +data.precinct, "criminal": total_criminal, "traffic": total_traffic, "population": +data.population, "age": +data.age});
     });
 
     that.sentimentData = {};
@@ -222,8 +224,10 @@ export default {
 
     that.xScale = d3.scaleLog().domain([xMin, xMax]).range([0, that.width]);
     that.yScale = d3.scaleLinear().domain([yMin, yMax]).range([that.height, 0]);
-    that.radiusScale = d3.scaleSqrt().domain([0, 5e8]).range([0, 40]);
+    that.radiusScale = d3.scaleSqrt().domain([0, rMax]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+
 
     var xAxis = d3.axisBottom().scale(that.xScale);
     var yAxis = d3.axisLeft().scale(that.yScale);
@@ -322,12 +326,16 @@ export default {
         options: this.donut_config.options,
       });
     },
-    getRadiusData: function(d){
-      return 2e7
-      // return d.population;
-    },
-    getColorData: function(d){
-      return 5;
+    getColorData: function(age){
+      age = Math.round(age);
+      let type = Math.round((age - 28) / 2);
+      if(type < 0){
+        type = 0;
+      }
+      if(type > 9){
+        type = 9;
+      }
+      return type;
       // return d.region;
     },
     isEmpty: function(obj) {
@@ -353,7 +361,6 @@ export default {
                   .append("g")
                   .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
 
-
       let criminal_arr = [];
       let traffic_arr = [];
       var gdots = svg.append("g").attr("class", "dots");
@@ -363,10 +370,10 @@ export default {
           that.gdots_dict[val.precinct] = gdots.append("circle")
             .attr("class", "dot")
             .attr("id", val.precinct)
-            .style("fill", that.colorScale(that.getColorData(val)))
+            .style("fill", that.colorScale(that.getColorData(val.age)))
             .attr("cx", that.xScale(val.traffic))
             .attr("cy", that.yScale(val.criminal))
-            .attr("r", that.radiusScale(that.getRadiusData(val)));
+            .attr("r", that.radiusScale(val.population));
 
           that.gdots_dict[val.precinct].append("title").text(val.precinct);
 
@@ -456,8 +463,8 @@ text {
 }
 
 .dot {
-  stroke: #000;
-  opacity:0.5;
+  // stroke: #000;
+  opacity:0.8;
 }
 
 .axis path, .axis line {
