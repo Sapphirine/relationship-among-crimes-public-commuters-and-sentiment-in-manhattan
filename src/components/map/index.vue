@@ -7,6 +7,8 @@
       <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
       <div class="mapHolder">
+        <h3 id="criminal_map">Criminal Flow</h3>
+        <h3 id="traffic_map">Traffic Flow</h3>
         <ManhattanMap
           @precinctSelected="onPrecinctSelected"
           @precinctDeselected="onPrecinctDeselected"
@@ -84,7 +86,7 @@ export default {
   name: 'map-plot-page',
   data: function() {
     return {
-      title: 'Criminal Map',
+      title: 'Map Plot',
 
       // Commom
       projection: undefined,
@@ -470,6 +472,18 @@ circle{
   position: absolute;
   left:0px;
   top: 100px;
+}
+
+#criminal_map{
+  position: absolute;
+  left: 500px;
+  top: 70px;
+}
+
+#traffic_map{
+  position: absolute;
+  left: 1100px;
+  top: 70px;
 }
 
 .q0 { fill:rgb(204, 204, 204) }
