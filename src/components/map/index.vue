@@ -3,12 +3,15 @@
     <canvas id="sentiment-chart" width="250" height="250"></canvas>
 
     <div class="container" style="width:1280px">
+      <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn">Story1</button>
+
 
       <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
       <div class="mapHolder">
-        <h3 id="criminal_map">Criminal Flow</h3>
-        <h3 id="traffic_map">Traffic Flow</h3>
+        <h3 id="criminal_map">Criminal</h3>
+
+        <h3 id="traffic_map">Population</h3>
         <ManhattanMap
           @precinctSelected="onPrecinctSelected"
           @precinctDeselected="onPrecinctDeselected"
@@ -314,6 +317,16 @@ export default {
     immediate: true,
   },
   methods: {
+    setIdx: function(hourIdx, dayIdx){
+      console.log(hourIdx, dayIdx)
+      this.$refs.hourSlider.setIndex(hourIdx);
+      this.$refs.daySlider.setIndex(dayIdx);
+    },
+      
+    setStory1: function(){
+      this.setIdx(10, this.dayIndexMap["WED"]);
+    },
+
     onPrecinctSelected: function(precinctIdx) {
       this.currPrecinct = precinctIdx;
     },
@@ -495,4 +508,16 @@ circle{
 .q6 { fill:rgb(204, 51, 51) }
 .q7 { fill:rgb(204, 25, 25) }
 .q8 { fill:rgb(204, 0, 0) }
+
+.storyBtn{
+  width: 100px;
+  border-radius: 25px;
+}
+
+#story1{
+  position: absolute;
+  left: 0px;
+  top: 400px;
+}
+
 </style>
