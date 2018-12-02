@@ -479,7 +479,7 @@ export default {
     },
     animation: function(){
       var that = this;
-      var pauseSec = 300;
+      var pauseSec = 400;
       // that.animationHour(0, pauseSec);
       // that.animationDay(0, pauseSec);
       that.animationSet1(0, 0, pauseSec)
@@ -578,5 +578,11 @@ circle{
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
+}
+
+.card-header {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }
 </style>
