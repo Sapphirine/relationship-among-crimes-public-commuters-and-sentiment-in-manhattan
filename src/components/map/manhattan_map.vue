@@ -1,11 +1,13 @@
 <template>
   <div id="manhattan_map">
     <div class="row">
-      <div id="map_criminal_col">
-        <svg id="map_svg_criminal" width="570" height="600"></svg>
+      <div id="map_criminal_col" class="border">
+        <svg id="map_svg_criminal" width="500" height="600"></svg>
       </div>
-      <div id="map_traffic_col">
-        <svg id="map_svg_traffic" width="570" height="600"></svg>
+      <div class="ml-3 mr-3">
+      </div>
+      <div id="map_traffic_col" class="border">
+        <svg id="map_svg_traffic" width="500" height="600"></svg>
       </div>
     </div>
   </div>
@@ -98,5 +100,13 @@ export default {
   stroke: grey;
   stroke-width: 1px;
   fill: white;
+}
+#map_criminal_col{
+    border-radius: 2%;
+    border: 1px solid;
+}
+#map_traffic_col{
+    border-radius: 2%;
+    border: 1px solid;
 }
 </style>

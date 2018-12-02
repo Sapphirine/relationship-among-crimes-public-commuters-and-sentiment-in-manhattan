@@ -1,24 +1,71 @@
 <template>
   <div class="criminalMap">
-    <canvas id="sentiment-chart" width="260" height="260"></canvas>
 
-    <div class="container" style="width:1280px">
-      <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn">Story1</button>
 
-      <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn">Story2</button>
+    <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
-      <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
-
-      <div class="mapHolder">
-        <h3 id="criminal_map">Criminal Heatmap</h3>
-
-        <h3 id="traffic_map">Commuter Heatmap</h3>
-        <ManhattanMap
-          @precinctSelected="onPrecinctSelected"
-          @precinctDeselected="onPrecinctDeselected"
-          @mapIsReady="onMapIsReady"
-        />
+    <div class="container-fluid">
+      <div class="row">
+        <div class="mapHolder" style="padding-left:46px">
+          <h3 id="criminal_map">Criminal Heatmap</h3>
+          <h3 id="traffic_map">Commuter Heatmap</h3>
+          <ManhattanMap
+            @precinctSelected="onPrecinctSelected"
+            @precinctDeselected="onPrecinctDeselected"
+            @mapIsReady="onMapIsReady"
+          />
+        </div>
+        <div class="col-md-3">
+          <div class="row" style="padding-left:35px">
+            <div class="sentimentHolder">
+              <canvas id="sentiment-chart" class="border" width="300" height="300"></canvas>
+            </div>
+            <div class="storyHolder mt-3 border">
+              <div class="row mt-3">
+                <div class="col-sm-6">
+                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
+                </div>
+                <div class="col-sm-6">
+                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-sm-6">
+                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
+                </div>
+                <div class="col-sm-6">
+                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-sm-6">
+                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
+                </div>
+                <div class="col-sm-6">
+                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-sm-6">
+                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
+                </div>
+                <div class="col-sm-6">
+                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
+                </div>
+              </div>
+              <div class="row mt-3 mb-3">
+                <div class="col-sm-6">
+                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
+                </div>
+                <div class="col-sm-6">
+                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      
       <div class="tooltipHolder">
         <Tooltip
           v-if="currPrecinct"
@@ -26,19 +73,13 @@
           :description="currentPrecinctDescription"
         />
       </div>
-      <div class="sliderHolder my-4 mb-2 pl-6">
+      <div class="sliderHolder my-4 mb-2 border" style="width: 1361px;margin-left: 17px;">
         <div class="row">
           <div class="col-md-1">
+              <div  style="float:right"><h5><span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5></div>
+              <div  style="float:right"><h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5></div>
           </div>
-          <div class="col-md-1">
-            <div class="row">
-              <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5>
-            </div>
-            <div class="row">
-              <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5>
-            </div>
-          </div>
-          <div class="col-md-8">
+          <div class="col-md-10">
             <div class="row">
               <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
                 <vue-slider 
@@ -61,10 +102,8 @@
             </div>
           </div>
           <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary  btn-lg my-1" v-on:click="animation"><font-awesome-icon icon="play" /></button>
+            <button id="playBtn" class="btn btn-primary  btn-lg my-1" style="float:left" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
           </div> 
-          <div class="col-md-1">
-          </div>
         </div>
       </div>
     </div>
@@ -175,7 +214,7 @@ export default {
             labels:{
               usePointStyle: true,
             },
-            position: 'right',
+            position: 'top',
           },
           title: {
             display: false,
@@ -194,7 +233,9 @@ export default {
 
     var count1 = 0;
     that.criminalData = {};
-    d3.csv("static/data/map_plot_criminal_lat_long.csv", function(data) {
+    d3.csv("static/data/map_plot_criminal_lat_long.csv",
+    // d3.csv("static/data/criminal_lat_long_01_clean.csv", 
+    function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
         that.maxNbCriminal = total;
@@ -209,7 +250,9 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/map_plot_commuter_lat_long.csv", function(data){ 
+    d3.csv("static/data/map_plot_commuter_lat_long.csv", 
+    // d3.csv("static/data/taxi_sort_01_clean.csv",
+    function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
@@ -485,10 +528,10 @@ circle{
 
 #playBtn{
   border: 1px solid black;
-  border-radius: 25px;
+  border-radius: 50%;
 }
 
-#sentiment-chart{
+.sentiment-chart{
   position: absolute;
   left:0px;
   top: 100px;
@@ -496,13 +539,13 @@ circle{
 
 #criminal_map{
   position: absolute;
-  left: 380px;
+  left: 400px;
   top: 70px;
 }
 
 #traffic_map{
   position: absolute;
-  left: 950px;
+  left: 1000px;
   top: 70px;
 }
 
@@ -521,15 +564,6 @@ circle{
   border-radius: 25px;
 }
 
-#story1{
-  position: absolute;
-  left: 0px;
-  top: 400px;
-}
 
-#story2{
-  position: absolute;
-  left: 0px;
-  top: 450px;
-}
+
 </style>
