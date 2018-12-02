@@ -157,15 +157,15 @@ export default {
 
       // Story
       StoryTitle: [
-        "Story Telling",
-        "1111111111111111111111111111111111",
+        "Plot of Crime and Population",
+        "11111111111111111111111111",
         "title2",
         "title3",
         "title4",
         "title5"
       ],
       StoryContext: [
-        "Highlight the main pattern of this map.",
+        "This visualizationis the bubble plot of # of crimes and # commuters, the size of bubble denotes the # of residents, and color of bubbles represents the area. We measure the correlation using pearson algo.",
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
         "contenxt2",
         "contenxt3",
@@ -682,11 +682,5 @@ path {
 
 #app{
   margin-top: 30px;
-}
-
-.card-header {
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis; 
 }
 </style>

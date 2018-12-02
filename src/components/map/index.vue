@@ -7,7 +7,7 @@
       <div class="row">
         <div class="mapHolder" style="padding-left:46px">
           <h3 id="criminal_map">Criminal Heatmap</h3>
-          <h3 id="traffic_map">Commuter Heatmap</h3>
+          <h3 id="traffic_map">Population Heatmap</h3>
           <h3 id="sentiment_chart">Sentiment</h3>
           <ManhattanMap
             @precinctSelected="onPrecinctSelected"
@@ -133,16 +133,16 @@ export default {
 
       // Story
       StoryTitle: [
-        "Story Telling",
-        "title1",
+        "Heatmap of Crime and Population",
+        "11111111111111111111111111",
         "title2",
         "title3",
         "title4",
         "title5"
       ],
       StoryContext: [
-        "Highlight the main pattern of this map.",
-        "contenxt1",
+        "This visualization is heapmaps of dynamic crime and population of Manhattan, aggregated by precinct. Twitter is used to analyse the sentiment of manhattan people hour-by-hour in an average week.",
+        "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
         "contenxt2",
         "contenxt3",
         "contenxt4",
@@ -578,11 +578,5 @@ circle{
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
-}
-
-.card-header {
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis; 
 }
 </style>
