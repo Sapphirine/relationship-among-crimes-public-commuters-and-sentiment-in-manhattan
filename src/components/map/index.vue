@@ -21,50 +21,6 @@
               <canvas id="sentiment-chart" class="" width="310" height="310"></canvas>
             </div>
           </div>
-            <!--
-            <div class="storyHolder mt-3 cliente">
-              <div class="row mt-3">
-                <div class="col-sm-6">
-                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
-                </div>
-                <div class="col-sm-6">
-                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
-                </div>
-              </div>
-              <div class="row mt-3">
-                <div class="col-sm-6">
-                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
-                </div>
-                <div class="col-sm-6">
-                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
-                </div>
-              </div>
-              <div class="row mt-3">
-                <div class="col-sm-6">
-                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
-                </div>
-                <div class="col-sm-6">
-                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
-                </div>
-              </div>
-              <div class="row mt-3">
-                <div class="col-sm-6">
-                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
-                </div>
-                <div class="col-sm-6">
-                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
-                </div>
-              </div>
-              <div class="row mt-3 mb-3">
-                <div class="col-sm-6">
-                <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
-                </div>
-                <div class="col-sm-6">
-                <button v-on:click="setStory2" id="story2" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story2</button>
-                </div>
-              </div>
-            </div>
-            -->
           <div class="row  mt-4 cliente" >
             <div class="card bg-light" style="width: 315px; height:260px">
               <div class="card-header">
@@ -173,14 +129,6 @@ export default {
 
       // Sentiment Data
       sentimentData: undefined,
-      sentimentEmoji: undefined,
-      sentimentEmojis: [
-        "static/images/1.png",
-        "static/images/2.png",
-        "static/images/3.png",
-        "static/images/4.png",
-        "static/images/5.png",
-      ],
       sentimentDonutChart: undefined,
 
       // Story
@@ -280,8 +228,8 @@ export default {
 
     var count1 = 0;
     that.criminalData = {};
-    // d3.csv("static/data/map_plot_criminal_lat_long.csv",
-    d3.csv("static/data/criminal_lat_long_01_clean.csv", 
+    d3.csv("static/data/map_plot_criminal_lat_long.csv",
+    // d3.csv("static/data/criminal_lat_long_01_clean.csv", 
     function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
@@ -297,8 +245,8 @@ export default {
     });
 
     that.trafficFlowData = {};
-    // d3.csv("static/data/map_plot_commuter_lat_long.csv", 
-    d3.csv("static/data/taxi_sort_01_clean.csv",
+    d3.csv("static/data/map_plot_commuter_lat_long.csv", 
+    // d3.csv("static/data/taxi_sort_01_clean.csv",
     function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
@@ -422,7 +370,7 @@ export default {
   },
   methods: {
     switchToPrevPage: function(){
-      if(this.currPage == 1){
+      if(this.currPage <= 1){
         this.currPage = this.totalPage;
       }
       else{
@@ -442,16 +390,6 @@ export default {
       this.$refs.hourSlider.setIndex(hourIdx);
       this.$refs.daySlider.setIndex(dayIdx);
     },
-      
-    setStory1: function(){
-      this.setIdx(10, this.dayIndexMap["WED"]);
-    },
-
-    setStory2: function(){
-      this.setIdx(15, this.dayIndexMap["THU"]);
-    },
-
-
     onPrecinctSelected: function(precinctIdx) {
       this.currPrecinct = precinctIdx;
     },
@@ -640,22 +578,5 @@ circle{
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
-}
-
-i {
-    border: solid black;
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
-}
-
-.right {
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-}
-
-.left {
-    transform: rotate(135deg);
-    -webkit-transform: rotate(135deg);
 }
 </style>

@@ -1,50 +1,79 @@
 <template>
   <div class="chart_plot">
-    <canvas id="sentiment-chart" width="260" height="260"></canvas>
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
-    <div class="chartHolder">
-    <h4 style="position:absolute; top:95px; left:418px; color:black">Area</h4>
-    <h4 style="position:absolute; top:95px; left:610px; color:black">Number of Residents</h4>
-    <h4 style="position:absolute; top:95px; left:970px; color:black">Pearson Correlation</h4>
-    </div>
-    <div class="sliderHolder my-4 mb-2 pl-6">
-      <div class="row">
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-1">
-          <div class="row">
-            <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5>
-          </div>
-          <div class="row">
-            <h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5>
+
+    <h4 style="position:absolute; top:95px; left:275px; color:black">Area</h4>
+    <h4 style="position:absolute; top:95px; left:475px; color:black">Number of Residents</h4>
+    <h4 style="position:absolute; top:95px; left:810px; color:black">Pearson Correlation</h4>
+
+    <div class="container-fluid">
+      <div class="row" style="padding-left:30px">
+        <div class="col-md-9 cliente">
+          <div class="chartHolder">
           </div>
         </div>
-        <div class="col-md-8">
-          <div class="row">
-            <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-              <vue-slider 
-                ref="hourSlider"
-                v-model="hourSliderValue"
-                v-bind="hourSliderOption"
-              >
-              </vue-slider>
+        
+        <div class="col-md-3" style="padding-left: 40px;padding-right: 35px;">
+          <div class="row cliente">
+            <div class="sentimentHolder ">
+              <canvas id="sentiment-chart" class="" width="310" height="310"></canvas>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-              <vue-slider 
-                ref="daySlider"
-                v-model="daySliderValue"
-                v-bind="daySliderOption"
-              >
-              </vue-slider>
+          <div class="row  mt-4 cliente" >
+            <div class="card bg-light" style="width: 315px; height:290px">
+              <div class="card-header">
+                {{currTitle}}
+              </div>
+              <div class="card-body">
+                <p class="card-text">
+                  {{currContext}}
+                </p>
+              </div>
+              <div class="card-footer" style="padding:0.35rem 1.25rem;">
+                <small class="text-muted">
+                  <button type="button" class="btn btn-secondary " style="float:left;  border-radius:50%" v-on:click="switchToPrevPage"><font-awesome-icon icon="arrow-left" class=""/></button>
+
+                  <center class="text-monospace" style="padding-top:10px; display:inline-block">{{currPage}} / {{totalPage}}</center>
+
+                  <button type="button" class="btn btn-secondary " style="float:right;  border-radius:50%" v-on:click="switchToNextPage"><font-awesome-icon icon="arrow-right" class=""/></button>
+                </small>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-1">
-          <button id="playBtn" class="btn btn-primary  btn-lg my-1" v-on:click="animation"><font-awesome-icon icon="play" /></button>
-        </div> 
-        <div class="col-md-1">
+      </div>
+
+      <div class="sliderHolder my-3 cliente" style="margin-left: 15px;margin-right: 4px; padding-top:3px; padding-bottom:1px;">
+        <div class="row">
+          <div class="col-md-1">
+              <div  style="float:right"><h5><span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5></div>
+              <div  style="float:right"><h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5></div>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+                <vue-slider 
+                  ref="hourSlider"
+                  v-model="hourSliderValue"
+                  v-bind="hourSliderOption"
+                >
+                </vue-slider>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+                <vue-slider 
+                  ref="daySlider"
+                  v-model="daySliderValue"
+                  v-bind="daySliderOption"
+                >
+                </vue-slider>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1">
+            <button id="playBtn" class="btn btn-primary  btn-lg my-1" style="float:left;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
+          </div> 
         </div>
       </div>
     </div>
@@ -63,7 +92,7 @@ const margin = {
   top: 19.5,
   right: 19.5,
   bottom:19.5,
-  left:60.5
+  left:29.5
 }
 
 const xMin = 1;
@@ -71,7 +100,7 @@ const xMax = 280000;
 const yMin = 0;
 const yMax = 450;
 const svgWidth = 1000;
-const svgHeight = 600;
+const svgHeight = 630;
 const rMax = 250162;
 const rMin = 1;
 
@@ -126,6 +155,30 @@ export default {
       sentimentData: undefined,
       sentimentDonutChart: undefined,
 
+      // Story
+      StoryTitle: [
+        "Story Telling",
+        "title1",
+        "title2",
+        "title3",
+        "title4",
+        "title5"
+      ],
+      StoryContext: [
+        "Highlight the main pattern of this map.",
+        "contenxt1",
+        "contenxt2",
+        "contenxt3",
+        "contenxt4",
+        "contenxt5"
+      ],
+      hourList: [2, 4, 6, 8, 10],
+      dayList: ["FRI", "THU", "WED", "TUE", "MON"],
+      currPage: 0,
+      totalPage: 5,
+      currTitle: "placeholder",
+      currContext: "placeholder",
+
       // Utils
       /// Day slider
       dayIndexMap:{"MON": 0, "TUE": 1, "WED": 2, "THU": 3, "FRI": 4, "SAT": 5, "SUN": 6},
@@ -179,7 +232,7 @@ export default {
             labels:{
               usePointStyle: true,
             },
-            position: 'right',
+            position: 'top',
           },
           title: {
             display: false,
@@ -305,18 +358,42 @@ export default {
       .attr("class", "pearson_text")
       .attr("text-anchor", "end")
       .attr("x", that.width - 105)
-      .attr("y", 47)
+      .attr("y", 75)
       .text("Pearson: ")
 
     that.pearson_text = svg.append("text")
       .attr("class", "pearson_text")
       .attr("text-anchor", "end")
       .attr("x", that.width)
-      .attr("y", 50);
+      .attr("y", 78);
     
     that.pearson_text.text("0.00");
+
+    that.currTitle = that.StoryTitle[that.currPage];
+    that.currContext = that.StoryContext[that.currPage];
   },
   methods:{
+    switchToPrevPage: function(){
+      if(this.currPage <= 1){
+        this.currPage = this.totalPage;
+      }
+      else{
+        this.currPage--;
+      }
+    },
+    switchToNextPage: function(){
+      if(this.currPage == this.totalPage){
+        this.currPage = 1;
+      }
+      else{
+        this.currPage++;
+      }
+    },
+    setIdx: function(hourIdx, dayIdx){
+      console.log(hourIdx, dayIdx)
+      this.$refs.hourSlider.setIndex(hourIdx);
+      this.$refs.daySlider.setIndex(dayIdx);
+    },
     animation: function(){
       var that = this;
       var pauseSec = 300;
@@ -397,7 +474,7 @@ export default {
       var svg = d3.select("svg");
       svg.append("g")
         .attr("class", "legendSequential")
-        .attr("transform", "translate(150,30)");
+        .attr("transform", "translate(150,70)");
 
       var legendSequential = d3Legend.legendColor()
           .shapeWidth(50)
@@ -411,7 +488,7 @@ export default {
 
       svg.append("g")
         .attr("class", "legendSize")
-        .attr("transform", "translate(410, 20)");
+        .attr("transform", "translate(410, 60)");
 
       var legendSize = d3Legend.legendSize()
         .scale(that.radiusScale)
@@ -419,7 +496,7 @@ export default {
         .shapePadding(15)
         .labelOffset(20)
         .orient('horizontal')
-        .labels(["_", "62541", "125081", "187621", "250162"]);
+        .labels(["", "62541", "125081", "187621", "250162"]);
 
       svg.select(".legendSize")
         .call(legendSize);
@@ -503,6 +580,15 @@ export default {
     }
   },
   watch: {
+    currPage:{
+      handler: function(){
+        var that = this;
+        that.setIdx(that.hourList[that.currPage], that.dayIndexMap[that.dayList[that.currPage]]);
+
+        that.currTitle = that.StoryTitle[that.currPage];
+        that.currContext = that.StoryContext[that.currPage];
+      }
+    },
     hourSliderValue: {
       handler: function(){
         var that = this;
@@ -560,19 +646,13 @@ path {
 
 #playBtn{
   border: 1px solid black;
-  border-radius: 25px;
+  border-radius: 50%;
 }
 
 .regression {
   stroke-width: 2px;
   stroke: steelblue;
   stroke-dasharray: 10,5;
-}
-
-#sentiment-chart{
-  position: absolute;
-  left:10px;
-  top: 70px;
 }
 
 .legendSequential{
@@ -590,5 +670,17 @@ path {
 .y.label{
   font: 500 20px "Helvetica Neue";
   fill: black;
+}
+
+
+.cliente {
+  border: #cdcdcd medium solid;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+#app{
+  margin-top: 30px;
 }
 </style>
