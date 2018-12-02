@@ -52,11 +52,11 @@
           :description="currentPrecinctDescription"
         />
       </div>
-      <div class="sliderHolder my-4 mb-2 cliente" style="margin-left: 15px;margin-right: 4px;">
+      <div class="sliderHolder my-3 cliente" style="margin-left: 15px;margin-right: 4px; padding-top:3px; padding-bottom:1px;">
         <div class="row">
           <div class="col-md-1">
-              <div  style="float:right"><h5><span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5></div>
-              <div  style="float:right"><h5> <span class="badge badge-pill badge-primary ml-4 mr-1">Day </span> </h5></div>
+              <div  style="float:right"><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
+              <div  style="float:right"><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
           </div>
           <div class="col-md-10">
             <div class="row">
@@ -81,7 +81,7 @@
             </div>
           </div>
           <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary  btn-lg my-1" style="float:left;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
+            <button id="playBtn" class="btn btn-primary  btn-lg" style="margin-top: 7px;margin-left: -17px;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
           </div> 
         </div>
       </div>
@@ -479,7 +479,7 @@ export default {
     },
     animation: function(){
       var that = this;
-      var pauseSec = 500;
+      var pauseSec = 300;
       // that.animationHour(0, pauseSec);
       // that.animationDay(0, pauseSec);
       that.animationSet1(0, 0, pauseSec)
