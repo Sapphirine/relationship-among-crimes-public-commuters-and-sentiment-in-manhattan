@@ -1,7 +1,6 @@
 <template>
   <div class="criminalMap">
 
-
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
     <div class="container-fluid">
@@ -9,18 +8,21 @@
         <div class="mapHolder" style="padding-left:46px">
           <h3 id="criminal_map">Criminal Heatmap</h3>
           <h3 id="traffic_map">Commuter Heatmap</h3>
+          <h3 id="sentiment_chart">Sentiment</h3>
           <ManhattanMap
             @precinctSelected="onPrecinctSelected"
             @precinctDeselected="onPrecinctDeselected"
             @mapIsReady="onMapIsReady"
           />
         </div>
-        <div class="col-md-3">
-          <div class="row" style="padding-left:35px">
-            <div class="sentimentHolder">
-              <canvas id="sentiment-chart" class="border" width="300" height="300"></canvas>
+        <div class="col-md-3" style="padding-left:60px">
+          <div class="row cliente">
+            <div class="sentimentHolder ">
+              <canvas id="sentiment-chart" class="" width="310" height="310"></canvas>
             </div>
-            <div class="storyHolder mt-3 border">
+          </div>
+            <!--
+            <div class="storyHolder mt-3 cliente">
               <div class="row mt-3">
                 <div class="col-sm-6">
                 <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn ml-3 mr-3">Story1</button>
@@ -62,6 +64,27 @@
                 </div>
               </div>
             </div>
+            -->
+          <div class="row  mt-4 cliente" >
+            <div class="card bg-light" style="width: 315px; height:260px">
+              <div class="card-header">
+                {{currTitle}}
+              </div>
+              <div class="card-body">
+                <p class="card-text">
+                  {{currContext}}
+                </p>
+              </div>
+              <div class="card-footer" style="padding:0.35rem 1.25rem;">
+                <small class="text-muted">
+                  <button type="button" class="btn btn-secondary " style="float:left;  border-radius:50%" v-on:click="switchToPrevPage"><font-awesome-icon icon="arrow-left" class=""/></button>
+
+                  <center class="text-monospace" style="padding-top:10px; display:inline-block">{{currPage}} / {{totalPage}}</center>
+
+                  <button type="button" class="btn btn-secondary " style="float:right;  border-radius:50%" v-on:click="switchToNextPage"><font-awesome-icon icon="arrow-right" class=""/></button>
+                </small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -73,7 +96,7 @@
           :description="currentPrecinctDescription"
         />
       </div>
-      <div class="sliderHolder my-4 mb-2 border" style="width: 1361px;margin-left: 17px;">
+      <div class="sliderHolder my-4 mb-2 cliente" style="margin-left: 15px;margin-right: 4px;">
         <div class="row">
           <div class="col-md-1">
               <div  style="float:right"><h5><span class="badge badge-pill badge-primary ml-4 mr-1">Time </span> </h5></div>
@@ -102,7 +125,7 @@
             </div>
           </div>
           <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary  btn-lg my-1" style="float:left" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
+            <button id="playBtn" class="btn btn-primary  btn-lg my-1" style="float:left;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
           </div> 
         </div>
       </div>
@@ -159,6 +182,30 @@ export default {
         "static/images/5.png",
       ],
       sentimentDonutChart: undefined,
+
+      // Story
+      StoryTitle: [
+        "Story Telling",
+        "title1",
+        "title2",
+        "title3",
+        "title4",
+        "title5"
+      ],
+      StoryContext: [
+        "Highlight the main pattern of this map.",
+        "contenxt1",
+        "contenxt2",
+        "contenxt3",
+        "contenxt4",
+        "contenxt5"
+      ],
+      hourList: [2, 4, 6, 8, 10],
+      dayList: ["FRI", "THU", "WED", "TUE", "MON"],
+      currPage: 0,
+      totalPage: 5,
+      currTitle: "placeholder",
+      currContext: "placeholder",
 
       // Utils
       /// Day slider
@@ -233,8 +280,8 @@ export default {
 
     var count1 = 0;
     that.criminalData = {};
-    d3.csv("static/data/map_plot_criminal_lat_long.csv",
-    // d3.csv("static/data/criminal_lat_long_01_clean.csv", 
+    // d3.csv("static/data/map_plot_criminal_lat_long.csv",
+    d3.csv("static/data/criminal_lat_long_01_clean.csv", 
     function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
@@ -250,8 +297,8 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/map_plot_commuter_lat_long.csv", 
-    // d3.csv("static/data/taxi_sort_01_clean.csv",
+    // d3.csv("static/data/map_plot_commuter_lat_long.csv", 
+    d3.csv("static/data/taxi_sort_01_clean.csv",
     function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
@@ -329,6 +376,9 @@ export default {
 
     that.$refs.hourSlider.setIndex(12);
     that.$refs.daySlider.setIndex(1);
+
+    that.currTitle = that.StoryTitle[that.currPage];
+    that.currContext = that.StoryContext[that.currPage];
   },
   computed:{
     currentPrecinctTitle: function(){
@@ -339,6 +389,15 @@ export default {
     },
   },
   watch: {
+    currPage:{
+      handler: function(){
+        var that = this;
+        that.setIdx(that.hourList[that.currPage], that.dayIndexMap[that.dayList[that.currPage]]);
+
+        that.currTitle = that.StoryTitle[that.currPage];
+        that.currContext = that.StoryContext[that.currPage];
+      }
+    },
     hourSliderValue: {
       handler: function(){
         var that = this;
@@ -362,6 +421,22 @@ export default {
     immediate: true,
   },
   methods: {
+    switchToPrevPage: function(){
+      if(this.currPage == 1){
+        this.currPage = this.totalPage;
+      }
+      else{
+        this.currPage--;
+      }
+    },
+    switchToNextPage: function(){
+      if(this.currPage == this.totalPage){
+        this.currPage = 1;
+      }
+      else{
+        this.currPage++;
+      }
+    },
     setIdx: function(hourIdx, dayIdx){
       console.log(hourIdx, dayIdx)
       this.$refs.hourSlider.setIndex(hourIdx);
@@ -531,21 +606,21 @@ circle{
   border-radius: 50%;
 }
 
-.sentiment-chart{
-  position: absolute;
-  left:0px;
-  top: 100px;
-}
-
 #criminal_map{
   position: absolute;
-  left: 400px;
+  left: 175px;
   top: 70px;
 }
 
 #traffic_map{
   position: absolute;
-  left: 1000px;
+  left: 700px;
+  top: 70px;
+}
+
+#sentiment_chart{
+  position: absolute;
+  left: 1200px;
   top: 70px;
 }
 
@@ -559,11 +634,28 @@ circle{
 .q7 { fill:rgb(204, 25, 25) }
 .q8 { fill:rgb(204, 0, 0) }
 
-.storyBtn{
-  width: 100px;
-  border-radius: 25px;
+
+.cliente {
+  border: #cdcdcd medium solid;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
 }
 
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
 
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
 
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
 </style>

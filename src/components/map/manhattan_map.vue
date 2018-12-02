@@ -1,12 +1,12 @@
 <template>
   <div id="manhattan_map">
     <div class="row">
-      <div id="map_criminal_col" class="border">
+      <div id="map_criminal_col" class="cliente">
         <svg id="map_svg_criminal" width="500" height="600"></svg>
       </div>
       <div class="ml-3 mr-3">
       </div>
-      <div id="map_traffic_col" class="border">
+      <div id="map_traffic_col" class="cliente">
         <svg id="map_svg_traffic" width="500" height="600"></svg>
       </div>
     </div>
@@ -101,12 +101,11 @@ export default {
   stroke-width: 1px;
   fill: white;
 }
-#map_criminal_col{
-    border-radius: 2%;
-    border: 1px solid;
-}
-#map_traffic_col{
-    border-radius: 2%;
-    border: 1px solid;
+
+.cliente {
+  border: #cdcdcd medium solid;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
 }
 </style>
