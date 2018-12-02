@@ -158,7 +158,7 @@ export default {
       // Story
       StoryTitle: [
         "Story Telling",
-        "title1",
+        "11111111111111111111111111111",
         "title2",
         "title3",
         "title4",
@@ -166,7 +166,7 @@ export default {
       ],
       StoryContext: [
         "Highlight the main pattern of this map.",
-        "contenxt1",
+        "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
         "contenxt2",
         "contenxt3",
         "contenxt4",
