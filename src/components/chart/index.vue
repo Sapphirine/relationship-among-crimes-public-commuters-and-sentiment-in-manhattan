@@ -1,10 +1,10 @@
 <template>
   <div class="chart_plot">
-    <canvas id="sentiment-chart" width="240" height="240"></canvas>
+    <canvas id="sentiment-chart" width="260" height="260"></canvas>
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
     <div class="chartHolder">
-    <h4 style="position:absolute; top:95px; left:375px; color:black">Average Age</h4>
-    <h4 style="position:absolute; top:95px; left:660px; color:black">Number of Residents</h4>
+    <h4 style="position:absolute; top:95px; left:418px; color:black">Area</h4>
+    <h4 style="position:absolute; top:95px; left:610px; color:black">Number of Residents</h4>
     <h4 style="position:absolute; top:95px; left:970px; color:black">Pearson Correlation</h4>
     </div>
     <div class="sliderHolder my-4 mb-2 pl-6">
@@ -67,13 +67,21 @@ const margin = {
 }
 
 const xMin = 1;
-const xMax = 250000;
+const xMax = 280000;
 const yMin = 0;
 const yMax = 450;
 const svgWidth = 1000;
 const svgHeight = 600;
 const rMax = 250162;
 const rMin = 1;
+
+const manhattan_precinct = ["1", "5", "6", "7", "9", "10", "13", "14", "17", "18", "19", "20", "22", "23", "24", "25", "26", "28", "30", "32", "33", "34"];
+
+// 0:downtown 1:midtown 2: uptown 3: uppertown   -- according to wiki(https://en.wikipedia.org/wiki/List_of_Manhattan_neighborhoods) and google map (search midtown manhattan)
+const precinct_area_map = {"1": 0, "5":0, "6":0, "7":0, "9":0, 
+                           "10":1, "13":1, "14":1, "17":1, "18":1, 
+                           "19":2, "20":2, "22":2, "23":3, "24":2, 
+                           "25":3, "26":3, "28":3, "30":3, "32":3, "33":3, "34":3}
 
 export default {
   components: {
@@ -149,19 +157,19 @@ export default {
         data: {
           datasets: [{
             data: [
-              1,2,1
+              1,1
             ],
             backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
                 'rgb(75, 192, 192)',
+                //'rgb(54, 162, 235)',
+                'rgb(255, 99, 132)',
             ],
             label: 'Sentiment'
           }],
           labels: [
-            "Negative",
-            "Neutral",
-            "Positive"
+            "Positive",
+            // "Neutral",
+            "Negative"
           ]
         },
         options: {
@@ -171,7 +179,7 @@ export default {
             labels:{
               usePointStyle: true,
             },
-            position: 'top',
+            position: 'right',
           },
           title: {
             display: false,
@@ -189,28 +197,40 @@ export default {
     var that = this;
 
     that.combine_data = {};
-    d3.csv("static/data/combine_precinct_0006_temp.csv", function(data) {
-      var total_criminal = +data.criminal;
-      var total_traffic = +data.traffic;
-      if(that.maxNbCriminal < total_criminal){
-        that.maxNbCriminal = total_criminal;
-      }
-      if(that.maxNbTraffic < total_traffic){
-        that.maxNbTraffic = total_traffic;
-      }
-      if(that.combine_data[+data.day] === undefined){
-        that.combine_data[+data.day] = {}
-      }
-      if(that.combine_data[+data.day][+data.hour] === undefined){
-        that.combine_data[+data.day][+data.hour] = []
+    var count1 = 0;
+    d3.csv("static/data/chart_plot_combine_precinct.csv", function(data) {
+      if(manhattan_precinct.includes(data.precinct) == true){
+        var total_criminal = +data.criminal;
+        var total_traffic = +data.traffic;
+        if(that.maxNbCriminal < total_criminal){
+          that.maxNbCriminal = total_criminal;
+        }
+        if(that.maxNbTraffic < total_traffic){
+          that.maxNbTraffic = total_traffic;
+        }
+        if(that.combine_data[+data.day] === undefined){
+          that.combine_data[+data.day] = {}
+        }
+        if(that.combine_data[+data.day][+data.hour] === undefined){
+          that.combine_data[+data.day][+data.hour] = []
+        }
+
+        that.combine_data[+data.day][+data.hour].push({"precinct": +data.precinct, "criminal": total_criminal, "traffic": total_traffic, "population": +data.population, "age": +data.age, "area": precinct_area_map[data.precinct]});
       }
 
-      that.combine_data[+data.day][+data.hour].push({"precinct": +data.precinct, "criminal": total_criminal, "traffic": total_traffic, "population": +data.population, "age": +data.age});
+      count1++;
 
-      that.$refs.hourSlider.setIndex(12);
-      that.$refs.daySlider.setIndex(1);
+      if(count1 >= 7 * 24 * 75){
+        that.$refs.hourSlider.setIndex(12);
+        that.$refs.daySlider.setIndex(1);
+        that.$refs.hourSlider.setIndex(0);
+        that.$refs.daySlider.setIndex(0);
+        that.$refs.hourSlider.setIndex(6);
+        that.$refs.daySlider.setIndex(6);
+      }
     });
 
+    var count2 = 0;
     that.sentimentData = {};
     d3.csv("static/data/sentiment_number.csv", function(data){
       if(that.sentimentData[+data.day] === undefined){
@@ -220,13 +240,19 @@ export default {
         that.sentimentData[+data.day][+data.hour] = {}
       }
       that.sentimentData[+data.day][+data.hour]["negative"] = +data.negative;
-      that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
+      // that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
       that.sentimentData[+data.day][+data.hour]["positive"] = +data.positive;
 
-      that.$refs.hourSlider.setIndex(5);
-      that.$refs.daySlider.setIndex(0);
-      that.$refs.hourSlider.setIndex(1);
-      that.$refs.daySlider.setIndex(0);
+      count2++;
+
+      if(count2 >= 7 * 24 * 75){
+        that.$refs.hourSlider.setIndex(5);
+        that.$refs.daySlider.setIndex(0);
+        that.$refs.hourSlider.setIndex(1);
+        that.$refs.daySlider.setIndex(0);
+        that.$refs.hourSlider.setIndex(6);
+        that.$refs.daySlider.setIndex(6);
+      }
     });
   },
   mounted: function(){
@@ -234,7 +260,7 @@ export default {
 
     that.createChart("sentiment-chart");
 
-    that.xScale = d3.scaleLog().domain([xMin, xMax]).range([0, that.width]);
+    that.xScale = d3.scaleLinear().domain([xMin, xMax]).range([0, that.width]);
     that.yScale = d3.scaleLinear().domain([yMin, yMax]).range([that.height, 0]);
     that.radiusScale = d3.scaleSqrt().domain([0, rMax]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
@@ -265,7 +291,7 @@ export default {
       .attr("text-anchor", "end")
       .attr("x", that.width)
       .attr("y", that.height - 6)
-      .text("traffic flow");
+      .text("# of commuters");
 
     svg.append("text")
       .attr("class", "y label")
@@ -273,7 +299,7 @@ export default {
       .attr("y", 6)
       .attr("dy", ".75em")
       .attr("transform", "rotate(-90)")
-      .text("number of crime");
+      .text("# of crimes");
     
      svg.append("text")
       .attr("class", "pearson_text")
@@ -347,7 +373,6 @@ export default {
         type = 9;
       }
       return type;
-      // return d.region;
     },
     isEmpty: function(obj) {
       for(var key in obj) {
@@ -359,9 +384,9 @@ export default {
     updateSentiment: function(){
       var that = this;
 
-      that.donut_config.data.datasets[0].data = [that.sentimentData[that.currDay][that.currHour]["negative"],
-                                                 that.sentimentData[that.currDay][that.currHour]["neutral"],
-                                                 that.sentimentData[that.currDay][that.currHour]["positive"]];
+      that.donut_config.data.datasets[0].data = [that.sentimentData[that.currDay][that.currHour]["positive"],
+                                                //  that.sentimentData[that.currDay][that.currHour]["neutral"],
+                                                 that.sentimentData[that.currDay][that.currHour]["negative"]];
       that.sentimentDonutChart.update();
 
     },
@@ -372,21 +397,21 @@ export default {
       var svg = d3.select("svg");
       svg.append("g")
         .attr("class", "legendSequential")
-        .attr("transform", "translate(100,30)");
+        .attr("transform", "translate(150,30)");
 
       var legendSequential = d3Legend.legendColor()
-          .shapeWidth(30)
+          .shapeWidth(50)
           .cells(10)
           .orient("horizontal")
           .scale(that.colorScale) 
-          .labels(["28", "30", "32", "34", "36", "38", "40", "42", "44", "46"]);
+          .labels(["Uppertown", "UpTown", "Midtown", "Downtown"]);
 
       svg.select(".legendSequential")
         .call(legendSequential);
 
       svg.append("g")
         .attr("class", "legendSize")
-        .attr("transform", "translate(460, 20)");
+        .attr("transform", "translate(410, 20)");
 
       var legendSize = d3Legend.legendSize()
         .scale(that.radiusScale)
@@ -411,36 +436,37 @@ export default {
           var val = that.combine_data[that.currDay][that.currHour][i];
           that.gdots_dict[val.precinct] = gdots.append("circle")
             .attr("class", "dot")
-            .attr("id", val.precinct)
-            .style("fill", that.colorScale(that.getColorData(val.age)))
+            .attr("id", "precinct" + val.precinct.toString())
+            // .style("fill", that.colorScale(that.getColorData(val.age)))
+            .style("fill", that.colorScale(val.area))
             .attr("cx", that.xScale(val.traffic))
             .attr("cy", that.yScale(val.criminal))
             .attr("r", that.radiusScale(val.population));
 
-          that.gdots_dict[val.precinct].append("title").text(val.precinct);
+          that.gdots_dict[val.precinct].append("title").text("precinct_#" + val.precinct.toString());
 
           criminal_arr.push(val.criminal);
           traffic_arr.push(val.traffic);
         }
 
-        // var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
-        // var slope = leastSquaresCoeff[0];
-        // var intercept = leastSquaresCoeff[1];
-        // var rSquare = leastSquaresCoeff[2];
-        // var x1 = xMin;
-        // var x2 = xMax;
-        // var y1 = intercept;
-        // var y2 = xMax * slope + intercept;
-        // // if(y2 < 0){
-        // //   x2 = (-intercept) / slope;
-        // //   y2 = 0;
-        // // }
-        // that.line = svg.append("line")
-        //   .attr("x1", that.xScale(x1))
-        //   .attr("y1", that.yScale(y1))
-        //   .attr("x2", that.xScale(x2))
-        //   .attr("y2", that.yScale(y2))
-        //   .classed("regression", true);
+        var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
+        var slope = leastSquaresCoeff[0];
+        var intercept = leastSquaresCoeff[1];
+        var rSquare = leastSquaresCoeff[2];
+        var x1 = xMin;
+        var x2 = xMax;
+        var y1 = intercept;
+        var y2 = xMax * slope + intercept;
+        // if(y2 < 0){
+        //   x2 = (-intercept) / slope;
+        //   y2 = 0;
+        // }
+        that.line = svg.append("line")
+          .attr("x1", that.xScale(x1))
+          .attr("y1", that.yScale(y1))
+          .attr("x2", that.xScale(x2))
+          .attr("y2", that.yScale(y2))
+          .classed("regression", true);
       }
       else{
         for(var i = 0; i < that.combine_data[that.currDay][that.currHour].length; i++){
@@ -454,29 +480,26 @@ export default {
           traffic_arr.push(val.traffic);
         }
 
-        // var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
-        // var slope = leastSquaresCoeff[0];
-        // var intercept = leastSquaresCoeff[1];
-        // var rSquare = leastSquaresCoeff[2];
-        // console.log(slope, intercept, rSquare)
-        // var x1 = xMin;
-        // var x2 = xMax;
-        // var y1 = intercept;
-        // var y2 = xMax * slope + intercept;
-        // // if(y2 < 0){
-        // //   x2 = (-intercept) / slope;
-        // //   y2 = 0;
-        // // }
-        // that.line.transition()
-        //   .attr("x1", that.xScale(x1))
-        //   .attr("y1", that.yScale(y1))
-        //   .attr("x2", that.xScale(x2))
-        //   .attr("y2", that.yScale(y2))
+        var leastSquaresCoeff = that.leastSquares(traffic_arr, criminal_arr);
+        var slope = leastSquaresCoeff[0];
+        var intercept = leastSquaresCoeff[1];
+        var rSquare = leastSquaresCoeff[2];
+        var x1 = xMin;
+        var x2 = xMax;
+        var y1 = intercept;
+        var y2 = xMax * slope + intercept;
+        // if(y2 < 0){
+        //   x2 = (-intercept) / slope;
+        //   y2 = 0;
+        // }
+        that.line.transition()
+          .attr("x1", that.xScale(x1))
+          .attr("y1", that.yScale(y1))
+          .attr("x2", that.xScale(x2))
+          .attr("y2", that.yScale(y2))
       }
       let rho = pearsonCorrelation.pearsonCorrelation(criminal_arr, traffic_arr);
       that.pearson_text.transition().text(rho.toFixed(2));
-
-
     }
   },
   watch: {
@@ -548,8 +571,8 @@ path {
 
 #sentiment-chart{
   position: absolute;
-  left:0px;
-  top: 100px;
+  left:10px;
+  top: 70px;
 }
 
 .legendSequential{
@@ -558,5 +581,14 @@ path {
 
 .legendSize{
   fill: #00BFFF;
+}
+
+.x.label{
+  font: 500 20px "Helvetica Neue";
+  fill: black;
+}
+.y.label{
+  font: 500 20px "Helvetica Neue";
+  fill: black;
 }
 </style>

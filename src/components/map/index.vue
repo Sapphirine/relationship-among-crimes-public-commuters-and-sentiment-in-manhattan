@@ -1,6 +1,6 @@
 <template>
   <div class="criminalMap">
-    <canvas id="sentiment-chart" width="250" height="250"></canvas>
+    <canvas id="sentiment-chart" width="260" height="260"></canvas>
 
     <div class="container" style="width:1280px">
       <button v-on:click="setStory1" id="story1" type="button" class="btn btn-info storyBtn">Story1</button>
@@ -10,9 +10,9 @@
       <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
       <div class="mapHolder">
-        <h3 id="criminal_map">Criminal</h3>
+        <h3 id="criminal_map">Criminal Heatmap</h3>
 
-        <h3 id="traffic_map">Population</h3>
+        <h3 id="traffic_map">Commuter Heatmap</h3>
         <ManhattanMap
           @precinctSelected="onPrecinctSelected"
           @precinctDeselected="onPrecinctDeselected"
@@ -153,19 +153,19 @@ export default {
         data: {
           datasets: [{
             data: [
-              1,2,1
+              1,1
             ],
             backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
                 'rgb(75, 192, 192)',
+                //'rgb(54, 162, 235)',
+                'rgb(255, 99, 132)',
             ],
             label: 'Sentiment'
           }],
           labels: [
-            "Negative",
-            "Neutral",
-            "Positive"
+            "Positive",
+            // "Neutral",
+            "Negative"
           ]
         },
         options: {
@@ -175,7 +175,7 @@ export default {
             labels:{
               usePointStyle: true,
             },
-            position: 'bottom',
+            position: 'right',
           },
           title: {
             display: false,
@@ -191,9 +191,10 @@ export default {
   },
   created: function(){
     var that = this;
-      
+
+    var count1 = 0;
     that.criminalData = {};
-    d3.csv("static/data/criminal_lat_long_001.csv", function(data) {
+    d3.csv("static/data/map_plot_criminal_lat_long.csv", function(data) {
       var total = +data.sum;
       if(that.maxNbCriminal < total){
         that.maxNbCriminal = total;
@@ -208,7 +209,7 @@ export default {
     });
 
     that.trafficFlowData = {};
-    d3.csv("static/data/taxi_sort_001_clean.csv", function(data){ 
+    d3.csv("static/data/map_plot_commuter_lat_long.csv", function(data){ 
       var total = +data.sum;
       if(that.maxNbTraffic < +total){
         that.maxNbTraffic = +total;
@@ -231,7 +232,7 @@ export default {
         that.sentimentData[+data.day][+data.hour] = {}
       }
       that.sentimentData[+data.day][+data.hour]["negative"] = +data.negative;
-      that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
+      // that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
       that.sentimentData[+data.day][+data.hour]["positive"] = +data.positive;
     });
   },
@@ -414,9 +415,9 @@ export default {
     updateSentiment: function(){
       var that = this;
 
-      that.donut_config.data.datasets[0].data = [that.sentimentData[that.currDay][that.currHour]["negative"],
-                                                 that.sentimentData[that.currDay][that.currHour]["neutral"],
-                                                 that.sentimentData[that.currDay][that.currHour]["positive"]];
+      that.donut_config.data.datasets[0].data = [that.sentimentData[that.currDay][that.currHour]["positive"],
+                                                //  that.sentimentData[that.currDay][that.currHour]["neutral"],
+                                                 that.sentimentData[that.currDay][that.currHour]["negative"]];
       that.sentimentDonutChart.update();
 
     },
@@ -495,13 +496,13 @@ circle{
 
 #criminal_map{
   position: absolute;
-  left: 500px;
+  left: 380px;
   top: 70px;
 }
 
 #traffic_map{
   position: absolute;
-  left: 1100px;
+  left: 950px;
   top: 70px;
 }
 

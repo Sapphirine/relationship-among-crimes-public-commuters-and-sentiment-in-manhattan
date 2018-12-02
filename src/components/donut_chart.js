@@ -80,7 +80,7 @@ Chart.controllers.doughnutLabels = Chart.controllers.doughnut.extend({
             ctx.fillText(segmentLabel.toFixed(2) + "%", labelPos.x, labelPos.y);
           
           //display in the center the total sum of all segments
-          ctx.fillText('Sentiment', vm.x, vm.y, 200);
+          ctx.fillText('Sentiment', vm.x, vm.y-5, 200);
           }
           
       }
