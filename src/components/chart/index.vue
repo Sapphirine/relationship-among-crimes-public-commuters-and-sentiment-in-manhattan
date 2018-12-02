@@ -158,7 +158,7 @@ export default {
       // Story
       StoryTitle: [
         "Story Telling",
-        "11111111111111111111111111111",
+        "1111111111111111111111111111111111",
         "title2",
         "title3",
         "title4",
@@ -682,5 +682,11 @@ path {
 
 #app{
   margin-top: 30px;
+}
+
+.card-header {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }
 </style>
