@@ -1,7 +1,6 @@
 <template>
   <div id="newyork_map">
-    <h2>New York Map</h2>
-    <svg width="800" height="800"></svg>
+    <svg width="600" height="643.6"></svg>
   </div>
 </template>
 
@@ -21,7 +20,7 @@ export default {
 
     const projection = d3.geoMercator()
                          .center([-73.94, 40.78])
-                         .scale(170000)
+                         .scale(140000)
                          .translate([width/2, height/2]);
     var path = d3.geoPath().projection(projection);
 
@@ -48,12 +47,12 @@ export default {
           .attr("d", path)
           .classed("precinct", true)
           .on('mouseover', function(d) {
-            d3.select(this).transition().duration(500).style("stroke-width", 8).style("stroke-opacity", .5)
-            that.$emit('precinctSelected', +d.properties.Precinct)
+            d3.select(this).transition().duration(500).style("stroke-width", 8).style("stroke-opacity", .5).style("fill", "#6666ff");
+            that.$emit('precinctSelected', +d.properties.Precinct);
           })
           .on('mouseout', function(d) {
-            d3.select(this).transition().duration(500).style("stroke-width", 1).style("stroke-opacity", 1);
-            that.$emit('precinctDeselected', +d.properties.Precinct)
+            d3.select(this).transition().duration(500).style("stroke-width", 1).style("stroke-opacity", 1).style("fill", "#ddd");
+            that.$emit('precinctDeselected', +d.properties.Precinct);
           });
 
         that.$emit('mapIsReady', 'ready');

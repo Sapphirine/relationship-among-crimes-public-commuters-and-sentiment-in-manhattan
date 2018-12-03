@@ -29,7 +29,7 @@
 
 #tooltipContainer {
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   width: 230px;
   left: -125px;
   font-size: 12px;
