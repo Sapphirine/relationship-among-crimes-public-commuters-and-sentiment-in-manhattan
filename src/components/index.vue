@@ -29,9 +29,9 @@
           <div class="card mx-auto" >
             <img class="card-img-top" src="https://via.placeholder.com/150" alt="Card image cap">
             <div class="card-body">
-              <h5 class="card-title">Chart Plot</h5>
+              <h5 class="card-title">Statistic Plot</h5>
               <p class="card-text">This visualizationis the bubble plot of # of crimes and # commuters, the size of bubble denotes the # of residents, and color of bubbles represents the area. We measure the correlation using pearson algorithm.</p>
-              <a href="/chart_plot" class="btn btn-primary">Go Chart Plot</a>
+              <a href="/statistic_plot" class="btn btn-primary">Go Statistic Plot</a>
             </div>
           </div>
         </div>

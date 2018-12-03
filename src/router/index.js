@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HomePage from '@/components/index'
 import MapPlot from '@/components/map/index'
 import ChartPlot from '@/components/chart/index'
+import StatisticPlot from '@/components/statistic/index'
 import about from '@/components/about/index'
 
 import UsStateDemo from '@/_demo/us_state/index'
@@ -30,6 +31,11 @@ export default new Router({
       path: '/chart_plot',
       name: 'Chart Plot Page',
       component: ChartPlot
+    },
+    {
+      path: '/statistic_plot',
+      name: 'Statistic Plot Page',
+      component: StatisticPlot
     },
     {
       path: '/about',

@@ -604,7 +604,8 @@ export default {
         that.updateGraph();
         that.updateSentiment();
       }
-    }
+    },
+    immediate: true,
   },
 }
 </script>
