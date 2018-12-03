@@ -24,14 +24,14 @@
   position: relative;
   left: 50%;
   // top: 350px;
-  width: 240px;
+  width: 150px;
 }
 
 #tooltipContainer {
   position: absolute;
   bottom: 20px;
-  width: 230px;
-  left: -125px;
+  width: 180px;
+  left: -37px;
   font-size: 12px;
   line-height: 16px;
   padding: 10px;

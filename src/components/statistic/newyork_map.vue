@@ -1,6 +1,6 @@
 <template>
   <div id="newyork_map">
-    <svg width="600" height="643.6"></svg>
+    <svg width="350" height="643.6"></svg>
   </div>
 </template>
 
@@ -19,8 +19,8 @@ export default {
     var height = +svg.attr('height');
 
     const projection = d3.geoMercator()
-                         .center([-73.94, 40.78])
-                         .scale(140000)
+                         .center([-73.9735, 40.78])
+                         .scale(130000)
                          .translate([width/2, height/2]);
     var path = d3.geoPath().projection(projection);
 

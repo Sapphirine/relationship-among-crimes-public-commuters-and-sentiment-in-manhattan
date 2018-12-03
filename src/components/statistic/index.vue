@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="statisticInfoHolder" style="margin-left: 15px;margin-right: 4px;" >
         <div class="row">
-          <div class="col-sm-6 " >
+          <div class="col-sm-3 " >
             <div class="mapHolder cliente">
               <NewyorkMap
                 @precinctSelected="onPrecinctSelected"
@@ -25,10 +25,10 @@
               <canvas id="crimeLineCanvas"></canvas>
               <div id="crimeDataText">
                 <div id="dataContainer">
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
+                  <div class="">Current # of Crime: </div>
+                  <div class="">Minimal # of Crime: </div>
+                  <div class="">Maximal # of Crime: </div>
+                  <div class="">Maximal # of Crime :  </div>
                   <div class="">1</div>
                   <div class="">2</div>
                 </div>
@@ -43,6 +43,42 @@
               </div>
               <canvas id="trafficLineCanvas"></canvas>
               <div id="crimeDataText">
+                <div id="dataContainer">
+                  <div class="">1</div>
+                  <div class="">2</div>
+                  <div class="">1</div>
+                  <div class="">2</div>
+                  <div class="">1</div>
+                  <div class="">2</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card cliente">
+              <div id="title">
+                <h4>Positive Sentiment Trend</h4>
+              </div>
+              <canvas id="sentimentPositiveLineCanvas"></canvas>
+              <div id="sentimentPosDataText">
+                <div id="dataContainer">
+                  <div class="">1</div>
+                  <div class="">2</div>
+                  <div class="">1</div>
+                  <div class="">2</div>
+                  <div class="">1</div>
+                  <div class="">2</div>
+                </div>
+              </div>
+            </div>
+            <div class="my-3">
+            </div>
+            <div class="card cliente">
+              <div id="title">
+                <h4>Negative Sentiment Trend</h4>
+              </div>
+              <canvas id="sentimentNegativeLineCanvas"></canvas>
+              <div id="sentimentNegDataText">
                 <div id="dataContainer">
                   <div class="">1</div>
                   <div class="">2</div>
@@ -230,8 +266,7 @@ export default {
 
       count1++;
 
-      console.log(count1, 7*24*75)
-      if(count1 >= 12699){
+      if(count1 >=  7*24*76){
         that.data1Ready = true;
         that.onDataReady();
       }
