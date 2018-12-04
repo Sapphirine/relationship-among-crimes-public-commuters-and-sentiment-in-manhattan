@@ -150,10 +150,12 @@ export default {
       combine_data: undefined,
       maxNbCriminal: 0,
       maxNbTraffic: 0,
+      data1Ready: false,
 
       // Sentiment Data
       sentimentData: undefined,
       sentimentDonutChart: undefined,
+      data2Ready: false,
 
       // Story
       StoryTitle: [
@@ -214,14 +216,12 @@ export default {
             ],
             backgroundColor: [
                 'rgb(75, 192, 192)',
-                //'rgb(54, 162, 235)',
                 'rgb(255, 99, 132)',
             ],
             label: 'Sentiment'
           }],
           labels: [
             "Positive",
-            // "Neutral",
             "Negative"
           ]
         },
@@ -273,13 +273,9 @@ export default {
 
       count1++;
 
-      if(count1 >= 7 * 24 * 75){
-        that.$refs.hourSlider.setIndex(12);
-        that.$refs.daySlider.setIndex(1);
-        that.$refs.hourSlider.setIndex(0);
-        that.$refs.daySlider.setIndex(0);
-        that.$refs.hourSlider.setIndex(6);
-        that.$refs.daySlider.setIndex(6);
+      if(count1 >= 7 * 24 * 76){
+        that.data1Ready = true;
+        that.onDataReady();
       }
     });
 
@@ -293,18 +289,13 @@ export default {
         that.sentimentData[+data.day][+data.hour] = {}
       }
       that.sentimentData[+data.day][+data.hour]["negative"] = +data.negative;
-      // that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
       that.sentimentData[+data.day][+data.hour]["positive"] = +data.positive;
 
       count2++;
 
-      if(count2 >= 7 * 24 * 75){
-        that.$refs.hourSlider.setIndex(5);
-        that.$refs.daySlider.setIndex(0);
-        that.$refs.hourSlider.setIndex(1);
-        that.$refs.daySlider.setIndex(0);
-        that.$refs.hourSlider.setIndex(6);
-        that.$refs.daySlider.setIndex(6);
+      if(count2 >= 7 * 24){
+        that.data2Ready = true;
+        that.onDataReady();
       }
     });
   },
@@ -371,8 +362,17 @@ export default {
 
     that.currTitle = that.StoryTitle[that.currPage];
     that.currContext = that.StoryContext[that.currPage];
+    this.$refs.hourSlider.setIndex(12);
+    this.$refs.daySlider.setIndex(3);
   },
   methods:{
+    onDataReady: function(){
+      
+      if(this.data1Ready == true && this.data2Ready == true){
+        this.$refs.hourSlider.setIndex(0);
+        this.$refs.daySlider.setIndex(0);
+      }
+    },
     switchToPrevPage: function(){
       if(this.currPage <= 1){
         this.currPage = this.totalPage;
@@ -462,7 +462,6 @@ export default {
       var that = this;
 
       that.donut_config.data.datasets[0].data = [that.sentimentData[that.currDay][that.currHour]["positive"],
-                                                //  that.sentimentData[that.currDay][that.currHour]["neutral"],
                                                  that.sentimentData[that.currDay][that.currHour]["negative"]];
       that.sentimentDonutChart.update();
 
