@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="statisticInfoHolder" style="margin-left: 15px;margin-right: 4px;" >
         <div class="row">
-          <div class="col-sm-3 " >
+          <div class="col-sm-6 " >
             <div class="mapHolder cliente">
               <NewyorkMap
                 @precinctSelected="onPrecinctSelected"
@@ -25,12 +25,17 @@
               <canvas id="crimeLineCanvas"></canvas>
               <div id="crimeDataText">
                 <div id="dataContainer">
-                  <div class="">Current # of Crime: </div>
-                  <div class="">Minimal # of Crime: </div>
-                  <div class="">Maximal # of Crime: </div>
-                  <div class="">Maximal # of Crime :  </div>
-                  <div class="">1</div>
-                  <div class="">2</div>
+                  <div style="text-align:left">Current number of crime:<span style="float:right">{{curr_crime}}</span></div>
+                  
+                  <div style="text-align:left">Min number of crime:<span style="float:right">{{min_crime}}</span></div>
+
+                  <div style="text-align:left">Max number of crime:<span style="float:right">{{max_crime}}</span></div>
+                  
+                  <div style="text-align:left">Time of min number of crime:<span style="float:right">{{min_crime_time}} h</span></div>
+                  
+                  <div style="text-align:left">Time of max number of crime:<span style="float:right">{{max_crime_time}} h</span></div>
+                  
+                  <div style="text-align:left">Ratio of Max to Min:<span style="float:right">{{max_crime_change}}</span></div>
                 </div>
               </div>
             </div>
@@ -39,17 +44,22 @@
             </div>
             <div class="card cliente">
               <div id="title">
-                <h4>Traffic Trend</h4>
+                <h4>Commuter Trend</h4>
               </div>
               <canvas id="trafficLineCanvas"></canvas>
               <div id="crimeDataText">
                 <div id="dataContainer">
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
+                  <div style="text-align:left">Current number of commuters:<span style="float:right">{{curr_traffic}}</span></div>
+                  
+                  <div style="text-align:left">Min number of commuters:<span style="float:right">{{min_traffic}}</span></div>
+
+                  <div style="text-align:left">Max number of commuters:<span style="float:right">{{max_traffic}}</span></div>
+                  
+                  <div style="text-align:left">Time of min number of commuters:<span style="float:right">{{min_traffic_time}} h</span></div>
+                  
+                  <div style="text-align:left">Time of max number of commuters:<span style="float:right">{{max_traffic_time}} h</span></div>
+                  
+                  <div style="text-align:left">Ratio of Max to Min:<span style="float:right">{{max_traffic_change}}</span></div>
                 </div>
               </div>
             </div>
@@ -59,15 +69,20 @@
               <div id="title">
                 <h4>Positive Sentiment Trend</h4>
               </div>
-              <canvas id="sentimentPositiveLineCanvas"></canvas>
+              <canvas id="sentimentLineCanvas"></canvas>
               <div id="sentimentPosDataText">
                 <div id="dataContainer">
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
+                  <div style="text-align:left">Current sentiment ratio:<span style="float:right">{{curr_positive}}</span></div>
+                  
+                  <div style="text-align:left">Min sentiment ratio:<span style="float:right">{{min_positive}}</span></div>
+
+                  <div style="text-align:left">Max sentiment ratio:<span style="float:right">{{max_positive}}</span></div>
+                  
+                  <div style="text-align:left">Time of min sentiment ratio:<span style="float:right">{{min_positive_time}} h</span></div>
+                  
+                  <div style="text-align:left">Time of max sentiment ratio:<span style="float:right">{{max_positive_time}} h</span></div>
+                  
+                  <div style="text-align:left">Ratio of Max to Min:<span style="float:right">{{max_positive_change}}</span></div>
                 </div>
               </div>
             </div>
@@ -75,53 +90,22 @@
             </div>
             <div class="card cliente">
               <div id="title">
-                <h4>Negative Sentiment Trend</h4>
+                <h4>Correlation Trend</h4>
               </div>
-              <canvas id="sentimentNegativeLineCanvas"></canvas>
-              <div id="sentimentNegDataText">
+              <canvas id="correlationLineCanvas"></canvas>
+              <div id="correlationDataText">
                 <div id="dataContainer">
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="card cliente">
-              <div id="title">
-                <h4>Positive Sentiment Trend</h4>
-              </div>
-              <canvas id="sentimentPositiveLineCanvas"></canvas>
-              <div id="sentimentPosDataText">
-                <div id="dataContainer">
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
-                </div>
-              </div>
-            </div>
-            <div class="my-3">
-            </div>
-            <div class="card cliente">
-              <div id="title">
-                <h4>Negative Sentiment Trend</h4>
-              </div>
-              <canvas id="sentimentNegativeLineCanvas"></canvas>
-              <div id="sentimentNegDataText">
-                <div id="dataContainer">
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
-                  <div class="">1</div>
-                  <div class="">2</div>
+                  <div style="text-align:left">Min pearson correlation:<span style="float:right">{{min_pearson}} ({{min_pearson_time}} h)</span></div>
+
+                  <div style="text-align:left">Max pearson correlation:<span style="float:right">{{max_pearson}} ({{max_pearson_time}} h)</span></div>
+                  
+                  <div style="text-align:left">Min kendall correlation:<span style="float:right">{{min_kendall}} ({{min_kendall_time}} h)</span></div>
+                  
+                  <div style="text-align:left">Max kendall correlation:<span style="float:right">{{max_kendall}} ({{max_kendall_time}} h)</span></div>
+                  
+                  <div style="text-align:left">Min spearman correlation:<span style="float:right">{{min_spearman}} ({{min_spearman_time}} h)</span></div>
+
+                  <div style="text-align:left">Max spearman correlation:<span style="float:right">{{max_spearman}} ({{max_spearman_time}} h)</span></div>
                 </div>
               </div>
             </div>
@@ -205,12 +189,49 @@ export default {
       data1Ready: false,
       criminalChart: undefined,
       trafficChart: undefined,
+      
+      curr_crime: undefined,
+      max_crime: undefined,
+      min_crime: undefined,
+      max_crime_time: undefined,
+      min_crime_time: undefined,
+      max_crime_change: undefined,
+
+      curr_traffic: undefined,
+      max_traffic: undefined,
+      min_traffic: undefined,
+      max_traffic_time: undefined,
+      min_traffic_time: undefined,
+      max_traffic_change: undefined,
 
       // Sentiment Data
       sentiment_data: undefined,
       data2Ready: false,
       sentimentPosChart: undefined,
       sentimentNegChart: undefined,
+
+      curr_positive: undefined,
+      min_positive: undefined,
+      max_positive: undefined,
+      min_positive_time: undefined,
+      max_positive_time: undefined,
+      max_positive_change: undefined,
+
+      // Correlation
+      correlation_data: undefined,
+      data3_ready: false,
+      max_pearson: undefined,
+      min_pearson: undefined,
+      max_kendall: undefined,
+      min_kendall: undefined,
+      max_spearman: undefined,
+      min_spearman: undefined,
+      max_pearson_time: undefined,
+      min_pearson_time: undefined,
+      max_kendall_time: undefined,
+      min_kendall_time: undefined,
+      max_spearman_time: undefined,
+      min_spearman_time: undefined,
 
       // Utils
       /// Day slider
@@ -244,7 +265,7 @@ export default {
 
     that.combine_data = {};
     var count1 = 0;
-    d3.csv("static/data/chart_plot_combine_precinct.csv", function(data) {
+    d3.csv("static/data/statistic_crime_and_traffic.csv", function(data) {
       if(manhattan_precinct.includes(data.precinct) == true){
         var total_criminal = +data.criminal;
         var total_traffic = +data.traffic;
@@ -261,7 +282,24 @@ export default {
           that.combine_data[+data.day][+data.precinct] = {}
         }
 
-        that.combine_data[+data.day][+data.precinct][+data.hour] = {"precinct": +data.precinct, "criminal": total_criminal, "traffic": total_traffic, "population": +data.population, "age": +data.age, "area": precinct_area_map[data.precinct]};
+        that.combine_data[+data.day][+data.precinct][+data.hour] = {
+          "precinct": +data.precinct, 
+          "criminal": total_criminal,
+          "traffic": total_traffic,
+          "population": +data.population,
+          "age": +data.age,
+          "area": precinct_area_map[data.precinct],
+          "max_crime": +data.max_crime,
+          "min_crime": +data.min_crime,
+          "max_crime_time": +data.max_crime_time,
+          "min_crime_time": +data.min_crime_time,
+          "max_crime_change": +data.max_crime_change,
+          "min_traffic": +data.min_traffic,
+          "max_traffic": +data.max_traffic,
+          "min_traffic_time": +data.min_traffic_time,
+          "max_traffic_time": +data.max_traffic_time,
+          "max_traffic_change": +data.max_traffic_change
+        };
       }
 
       count1++;
@@ -274,7 +312,7 @@ export default {
 
     var count2 = 0;
     that.sentiment_data = {};
-    d3.csv("static/data/sentiment_number.csv", function(data){
+    d3.csv("static/data/statistic_sentiment.csv", function(data){
       if(that.sentiment_data[+data.day] === undefined){
         that.sentiment_data[+data.day] = {};
       }
@@ -282,12 +320,51 @@ export default {
         that.sentiment_data[+data.day][+data.hour] = {}
       }
       that.sentiment_data[+data.day][+data.hour]["negative"] = +data.negative;
-      that.sentiment_data[+data.day][+data.hour]["neutral"] = +data.neutral;
       that.sentiment_data[+data.day][+data.hour]["positive"] = +data.positive;
+      that.sentiment_data[+data.day][+data.hour]["min_positive"] = +data.min_positive;
+      that.sentiment_data[+data.day][+data.hour]["max_positive"] = +data.max_positive;
+      that.sentiment_data[+data.day][+data.hour]["min_positive_time"] = +data.min_positive_time;
+      that.sentiment_data[+data.day][+data.hour]["max_positive_time"] = +data.max_positive_time;
+      that.sentiment_data[+data.day][+data.hour]["max_positive_change"] = +data.max_positive_change;
 
       count2++;
       if(count2 >= 7 * 24){
         that.data2Ready = true;
+        that.onDataReady();
+      }
+    });
+
+    var count3 = 0;
+    that.correlation_data = {};
+    d3.csv("static/data/statistic_correlation.csv", function(data){
+      if(that.correlation_data[+data.day] === undefined){
+        that.correlation_data[+data.day] = {};
+      }
+      if(that.correlation_data[+data.day][+data.hour] === undefined){
+        that.correlation_data[+data.day][+data.hour] = {}
+      }
+      that.correlation_data[+data.day][+data.hour]["pearson"] = +data.pearson;
+      that.correlation_data[+data.day][+data.hour]["kendall"] = +data.kendall;
+      that.correlation_data[+data.day][+data.hour]["spearman"] = +data.spearman;
+
+      that.correlation_data[+data.day][+data.hour]["max_pearson_val"] = +data.max_pearson_val;
+      that.correlation_data[+data.day][+data.hour]["min_pearson_val"] = +data.min_pearson_val;
+      that.correlation_data[+data.day][+data.hour]["max_pearson_time"] = +data.max_pearson_time;
+      that.correlation_data[+data.day][+data.hour]["min_pearson_time"] = +data.min_pearson_time;
+
+      that.correlation_data[+data.day][+data.hour]["max_kendall_val"] = +data.max_kendall_val;
+      that.correlation_data[+data.day][+data.hour]["min_kendall_val"] = +data.min_kendall_val;
+      that.correlation_data[+data.day][+data.hour]["max_kendall_time"] = +data.max_kendall_time;
+      that.correlation_data[+data.day][+data.hour]["min_kendall_time"] = +data.min_kendall_time;
+
+      that.correlation_data[+data.day][+data.hour]["max_spearman_val"] = +data.max_spearman_val;
+      that.correlation_data[+data.day][+data.hour]["min_spearman_val"] = +data.min_spearman_val;
+      that.correlation_data[+data.day][+data.hour]["max_spearman_time"] = +data.max_spearman_time;
+      that.correlation_data[+data.day][+data.hour]["min_spearman_time"] = +data.min_spearman_time;
+
+      count3++;
+      if(count3 >= 7 * 24){
+        that.data3Ready = true;
         that.onDataReady();
       }
     });
@@ -305,10 +382,7 @@ export default {
     hourSliderValue: function() {
       var that = this;
       that.currHour = +that.hourSliderValue;
-      // that.createCrimeChart();
-      // that.createTrafficChart();
-      // that.createSentimentPositiveChart();
-      // that.createSentimentNegativeChart();
+      that.updateStatisticData();
     },
     daySliderValue: function() {
       var that = this;
@@ -327,10 +401,11 @@ export default {
         that.sentimentNegChart.destroy();
       }
 
+      that.updateStatisticData();
       that.createCrimeChart();
       that.createTrafficChart();
-      that.createSentimentPositiveChart();
-      that.createSentimentNegativeChart();
+      that.createSentimentChart();
+      that.createCorrelationChart();
     },
     currPrecinct: function(){
       var that = this;
@@ -347,19 +422,24 @@ export default {
         that.sentimentNegChart.destroy();
       }
 
+      that.updateStatisticData();
       that.createCrimeChart();
       that.createTrafficChart();
-      that.createSentimentPositiveChart();
-      that.createSentimentNegativeChart();
+      that.createSentimentChart();
+      that.createCorrelationChart();
     },
   },
   methods: {
     onDataReady: function(){
-      if(this.data1Ready == true && this.data2Ready == true){
+      if(this.data1Ready == true && this.data2Ready == true && this.data3Ready == true){
         this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
         this.currPrecinct = 1;
       }
+    },
+    pad: function(num, size) {
+        var s = "000000000" + num;
+        return s.substr(s.length-size);
     },
     onPrecinctSelected: function(precinctIdx) {
       this.currPrecinct = precinctIdx;
@@ -374,11 +454,6 @@ export default {
     getCombineDayData : function(dayIdx, contentIdx, precinctIdx){
       var that = this;
       var data = [];
-      console.log(dayIdx, contentIdx, precinctIdx)
-      console.log(that.combine_data[dayIdx])
-      console.log(that.combine_data[dayIdx][precinctIdx])
-      console.log(that.combine_data[dayIdx][precinctIdx][0])
-      console.log(that.combine_data[dayIdx][precinctIdx][0][contentIdx])
       for(var i = 0; i < 24; i++){
         data.push(that.combine_data[dayIdx][precinctIdx][i][contentIdx])
       }
@@ -388,7 +463,15 @@ export default {
       var that = this;
       var data = [];
       for(var i = 0; i < 24; i++){
-        data.push(that.sentiment_data[dayIdx][i][contentIdx] / (that.sentiment_data[dayIdx][i]["negative"] + that.sentiment_data[dayIdx][i]["positive"] + that.sentiment_data[dayIdx][i]["neutral"]))
+        data.push(that.sentiment_data[dayIdx][i][contentIdx])
+      }
+      return data;
+    },
+    getCorrelationDayDate : function(dayIdx, contentIdx){
+      var that = this;
+      var data = [];
+      for(var i = 0; i < 24; i++){
+        data.push(that.correlation_data[dayIdx][i][contentIdx])
       }
       return data;
     },
@@ -401,17 +484,21 @@ export default {
           labels: ["0h","1h","2h","3h","4h","5h","6h","7h","8h","9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h", "22h", "23h"],
           datasets: [{ 
               data: that.getCombineDayData(that.currDay, "criminal", that.currPrecinct),
+              label: "# of crime",
               borderColor: "#3e95cd",
               fill: true
             },
           ]
         },
         options: {
+          animation: {
+            duration: 0, // general animation time
+          },
           legend: {
-              display: false
+            display: true
           },
           tooltips: {
-              enabled: true
+            enabled: true
           }
         }
       });
@@ -425,24 +512,28 @@ export default {
           labels: ["0h","1h","2h","3h","4h","5h","6h","7h","8h","9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h", "22h", "23h"],
           datasets: [{ 
               data: that.getCombineDayData(that.currDay, "traffic", that.currPrecinct),
+              label: "# of commuter",
               borderColor: "#3e95cd",
               fill: true
             },
           ]
         },
         options: {
+          animation: {
+            duration: 0, // general animation time
+          },
           legend: {
-              display: false
+            display: true
           },
           tooltips: {
-              enabled: true
+            enabled: true
           }
         }
       });
     },
-    createSentimentPositiveChart: function(){
+    createSentimentChart: function(){
       var that = this;
-      var canvas = document.getElementById("sentimentPositiveLineCanvas");
+      var canvas = document.getElementById("sentimentLineCanvas");
       that.sentimentPosChart = new Chart(canvas, {
         type: 'line',
         data: {
@@ -450,13 +541,22 @@ export default {
           datasets: [{ 
               data: that.getSentimentDayData(that.currDay, "positive"),
               borderColor: "#3e95cd",
+              label: "Positive tweets (%)",
+              fill: true
+            },{ 
+              data: that.getSentimentDayData(that.currDay, "negative"),
+              borderColor: "#8e5ea2",
+              label: "Negative tweets (%)",
               fill: true
             },
           ]
         },
         options: {
+          animation: {
+            duration: 0, // general animation time
+          },
           legend: {
-              display: false
+              display: true
           },
           tooltips: {
               enabled: true
@@ -464,29 +564,84 @@ export default {
         }
       });
     },
-    createSentimentNegativeChart: function(){
+    createCorrelationChart: function(){
       var that = this;
-      var canvas = document.getElementById("sentimentNegativeLineCanvas");
+      var canvas = document.getElementById("correlationLineCanvas");
       that.sentimentNegChart = new Chart(canvas, {
         type: 'line',
         data: {
           labels: ["0h","1h","2h","3h","4h","5h","6h","7h","8h","9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h", "22h", "23h"],
           datasets: [{ 
-              data: that.getSentimentDayData(that.currDay, "negative"),
+              data: that.getCorrelationDayDate(that.currDay, "pearson"),
+              label: "pearson",
               borderColor: "#3e95cd",
+              fill: true
+            },{ 
+              data: that.getCorrelationDayDate(that.currDay, "kendall"),
+              label: "kendall",
+              borderColor: "#8e5ea2",
+              fill: true
+            },{ 
+              data: that.getCorrelationDayDate(that.currDay, "spearman"),
+              label: "spearman",
+              borderColor: "#3cba9f",
               fill: true
             },
           ]
         },
         options: {
+          animation: {
+            duration: 0, // general animation time
+          },
           legend: {
-              display: false
+              display: true
           },
           tooltips: {
               enabled: true
           }
         }
       });
+    },
+    updateStatisticData: function(){
+      var that = this;
+      // Crime data
+      that.curr_crime = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["criminal"];
+      that.max_crime = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["max_crime"];
+      that.min_crime = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["min_crime"];
+      that.max_crime_time = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["max_crime_time"];
+      that.min_crime_time = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["min_crime_time"];
+      that.max_crime_change = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["max_crime_change"];
+
+      // Traffic data
+      that.curr_traffic = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["traffic"];
+      that.max_traffic = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["max_traffic"];
+      that.min_traffic = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["min_traffic"];
+      that.max_traffic_time = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["max_traffic_time"];
+      that.min_traffic_time = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["min_traffic_time"];
+      that.max_traffic_change = that.combine_data[that.currDay][that.currPrecinct][that.currHour]["max_traffic_change"];
+
+      //Sentiment Data
+      that.curr_positive = that.sentiment_data[that.currDay][that.currHour]["positive"];
+      that.max_positive = that.sentiment_data[that.currDay][that.currHour]["max_positive"];
+      that.min_positive = that.sentiment_data[that.currDay][that.currHour]["min_positive"];
+      that.max_positive_time = that.sentiment_data[that.currDay][that.currHour]["max_positive_time"];
+      that.min_positive_time = that.sentiment_data[that.currDay][that.currHour]["min_positive_time"];
+      that.max_positive_change = that.sentiment_data[that.currDay][that.currHour]["max_positive_change"];
+
+      //Correlation Data
+      that.min_pearson = that.correlation_data[that.currDay][that.currHour]["min_pearson_val"].toFixed(2);
+      that.max_pearson = that.correlation_data[that.currDay][that.currHour]["max_pearson_val"].toFixed(2);
+      that.min_kendall = that.correlation_data[that.currDay][that.currHour]["min_kendall_val"].toFixed(2);
+      that.max_kendall = that.correlation_data[that.currDay][that.currHour]["max_kendall_val"].toFixed(2);
+      that.min_spearman = that.correlation_data[that.currDay][that.currHour]["min_spearman_val"].toFixed(2);
+      that.max_spearman = that.correlation_data[that.currDay][that.currHour]["max_spearman_val"].toFixed(2);
+
+      that.min_pearson_time = that.pad(that.correlation_data[that.currDay][that.currHour]["min_pearson_time"], 2);
+      that.max_pearson_time = that.pad(that.correlation_data[that.currDay][that.currHour]["max_pearson_time"], 2);
+      that.min_kendall_time = that.pad(that.correlation_data[that.currDay][that.currHour]["min_kendall_time"], 2);
+      that.max_kendall_time = that.pad(that.correlation_data[that.currDay][that.currHour]["max_kendall_time"], 2);
+      that.min_spearman_time = that.pad(that.correlation_data[that.currDay][that.currHour]["min_spearman_time"], 2);
+      that.max_spearman_time = that.pad(that.correlation_data[that.currDay][that.currHour]["max_spearman_time"], 2);
     },
     animation: function(){
       var that = this;

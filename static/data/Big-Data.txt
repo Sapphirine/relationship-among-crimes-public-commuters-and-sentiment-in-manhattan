@@ -1,0 +1,39 @@
+# Big-Data
+1. Title: Blue Wednesday
+Time: Wen 14:00
+Context: the commute and the crime happens around the mid town, where is the major work place in the city. it is the most difficult time in the whole week with highest negative percentage.  Yes, nobody likes working.
+
+2. Title: Nightmare
+Time: Sun 23:00
+Context:
+There is no crime, no transportation around the city. But people feel sad that the weekend is ending and they have to start work again. What a long week!
+
+3. Title: Happy Weekend
+Time: Fri 19:00
+Context:
+Finally struggle to end the working. It is time to have fun! So people move around the city, especially to the hell’s kitchen to find delicious food. Everybody is delighted. What’s about the job? Forget it! It’s time to drink!
+
+5. Title: Crime Time
+Sat 20:00
+Context:
+the time with the Highest crime heat, mainly around mid town( 34th pen station— time square). And people seems go around the penne station with a happy mood. Maybe they are too happy to remember the safety.
+
+6. Title: peaceful Sunday Morning
+Sun 6:00
+Context: No crime, no busy transportation, everything looks good. And people are all in the beautiful sleeping and relaxing style.
+
+7. Title: late afternoon malaise
+Tue 16:00
+Context: 
+As people are working, with low commute in the city, they have a low mood around  65% of them feel upset. The crime focus on the Washington Square indicates that mostly, the  target of criminal is the tourist
+
+8. Title: Rock the night
+Time: Sat 1:00
+Context: 
+People gather around the soho and little Italy neighborhood, trying to have some fun together.  The highest positive sentiment ratio, nearly 76%, with little crime.
+
+9.  Title: Morning Depression
+Time: Thu 5:00
+Context: 
+With no crime, no transportation, there is a sharp increase of negative mood in the early morning of Thursday. Usually, it is called Morning Depression, feeling that intense frustrated and empty. Circadian rhythms disruption is often the main causes of morning depression.
+
