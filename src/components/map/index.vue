@@ -134,22 +134,29 @@ export default {
       // Story
       StoryTitle: [
         "Heatmap of Crime and Population",
-        "11111111111111111111111111",
-        "title2",
-        "title3",
-        "title4",
-        "title5"
+        "Blue Wednesday",
+        "Nightmare",
+        "Happy Weekend",
+        "Crime Time",
+        "peaceful Sunday Morning",
+        "late afternoon malaise",
+        "Rock the night",
+        "Morning Depression",
       ],
       StoryContext: [
-        "This visualization is heapmaps of dynamic crime and population of Manhattan, aggregated by precinct. Twitter is used to analyse the sentiment of manhattan people hour-by-hour in an average week.",
-        "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-        "contenxt2",
-        "contenxt3",
-        "contenxt4",
-        "contenxt5"
+        "The heapmaps show dynamic crimes and commuters of Manhattan aggregated by precinct. Twitter roughly shows sentiment of people hour-by-hour in an average week.",
+
+        "the commute and the crime happens around the mid town, where is the major work place in the city. it is the most difficult time in the whole week with highest negative percentage.  Yes, nobody likes working.",
+        "There is no crime, no transportation around the city. But people feel sad that the weekend is ending and they have to start work again. What a long week!",
+        "Finally struggle to end the working. It is time to have fun! So people move around the city, especially to the hell’s kitchen to find delicious food. Everybody is delighted. What’s about the job? Forget it! It’s time to drink!",
+        "the time with the Highest crime heat, mainly around mid town( 34th pen station— time square). And people seems go around the penne station with a happy mood. Maybe they are too happy to remember the safety.",
+        "No crime, no busy transportation, everything looks good. And people are all in the beautiful sleeping and relaxing style.",
+        "As people are working, with low commute in the city, they have a low mood around  65% of them feel upset. The crime focus on the Washington Square indicates that mostly, the  target of criminal is the tourist",
+        "People gather around the soho and little Italy neighborhood, trying to have some fun together.  The highest positive sentiment ratio, nearly 76%, with little crime.",
+        "With no crime, no transportation, there is a sharp increase of negative mood in the early morning of Thursday. Usually, it is called Morning Depression, feeling that intense frustrated and empty. Circadian rhythms disruption is often the main causes of morning depression."
       ],
-      hourList: [2, 4, 6, 8, 10],
-      dayList: ["FRI", "THU", "WED", "TUE", "MON"],
+      hourList: [0, 14, 23, 19, 10],
+      dayList: ["MON", "WED", "SUN", "FRI", "MON"],
       currPage: 0,
       totalPage: 5,
       currTitle: "placeholder",
