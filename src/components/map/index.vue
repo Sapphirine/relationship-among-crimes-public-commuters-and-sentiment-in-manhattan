@@ -26,14 +26,14 @@
               <div class="card-header">
                 {{currTitle}}
               </div>
-              <div class="card-body">
+              <div class="card-body" id="storyContextCardBody">
                 <p class="card-text">
-                  {{currContext}}
+                  <textarea v-model="currContext" class="form-control" id="storyContextTextArea" readonly></textarea>
                 </p>
               </div>
               <div class="card-footer" style="padding:0.35rem 1.25rem;">
                 <small class="text-muted">
-                  <button type="button" class="btn btn-secondary " style="float:left;  border-radius:50%" v-on:click="switchToPrevPage"><font-awesome-icon icon="arrow-left" class=""/></button>
+                  <button type="button" class="btn btn-secondary " style="float:left;  border-radius:50%; max-height:267px;" v-on:click="switchToPrevPage"><font-awesome-icon icon="arrow-left" class=""/></button>
 
                   <center class="text-monospace" style="padding-top:10px; display:inline-block">{{currPage}} / {{totalPage}}</center>
 
@@ -147,18 +147,25 @@ export default {
         "The heapmaps show dynamic crimes and commuters of Manhattan aggregated by precinct. Twitter roughly shows sentiment of people hour-by-hour in an average week.",
 
         "the commute and the crime happens around the mid town, where is the major work place in the city. it is the most difficult time in the whole week with highest negative percentage.  Yes, nobody likes working.",
+
         "There is no crime, no transportation around the city. But people feel sad that the weekend is ending and they have to start work again. What a long week!",
+
         "Finally struggle to end the working. It is time to have fun! So people move around the city, especially to the hell’s kitchen to find delicious food. Everybody is delighted. What’s about the job? Forget it! It’s time to drink!",
+
         "the time with the Highest crime heat, mainly around mid town( 34th pen station— time square). And people seems go around the penne station with a happy mood. Maybe they are too happy to remember the safety.",
+
         "No crime, no busy transportation, everything looks good. And people are all in the beautiful sleeping and relaxing style.",
+
         "As people are working, with low commute in the city, they have a low mood around  65% of them feel upset. The crime focus on the Washington Square indicates that mostly, the  target of criminal is the tourist",
+
         "People gather around the soho and little Italy neighborhood, trying to have some fun together.  The highest positive sentiment ratio, nearly 76%, with little crime.",
+
         "With no crime, no transportation, there is a sharp increase of negative mood in the early morning of Thursday. Usually, it is called Morning Depression, feeling that intense frustrated and empty. Circadian rhythms disruption is often the main causes of morning depression."
       ],
-      hourList: [0, 14, 23, 19, 10],
-      dayList: ["MON", "WED", "SUN", "FRI", "MON"],
+      hourList: [0, 14, 23, 19, 20, 6, 16, 1, 5],
+      dayList: ["MON", "WED", "SUN", "FRI", "SAT", "SUN", "TUE", "SAT", "THU"],
       currPage: 0,
-      totalPage: 5,
+      totalPage: 8,
       currTitle: "placeholder",
       currContext: "placeholder",
 
@@ -567,6 +574,17 @@ circle{
   position: absolute;
   left: 1200px;
   top: 70px;
+}
+
+#storyContextCardBody{
+  padding: 0px 0px 0px 0px;
+}
+
+#storyContextTextArea{
+  resize: none;
+  height: 159px;
+  width: 308px;
+  padding: 1px 1px 1px 1px;
 }
 
 .q0 { fill:rgb(204, 204, 204) }
