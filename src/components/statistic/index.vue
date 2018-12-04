@@ -541,12 +541,12 @@ export default {
           datasets: [{ 
               data: that.getSentimentDayData(that.currDay, "positive"),
               borderColor: "#3e95cd",
-              label: "Positive tweets (%)",
+              label: "Positive (%)",
               fill: true
             },{ 
               data: that.getSentimentDayData(that.currDay, "negative"),
               borderColor: "#8e5ea2",
-              label: "Negative tweets (%)",
+              label: "Negative (%)",
               fill: true
             },
           ]

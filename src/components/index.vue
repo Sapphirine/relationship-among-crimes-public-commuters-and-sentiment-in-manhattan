@@ -7,7 +7,7 @@
       <div class="row my-4">
         <div class="col-md-4">
           <div class="card mx-auto">
-            <img class="card-img-top" src="https://via.placeholder.com/150" alt="Card image cap">
+            <img class="card-img-top" src="/static/images/map_plot.png" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">Map Plot</h5>
               <p class="card-text">This visualization is heapmaps of dynamic # of crimes and # of commuters of Manhattan, aggregated by precinct. Twitter is used to analyse the sentiment of manhattan people hour-by-hour in an average week.</p>
@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-4">
           <div class="card mx-auto">
-            <img class="card-img-top" src="https://via.placeholder.com/150" alt="Card image cap">
+            <img class="card-img-top" src="/static/images/chart_plot.png" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">Chart Plot</h5>
               <p class="card-text">This visualizationis the bubble plot of # of crimes and # commuters, the size of bubble denotes the # of residents, and color of bubbles represents the area. We measure the correlation using pearson algorithm.</p>
@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-4">
           <div class="card mx-auto" >
-            <img class="card-img-top" src="https://via.placeholder.com/150" alt="Card image cap">
+            <img class="card-img-top" src="/static/images/statistic_plot.png" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">Statistic Plot</h5>
               <p class="card-text">This visualizationis the bubble plot of # of crimes and # commuters, the size of bubble denotes the # of residents, and color of bubbles represents the area. We measure the correlation using pearson algorithm.</p>
