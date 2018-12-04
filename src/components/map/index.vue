@@ -120,16 +120,19 @@ export default {
       precinctCenter: undefined,
       currPrecinct: undefined,
       maxNbCriminal: 0,
+      data1Ready: false,
       
       // Traffic Data
       trafficFlowData: undefined,
       maxNbTraffic: 0,
       canvas_criminal: undefined,
       canvas_traffic: undefined,
+      data2Ready: false,
 
       // Sentiment Data
       sentimentData: undefined,
       sentimentDonutChart: undefined,
+      data3Ready: false,
 
       // Story
       StoryTitle: [
@@ -256,8 +259,16 @@ export default {
         that.criminalData[+data.day][+data.hour] = {}
       }
       that.criminalData[+data.day][+data.hour][(data.lat + ":" +data.long)] = total;
+    
+      count1++;
+
+      if(count1 >=  1497702){
+        that.data1Ready = true;
+        that.onDataReady();
+      }
     });
 
+    var count2 = 0;
     that.trafficFlowData = {};
     d3.csv("static/data/map_plot_commuter_lat_long.csv", 
     // d3.csv("static/data/taxi_sort_01_clean.csv",
@@ -273,8 +284,14 @@ export default {
         that.trafficFlowData[+data.weekday][+data.pick_hour] = {}
       }
       that.trafficFlowData[+data.weekday][+data.pick_hour][(data.lat + ":" +data.long)] = total;
+
+      if(count2 >=  764323){
+        that.data2Ready = true;
+        that.onDataReady();
+      }
     });
 
+    var count3 = 0;
     that.sentimentData = {};
     d3.csv("static/data/sentiment_number.csv", function(data){
       if(that.sentimentData[+data.day] === undefined){
@@ -284,9 +301,18 @@ export default {
         that.sentimentData[+data.day][+data.hour] = {}
       }
       that.sentimentData[+data.day][+data.hour]["negative"] = +data.negative;
-      // that.sentimentData[+data.day][+data.hour]["neutral"] = +data.neutral;
       that.sentimentData[+data.day][+data.hour]["positive"] = +data.positive;
+
+      count3++;
+
+      if(count3 >=  7*24){
+        that.data3Ready = true;
+        that.onDataReady();
+      }
     });
+
+    // that.$refs.hourSlider.setIndex(12);
+    // that.$refs.daySlider.setIndex(3);
   },
   mounted: function(){
     var that = this;
@@ -298,10 +324,6 @@ export default {
 
     var width = +svg_criminal.attr('width');
     var height = +svg_criminal.attr('height');
-    // that.projection = d3.geoMercator()
-    //                     .center([-73.94, 40.70])
-    //                     .scale(50000)
-    //                     .translate([width/2, height/2]);
 
     that.projection = d3.geoMercator()
                          .center([-73.94, 40.78])
@@ -336,9 +358,6 @@ export default {
     context_criminal.globalAlpha = 0.8;
     context_traffic.globalAlpha = 0.8;
 
-    that.$refs.hourSlider.setIndex(12);
-    that.$refs.daySlider.setIndex(1);
-
     that.currTitle = that.StoryTitle[that.currPage];
     that.currContext = that.StoryContext[that.currPage];
   },
@@ -351,38 +370,38 @@ export default {
     },
   },
   watch: {
-    currPage:{
-      handler: function(){
-        var that = this;
-        that.setIdx(that.hourList[that.currPage], that.dayIndexMap[that.dayList[that.currPage]]);
+    currPage:function(){
+      var that = this;
+      that.setIdx(that.hourList[that.currPage], that.dayIndexMap[that.dayList[that.currPage]]);
 
-        that.currTitle = that.StoryTitle[that.currPage];
-        that.currContext = that.StoryContext[that.currPage];
-      }
+      that.currTitle = that.StoryTitle[that.currPage];
+      that.currContext = that.StoryContext[that.currPage];
     },
-    hourSliderValue: {
-      handler: function(){
-        var that = this;
-        that.currHour = +that.hourSliderValue;
+    hourSliderValue: function(){
+      var that = this;
+      that.currHour = +that.hourSliderValue;
 
-        this.updateCriminalDataBar();
-        this.updateTrafficFlow();
-        this.updateSentiment();
-      }
+      this.updateCriminalDataBar();
+      this.updateTrafficFlow();
+      this.updateSentiment();
     },
-    daySliderValue: {
-      handler: function(){
-        var that = this;
-        that.currDay = +that.dayIndexMap[that.daySliderValue];
+    daySliderValue: function(){
+      var that = this;
+      that.currDay = +that.dayIndexMap[that.daySliderValue];
 
-        this.updateCriminalDataBar();
-        this.updateTrafficFlow();
-        this.updateSentiment();
-      }
+      this.updateCriminalDataBar();
+      this.updateTrafficFlow();
+      this.updateSentiment();
     },
-    immediate: true,
   },
   methods: {
+    onDataReady: function(){
+      console.log(this.data1Ready, this.data2Ready, this.data3Ready)
+      if(this.data1Ready == true && this.data2Ready == true && this.data3Ready == true){
+        this.$refs.hourSlider.setIndex(6);
+        this.$refs.daySlider.setIndex(0);
+      }
+    },
     switchToPrevPage: function(){
       if(this.currPage <= 1){
         this.currPage = this.totalPage;
@@ -411,8 +430,6 @@ export default {
       this.currPrecinct = undefined;
     },
     onMapIsReady: function(signal){
-      this.$refs.hourSlider.setIndex(0);
-      this.$refs.daySlider.setIndex(0);
     },
     createChart(chartId) {
       var canvas = document.getElementById(chartId);
