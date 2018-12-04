@@ -2,7 +2,7 @@
   <div class="chart_plot">
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
-    <h4 style="position:absolute; top:95px; left:275px; color:black">Area</h4>
+    <h4 style="position:absolute; top:95px; left:231px; color:black">Size of Areas</h4>
     <h4 style="position:absolute; top:95px; left:475px; color:black">Number of Residents</h4>
     <h4 style="position:absolute; top:95px; left:810px; color:black">Pearson Correlation</h4>
 
@@ -368,6 +368,8 @@ export default {
   methods:{
     onDataReady: function(){
       
+      this.$refs.hourSlider.setIndex(12);
+      this.$refs.daySlider.setIndex(3);
       if(this.data1Ready == true && this.data2Ready == true){
         this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
