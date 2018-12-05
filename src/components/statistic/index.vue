@@ -177,7 +177,7 @@ export default {
   name: 'statistic-plot-page',
   data: function() {
     return {
-      title: 'MISC Plot',
+      title: 'Statistic Plot',
 
       // Commom
       currDay: 2,
