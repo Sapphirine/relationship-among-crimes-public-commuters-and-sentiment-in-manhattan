@@ -1,5 +1,7 @@
 <template>
   <div class="statisticPlot">
+    <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
+
     <div class="container-fluid">
       <div class="statisticInfoHolder" style="margin-left: 15px;margin-right: 4px;" >
         <div class="row">
