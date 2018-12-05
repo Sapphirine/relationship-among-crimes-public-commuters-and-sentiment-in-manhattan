@@ -12,6 +12,16 @@ const topojson = require('topojson');
 const manhattan_precinct = ["1", "5", "6", "7", "9", "10", "13", "14", "17", "18", "19", "20", "22", "23", "24", "25", "26", "28", "30", "32", "33", "34"];
 
 export default {
+  data: function(){
+    return {
+      precincts: undefined,
+    }
+  },
+  methods:{
+    equalToEventTarget: function() {
+        return this == d3.event.target;
+    }
+  },
   mounted: function() {
     var that = this;
     var svg = d3.select("svg");
@@ -47,14 +57,18 @@ export default {
           .attr("d", path)
           .classed("precinct", true)
           .on('mouseover', function(d) {
-            d3.select(this).transition().duration(500).style("stroke-width", 8).style("stroke-opacity", .5).style("fill", "#6666ff");
-            that.$emit('precinctSelected', +d.properties.Precinct);
+            d3.select(this).transition().duration(500).style("stroke-width", 5);
+          })
+          .on('click', function(d) {
+            d3.selectAll(".precinct").transition().duration(100).style("stroke-width", 1).style("stroke-opacity", 1).style("fill", "#ddd");
+            d3.select(this).transition().duration(100).style("stroke-width", 10).style("stroke-opacity", .5).style("fill", "#6666ff")
+            that.$emit('precinctSelected', +d.properties.Precinct)
           })
           .on('mouseout', function(d) {
-            d3.select(this).transition().duration(500).style("stroke-width", 1).style("stroke-opacity", 1).style("fill", "#ddd");
-            that.$emit('precinctDeselected', +d.properties.Precinct);
+            d3.select(this).transition().duration(500).style("stroke-width", 1);
           });
 
+        that.precincts = d3.selectAll('.precinct')
         that.$emit('mapIsReady', 'ready');
       }
     );
