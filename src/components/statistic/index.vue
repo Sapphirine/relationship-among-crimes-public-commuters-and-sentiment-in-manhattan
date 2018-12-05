@@ -10,6 +10,7 @@
               <NewyorkMap
                 @precinctSelected="onPrecinctSelected"
                 @precinctDeselected="onPrecinctDeselected"
+                @mapIsReady="onMapIsReady"
               />
             </div>
             <div class="tooltipHolder">
@@ -183,6 +184,7 @@ export default {
       currDay: 2,
       currHour: 1,
       currPrecinct: undefined,
+      mapIsReady: false,
 
       // Criminal and traffic data
       combine_data: undefined,
@@ -433,10 +435,11 @@ export default {
   },
   methods: {
     onDataReady: function(){
-      if(this.data1Ready == true && this.data2Ready == true && this.data3Ready == true){
+      if(this.data1Ready == true && this.data2Ready == true && this.data3Ready == true && this.mapIsReady == true){
         this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
-        this.currPrecinct = 1;
+        d3.select(".nb1").dispatch("click");
+        console.log(d3.select(".nb1"))
       }
     },
     pad: function(num, size) {
@@ -450,8 +453,8 @@ export default {
       // this.currPrecinct = undefined;
     },
     onMapIsReady: function(signal){
-      // this.$refs.hourSlider.setIndex(0);
-      // this.$refs.daySlider.setIndex(0);
+      this.mapIsReady = true;
+      this.onDataReady();
     },
     getCombineDayData : function(dayIdx, contentIdx, precinctIdx){
       var that = this;

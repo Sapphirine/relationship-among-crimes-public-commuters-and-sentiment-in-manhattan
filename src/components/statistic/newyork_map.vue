@@ -14,7 +14,6 @@ const manhattan_precinct = ["1", "5", "6", "7", "9", "10", "13", "14", "17", "18
 export default {
   data: function(){
     return {
-      precincts: undefined,
     }
   },
   methods:{
@@ -68,7 +67,6 @@ export default {
             d3.select(this).transition().duration(500).style("stroke-width", 1);
           });
 
-        that.precincts = d3.selectAll('.precinct')
         that.$emit('mapIsReady', 'ready');
       }
     );
