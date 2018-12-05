@@ -175,8 +175,8 @@ export default {
       // Utils
       /// Day slider
       dayIndexMap:{"MON": 0, "TUE": 1, "WED": 2, "THU": 3, "FRI": 4, "SAT": 5, "SUN": 6},
-      hourSliderValue: undefined,
-      daySliderValue: undefined,
+      hourSliderValue: 1,
+      daySliderValue: 2,
       daySliderOption:{
         width: 'auto',
         tooltip: "hover",
@@ -184,7 +184,8 @@ export default {
         piecewise: true,
         piecewiseLabel: true,
         startAnimation: false,
-        data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+        data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        speed: 0.1,
       },
 
       /// Hour Slider
@@ -195,7 +196,8 @@ export default {
         piecewise: true,
         piecewiseLabel: true,
         startAnimation: false,
-        data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+        data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+        speed: 0.1,
       },
 
       /// Donut chart
@@ -208,14 +210,12 @@ export default {
             ],
             backgroundColor: [
                 'rgb(75, 192, 192)',
-                //'rgb(54, 162, 235)',
                 'rgb(255, 99, 132)',
             ],
             label: 'Sentiment'
           }],
           labels: [
             "Positive",
-            // "Neutral",
             "Negative"
           ]
         },
@@ -262,7 +262,7 @@ export default {
     
       count1++;
 
-      if(count1 >=  1497702){
+      if(count1 >=  764323){
         that.data1Ready = true;
         that.onDataReady();
       }
@@ -285,7 +285,8 @@ export default {
       }
       that.trafficFlowData[+data.weekday][+data.pick_hour][(data.lat + ":" +data.long)] = total;
 
-      if(count2 >=  764323){
+      count2++;
+      if(count2 >=  1497702){
         that.data2Ready = true;
         that.onDataReady();
       }
@@ -398,7 +399,7 @@ export default {
     onDataReady: function(){
       console.log(this.data1Ready, this.data2Ready, this.data3Ready)
       if(this.data1Ready == true && this.data2Ready == true && this.data3Ready == true){
-        this.$refs.hourSlider.setIndex(6);
+        this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
       }
     },

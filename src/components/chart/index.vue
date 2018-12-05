@@ -2,7 +2,7 @@
   <div class="chart_plot">
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
-    <h4 style="position:absolute; top:95px; left:231px; color:black">Size of Areas</h4>
+    <h4 style="position:absolute; top:95px; left:231px; color:black">Place of Areas</h4>
     <h4 style="position:absolute; top:95px; left:475px; color:black">Number of Residents</h4>
     <h4 style="position:absolute; top:95px; left:810px; color:black">Pearson Correlation</h4>
 
@@ -193,7 +193,8 @@ export default {
         piecewise: true,
         piecewiseLabel: true,
         startAnimation: false,
-        data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+        data: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+        speed: 0.1,
       },
 
       /// Hour Slider
@@ -204,7 +205,8 @@ export default {
         piecewise: true,
         piecewiseLabel: true,
         startAnimation: false,
-        data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+        data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+        speed: 0.1,
       },
       /// Donut chart
       donut_config: {
