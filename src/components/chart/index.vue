@@ -282,7 +282,6 @@ export default {
       }
 
       count1++;
-
       if(count1 >= 7 * 24 * 76){
         that.data1Ready = true;
         that.onDataReady();
@@ -302,7 +301,6 @@ export default {
       that.sentimentData[+data.day][+data.hour]["positive"] = +data.positive;
 
       count2++;
-
       if(count2 >= 7 * 24){
         that.data2Ready = true;
         that.onDataReady();
@@ -564,10 +562,6 @@ export default {
         var x2 = xMax;
         var y1 = intercept;
         var y2 = xMax * slope + intercept;
-        // if(y2 < 0){
-        //   x2 = (-intercept) / slope;
-        //   y2 = 0;
-        // }
         that.line = svg.append("line")
           .attr("x1", that.xScale(x1))
           .attr("y1", that.yScale(y1))
@@ -595,10 +589,6 @@ export default {
         var x2 = xMax;
         var y1 = intercept;
         var y2 = xMax * slope + intercept;
-        // if(y2 < 0){
-        //   x2 = (-intercept) / slope;
-        //   y2 = 0;
-        // }
         that.line.transition()
           .attr("x1", that.xScale(x1))
           .attr("y1", that.yScale(y1))
@@ -640,7 +630,6 @@ text {
 }
 
 .dot {
-  // stroke: #000;
   opacity:0.8;
 }
 
@@ -668,7 +657,6 @@ text {
 
 path {
   pointer-events: all;
-  // fill: none;
   stroke: #666;
   stroke-opacity: 0.2;
 }
