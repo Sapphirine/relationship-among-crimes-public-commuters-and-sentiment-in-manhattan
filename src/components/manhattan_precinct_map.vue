@@ -1,5 +1,5 @@
 <template>
-  <div id="newyork_map">
+  <div id="manhattan_precinct_map">
     <svg width="350" height="643.6"></svg>
   </div>
 </template>
@@ -16,16 +16,13 @@ export default {
     return {
     }
   },
-  methods:{
-    equalToEventTarget: function() {
-        return this == d3.event.target;
-    }
-  },
   mounted: function() {
     var that = this;
     var svg = d3.select("svg");
     var width = +svg.attr('width');
     var height = +svg.attr('height');
+    svg.attr("width", width)
+      .attr("height", height)
 
     const projection = d3.geoMercator()
                          .center([-73.9735, 40.78])
@@ -67,7 +64,26 @@ export default {
             d3.select(this).transition().duration(500).style("stroke-width", 1);
           });
 
-        that.$emit('mapIsReady', 'ready');
+        var count = 0;
+        d3.csv("static/data/precinct_center.csv", function(data){
+          if(manhattan_precinct.includes(data.precinct.toString()) == true){
+            var corrd = projection([data.long, data.lat])
+            svg.append('text')
+              .attr("class", "precinct_center")
+              .attr("x", function(d){
+                return corrd[0];
+              })
+              .attr("y", function(d){
+                return corrd[1];
+              })
+              .text(data.precinct);
+          }
+
+          count++;
+          if(count >= manhattan_precinct.length){
+            that.$emit('mapIsReady', 'ready');
+          }
+        });
       }
     );
   }

@@ -9,7 +9,7 @@
           <h3 id="criminal_map">Criminal Heatmap</h3>
           <h3 id="traffic_map">Population Heatmap</h3>
           <h3 id="sentiment_chart">Sentiment</h3>
-          <ManhattanMap
+          <ManhattanAndNeighborMap
             @precinctSelected="onPrecinctSelected"
             @precinctDeselected="onPrecinctDeselected"
             @mapIsReady="onMapIsReady"
@@ -96,12 +96,12 @@ import simpleheat from 'simpleheat';
 // import Chart from 'chart.js';
 
 const chart = require("../donut_chart.js").default;
-const manhattanMap = require("./manhattan_map.vue").default;
+const manhattanAndNeighborMap = require("./manhattan_and_neighbor_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
 
 export default {
   components: {
-    ManhattanMap: manhattanMap,
+    ManhattanAndNeighborMap: manhattanAndNeighborMap,
     Tooltip: tooltip,
     vueSlider,
   },
@@ -137,36 +137,36 @@ export default {
       // Story
       StoryTitle: [
         "Heatmap of Crime and Population",
+        "Late Afternoon Malaise",
         "Blue Wednesday",
-        "Nightmare",
-        "Happy Weekend",
-        "Crime Time",
-        "peaceful Sunday Morning",
-        "late afternoon malaise",
-        "Rock the night",
         "Morning Depression",
+        "Happy Weekend",
+        "Rock the Night",
+        "Crime Time",
+        "Peaceful Sunday Morning",
+        "Nightmare",
       ],
       StoryContext: [
         "The heapmaps show dynamic crimes and commuters of Manhattan aggregated by precinct. Twitter roughly shows sentiment of people hour-by-hour in an average week.",
 
-        "the commute and the crime happens around the mid town, where is the major work place in the city. it is the most difficult time in the whole week with highest negative percentage.  Yes, nobody likes working.",
+        "As people are working, with low commute in the city, they have a low mood around  65% of them feel upset. The criminals focusing on the Washington Square indicates that mostly, the  target of criminal is the tourist.",
 
-        "There is no crime, no transportation around the city. But people feel sad that the weekend is ending and they have to start work again. What a long week!",
+        "Context: the commute and the crime happens around the mid town, where is the major work place in the city. it is the most difficult time in the whole week with highest negative percentage. Yes, nobody likes working.",
+
+        "With no crime, no transportation, there is a sharp increase of negative mood in the early morning of Thursday. Usually, it is called Morning Depression, with feeling of intense frustrated and empty. Circadian rhythms disruption is often the main causes of morning depression.",
 
         "Finally struggle to end the working. It is time to have fun! So people move around the city, especially to the hell’s kitchen to find delicious food. Everybody is delighted. What’s about the job? Forget it! It’s time to drink!",
 
-        "the time with the Highest crime heat, mainly around mid town( 34th pen station— time square). And people seems go around the penne station with a happy mood. Maybe they are too happy to remember the safety.",
+        "People gather around the soho and little Italy neighborhood, trying to have some fun together.  The highest positive sentiment ratio, nearly 76%, with little crime.",
+
+        "The time with the Highest crime heat, mainly around mid town( 34th pen station— time square). And people seem go around the penne station with a happy mood. Maybe they are too happy to remember the safety.",
 
         "No crime, no busy transportation, everything looks good. And people are all in the beautiful sleeping and relaxing style.",
 
-        "As people are working, with low commute in the city, they have a low mood around  65% of them feel upset. The crime focus on the Washington Square indicates that mostly, the  target of criminal is the tourist",
-
-        "People gather around the soho and little Italy neighborhood, trying to have some fun together.  The highest positive sentiment ratio, nearly 76%, with little crime.",
-
-        "With no crime, no transportation, there is a sharp increase of negative mood in the early morning of Thursday. Usually, it is called Morning Depression, feeling that intense frustrated and empty. Circadian rhythms disruption is often the main causes of morning depression."
+        "There is no crime, no transportation around the city. But people feel sad that the weekend is ending and they have to start work again. What a long week!"
       ],
-      hourList: [0, 14, 23, 19, 20, 6, 16, 1, 5],
-      dayList: ["MON", "WED", "SUN", "FRI", "SAT", "SUN", "TUE", "SAT", "THU"],
+      hourList: [0, 16, 14, 5, 19, 1, 20, 6, 23],
+      dayList: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SAT", "SUN", "SUN"],
       currPage: 0,
       totalPage: 8,
       currTitle: "placeholder",

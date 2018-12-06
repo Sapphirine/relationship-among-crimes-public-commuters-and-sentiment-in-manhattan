@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-sm-6 " >
             <div class="mapHolder cliente">
-              <NewyorkMap
+              <ManhattanPrecinctMap
                 @precinctSelected="onPrecinctSelected"
                 @precinctDeselected="onPrecinctDeselected"
                 @mapIsReady="onMapIsReady"
@@ -158,7 +158,7 @@ import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
 // import Chart from 'chart.js';
-const newyorkMap = require("./newyork_map.vue").default;
+const manhattanPrecinctMap = require("../manhattan_precinct_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
 
 const manhattan_precinct = ["1", "5", "6", "7", "9", "10", "13", "14", "17", "18", "19", "20", "22", "23", "24", "25", "26", "28", "30", "32", "33", "34"];
@@ -171,7 +171,7 @@ const precinct_area_map = {"1": 0, "5":0, "6":0, "7":0, "9":0,
 
 export default {
   components: {
-    NewyorkMap: newyorkMap,
+    ManhattanPrecinctMap: manhattanPrecinctMap,
     Tooltip: tooltip,
     vueSlider,
   },
@@ -441,7 +441,6 @@ export default {
         this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
         d3.select(".nb1").dispatch("click");
-        console.log(d3.select(".nb1"))
       }
     },
     pad: function(num, size) {
@@ -652,23 +651,18 @@ export default {
     },
     animation: function(){
       var that = this;
-      var pauseSec = 300;
-      that.animationSet1(0, 0, pauseSec)
+      var pauseSec = 1000;
+      that.animationSet1(0, pauseSec)
     },
-    animationSet1: function(day, hour, pauseSec){
+    animationSet1: function(day, pauseSec){
       var that = this;
-      that.$refs.hourSlider.setIndex(hour);
       that.$refs.daySlider.setIndex(day);
-      if(hour >= 24 && day >= 6){
+      if(day >= 6){
         return;
       }
       setTimeout(function(){
-        hour += 1;
-        if(hour >= 24 && day < 6){
-          hour = 0;
-          day += 1;
-        }
-        that.animationSet1(day, hour, pauseSec);
+        day += 1;
+        that.animationSet1(day, pauseSec);
       }, pauseSec);
     },
   },

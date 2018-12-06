@@ -85,7 +85,9 @@ import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import * as d3Legend from 'd3-svg-legend';
 const chart = require("../donut_chart.js").default;
+import Tour from "bootstrap-tour";
 
+const manhattanPrecinctMap = require("../manhattan_precinct_map.vue").default;
 const pearsonCorrelation = require("./ pearsoncorrelation.js");
 
 const margin = {
@@ -114,6 +116,7 @@ const precinct_area_map = {"1": 0, "5":0, "6":0, "7":0, "9":0,
 
 export default {
   components: {
+    ManhattanPrecinctMap: manhattanPrecinctMap,
     vueSlider,
   },
   name: 'chart-plot-page',
@@ -160,24 +163,26 @@ export default {
       // Story
       StoryTitle: [
         "Plot of Crime and Population",
-        "11111111111111111111111111",
-        "title2",
-        "title3",
-        "title4",
-        "title5"
+        "Random events",
+        "Risky Night Shift",
+        "Scattered Cloud",
+        "Weekend Safety",
       ],
       StoryContext: [
         "This visualizationis the bubble plot of # of crimes and # commuters, the size of bubble denotes the # of residents, and color of bubbles represents the area. We measure the correlation using pearson algo.",
-        "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-        "contenxt2",
-        "contenxt3",
-        "contenxt4",
-        "contenxt5"
+
+        "The time that crimes happen in a random chance. The mindless and purposeless crimes are accompanied with mass communications and less obvious motive baffles investigators. However , the crimes can have more effects at the time lacks the clear clarification of sentiments and motivations.",
+
+        "With highest Pearson correlation with value of 0.92 between the commuters and crime, indicates that when there is a shift, there may be a crime happens. People are in negative mood, both make sense for the victims and offenders.",
+
+        "Happy weekend is coming, everybody is exciting to move around the city. The population of commuters arrives at the peak. It seems that there is no body cares too much about safety.",
+
+        "Relaxing time with high commuters.  A lot of people come to crowd in the downtown. And there is also a risk of unexpected dangers happens Be careful! When you have fun, the criminals may also have fun",
       ],
-      hourList: [2, 4, 6, 8, 10],
-      dayList: ["FRI", "THU", "WED", "TUE", "MON"],
+      hourList: [2, 22, 4, 15, 12],
+      dayList: ["FRI", "TUE", "THU", "FRI", "SAT"],
       currPage: 0,
-      totalPage: 5,
+      totalPage: 4,
       currTitle: "placeholder",
       currContext: "placeholder",
 
