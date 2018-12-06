@@ -504,18 +504,18 @@ export default {
 
       var svg = d3.select("svg");
       svg.append("g")
-        .attr("class", "legendSequential")
+        .attr("class", "legendGeographic")
         .attr("transform", "translate(140,50)");
 
-      var legendSequential = d3Legend.legendColor()
+      var legendGeographic = d3Legend.legendColor()
           .shapeWidth(30)
           .cells(2)
           .orient("verticle")
           .scale(that.colorScale) 
           .labels(["Uppertown", "UpTown", "Midtown", "Downtown"]);
 
-      svg.select(".legendSequential")
-        .call(legendSequential);
+      svg.select(".legendGeographic")
+        .call(legendGeographic);
 
       svg.append("g")
         .attr("class", "legendSize")
@@ -527,7 +527,7 @@ export default {
         .shapePadding(15)
         .labelOffset(20)
         .orient('horizontal')
-        .labels(["", "62541", "125081", "187621", "250162"]);
+        .labels(["", "50000", "100000", "150000", "200000"]);
 
       svg.select(".legendSize")
         .call(legendSize);
@@ -545,7 +545,6 @@ export default {
           that.gdots_dict[val.precinct] = gdots.append("circle")
             .attr("class", "dot")
             .attr("id", "precinct" + val.precinct.toString())
-            // .style("fill", that.colorScale(that.getColorData(val.age)))
             .style("fill", that.colorScale(val.area))
             .attr("cx", that.xScale(val.traffic))
             .attr("cy", that.yScale(val.criminal))
@@ -723,5 +722,9 @@ path {
 
 #app{
   margin-top: 30px;
+}
+
+.legendGeographic rect{
+  opacity: 0.8;
 }
 </style>

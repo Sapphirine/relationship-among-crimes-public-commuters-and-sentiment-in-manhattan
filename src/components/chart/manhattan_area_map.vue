@@ -80,6 +80,7 @@ export default {
             }
             return color;
           })
+          .style("opacity", 0.8);
       that.$emit('mapIsReady', 'ready');
     });
   }
