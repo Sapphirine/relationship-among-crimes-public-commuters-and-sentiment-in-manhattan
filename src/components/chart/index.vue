@@ -2,10 +2,6 @@
   <div class="chart_plot">
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
-    <h4 style="position:absolute; top:95px; left:231px; color:black">Place of Areas</h4>
-    <h4 style="position:absolute; top:95px; left:475px; color:black">Number of Residents</h4>
-    <h4 style="position:absolute; top:95px; left:810px; color:black">Pearson Correlation</h4>
-
     <div class="container-fluid">
       <div class="row" style="padding-left:30px">
         <div class="col-md-9 cliente">
@@ -13,6 +9,12 @@
           </div>
         </div>
         
+        <div class="mapHolder" style="position:absolute; left:240px">
+          <ManhattanAreaMap
+            @mapIsReady="onMapIsReady"
+          />
+        </div>
+
         <div class="col-md-3" style="padding-left: 40px;padding-right: 35px;">
           <div class="row cliente">
             <div class="sentimentHolder ">
@@ -87,7 +89,7 @@ import * as d3Legend from 'd3-svg-legend';
 const chart = require("../donut_chart.js").default;
 import Tour from "bootstrap-tour";
 
-const manhattanPrecinctMap = require("../manhattan_precinct_map.vue").default;
+const manhattanAreaMap = require("./manhattan_area_map.vue").default;
 const pearsonCorrelation = require("./ pearsoncorrelation.js");
 
 const margin = {
@@ -116,7 +118,7 @@ const precinct_area_map = {"1": 0, "5":0, "6":0, "7":0, "9":0,
 
 export default {
   components: {
-    ManhattanPrecinctMap: manhattanPrecinctMap,
+    ManhattanAreaMap: manhattanAreaMap,
     vueSlider,
   },
   name: 'chart-plot-page',
@@ -148,6 +150,7 @@ export default {
       // Commom
       currDay: 2,
       currHour: 1,
+      mapIsReady: false,
 
       // Criminal and traffic data
       combine_data: undefined,
@@ -353,6 +356,27 @@ export default {
       .text("# of crimes");
     
      svg.append("text")
+      .attr("class", "desc_text")
+      .attr("text-anchor", "end")
+      .attr("x", 240)
+      .attr("y", 10)
+      .text("Geographic")
+
+     svg.append("text")
+      .attr("class", "desc_text")
+      .attr("text-anchor", "end")
+      .attr("x", 600)
+      .attr("y", 10)
+      .text("Number of Residents")
+
+     svg.append("text")
+      .attr("class", "desc_text")
+      .attr("text-anchor", "end")
+      .attr("x", that.width - 50)
+      .attr("y", 10)
+      .text("Linear Correlation")
+
+     svg.append("text")
       .attr("class", "pearson_text")
       .attr("text-anchor", "end")
       .attr("x", that.width - 105)
@@ -364,7 +388,7 @@ export default {
       .attr("text-anchor", "end")
       .attr("x", that.width)
       .attr("y", 78);
-    
+
     that.pearson_text.text("0.00");
 
     that.currTitle = that.StoryTitle[that.currPage];
@@ -373,11 +397,15 @@ export default {
     this.$refs.daySlider.setIndex(3);
   },
   methods:{
+    onMapIsReady: function(signal){
+      this.mapIsReady = true;
+      this.onDataReady();
+    },
     onDataReady: function(){
       
       this.$refs.hourSlider.setIndex(12);
       this.$refs.daySlider.setIndex(3);
-      if(this.data1Ready == true && this.data2Ready == true){
+      if(this.data1Ready == true && this.data2Ready == true && this.mapIsReady == true){
         this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
       }
@@ -482,12 +510,12 @@ export default {
       var svg = d3.select("svg");
       svg.append("g")
         .attr("class", "legendSequential")
-        .attr("transform", "translate(150,70)");
+        .attr("transform", "translate(140,50)");
 
       var legendSequential = d3Legend.legendColor()
-          .shapeWidth(50)
-          .cells(10)
-          .orient("horizontal")
+          .shapeWidth(30)
+          .cells(2)
+          .orient("verticle")
           .scale(that.colorScale) 
           .labels(["Uppertown", "UpTown", "Midtown", "Downtown"]);
 
@@ -638,6 +666,11 @@ text {
 .pearson_text{
   font: 500 45px "Helvetica Neue";
   fill: #ddd;
+}
+
+.desc_text{
+  font: 500 20px "Helvetica Neue";
+  fill: black;
 }
 
 .overlay {

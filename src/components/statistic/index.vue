@@ -158,7 +158,7 @@ import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import simpleheat from 'simpleheat';
 // import Chart from 'chart.js';
-const manhattanPrecinctMap = require("../manhattan_precinct_map.vue").default;
+const manhattanPrecinctMap = require("./manhattan_precinct_map.vue").default;
 const tooltip = require("./tooltip.vue").default;
 
 const manhattan_precinct = ["1", "5", "6", "7", "9", "10", "13", "14", "17", "18", "19", "20", "22", "23", "24", "25", "26", "28", "30", "32", "33", "34"];
