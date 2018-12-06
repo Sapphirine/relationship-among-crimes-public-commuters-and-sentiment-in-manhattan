@@ -69,7 +69,7 @@ export default {
           if(manhattan_precinct.includes(data.precinct.toString()) == true){
             var corrd = projection([data.long, data.lat])
             svg.append('text')
-              .attr("class", "precinct_center")
+              .attr("class", "noSelectableText")
               .attr("x", function(d){
                 return corrd[0];
               })
@@ -96,5 +96,8 @@ export default {
   stroke: grey;
   stroke-width: 1px;
   fill: #ddd;
+}
+.noSelectableText {
+    pointer-events: none;
 }
 </style>
