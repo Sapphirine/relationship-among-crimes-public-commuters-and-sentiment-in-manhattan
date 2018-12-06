@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import * as d3Legend from 'd3-svg-legend';
 const polygonCenter = require('geojson-polygon-center')
 const d3 = require('d3');
 const topojson = require('topojson');
@@ -18,6 +19,11 @@ const uptown = ["19", "20", "22", "24"];
 const uppertown = ["23", "25", "26", "28", "30", "32", "33", "34"];
 const color_arr = ["rgb(214, 39, 40)", "rgb(44, 160, 44)", "rgb(31, 119, 180)", "rgb(255, 127, 14)"];
 
+const legend_x = [10, 10, 10, 10, 10];
+const legend_y = [20, 50, 80, 110, 140];
+const legend_text = ["Uppertown", "UpTown", "Midtown", "Downtown", "Current Selected"];
+const legend_color = ["rgb(31, 119, 180)", "rgb(255, 127, 14)", "rgb(44, 160, 44)", "rgb(214, 39, 40)", "#ddd"];
+
 export default {
   data: function(){
     return {
@@ -29,13 +35,30 @@ export default {
     var width = +svg.attr('width');
     var height = +svg.attr('height');
     svg.attr("width", width)
-      .attr("height", height)
+      .attr("height", height);
 
     const projection = d3.geoMercator()
                          .center([-73.9735, 40.78])
                          .scale(130000)
                          .translate([width/2, height/2]);
     var path = d3.geoPath().projection(projection);
+
+    for(var i = 0; i < 5; i++){
+      svg.append('rect')
+      .attr('x', legend_x[i])
+      .attr('y', legend_y[i])
+      .attr('width', 50)
+      .attr('height', 20)
+      .style('fill', legend_color[i])
+      .style('stroke', 'black')
+      .style('stroke-width', '.3px')
+      .style('opacity', '0.8');
+
+      svg.append('text')
+      .attr('x', legend_x[i] + 60)
+      .attr('y', legend_y[i] + 15)
+      .text(legend_text[i])
+     }
 
     d3.json("static/data/police_precincts.geojson")
       .then(function(geoJson) {
@@ -78,7 +101,7 @@ export default {
           })
           .style("opacity", 0.8)
           .on('mouseover', function(d) {
-            d3.select(this).transition().duration(500).style("stroke-width", 5);
+            d3.select(this).transition().duration(500).style("stroke-width", 3);
           })
           .on('click', function(d) {
             d3.selectAll(".precinct").transition().duration(100).style("stroke-width", 1).style("stroke-opacity", 1).style("fill", function(d){
@@ -98,7 +121,7 @@ export default {
               }
               return color;
             })
-            d3.select(this).transition().duration(100).style("stroke-width", 10).style("stroke-opacity", .5).style("fill", "#ddd")
+            d3.select(this).transition().duration(100).style("stroke-width", 5).style("stroke-opacity", .5).style("fill", "#ddd")
             that.$emit('precinctSelected', +d.properties.Precinct)
           })
           .on('mouseout', function(d) {
