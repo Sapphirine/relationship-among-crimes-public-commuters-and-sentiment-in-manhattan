@@ -501,6 +501,9 @@ export default {
       var that = this;
 
       var svg = d3.select("svg");
+      svg.select(".legendGeographic").remove();
+      svg.select(".legendSize").remove();
+
       svg.append("g")
         .attr("class", "legendGeographic")
         .attr("transform", "translate(140,50)");
@@ -529,15 +532,13 @@ export default {
 
       svg.select(".legendSize")
         .call(legendSize);
-
-      var svg = d3.select("svg")
-                  .append("g")
-                  .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
-
       let criminal_arr = [];
       let traffic_arr = [];
-      var gdots = svg.append("g").attr("class", "dots");
       if(that.isEmpty(that.gdots_dict)){
+        var svg = d3.select("svg")
+                    .append("g")
+                    .attr("transform", "translate(" + that.marginLeft + "," + that.marginTop + ")");
+        var gdots = svg.append("g").attr("class", "dots");
         for(var i = 0; i < that.combine_data[that.currDay][that.currHour].length; i++){
           var val = that.combine_data[that.currDay][that.currHour][i];
           that.gdots_dict[val.precinct] = gdots.append("circle")
@@ -670,10 +671,6 @@ path {
   stroke-width: 2px;
   stroke: steelblue;
   stroke-dasharray: 10,5;
-}
-
-.legendSequential{
-  fill: black;
 }
 
 .legendSize{

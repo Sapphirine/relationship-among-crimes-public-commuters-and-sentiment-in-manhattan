@@ -20,7 +20,7 @@ const downtown = ["1", "5", "6", "7", "9"];
 const midtown = ["10", "13", "14", "17", "18"];
 const uptown = ["19", "20", "22", "24"];
 const uppertown = ["23", "25", "26", "28", "30", "32", "33", "34"];
-const color_arr = ["rgb(214, 39, 40)", "rgb(44, 160, 44)", "rgb(31, 119, 180)", "rgb(255, 127, 14)"]
+const color_arr = ["rgb(214, 39, 40)", "rgb(44, 160, 44)", "rgb(31, 119, 180)", "rgb(255, 127, 14)"];
 
 export default {
   data: function(){
