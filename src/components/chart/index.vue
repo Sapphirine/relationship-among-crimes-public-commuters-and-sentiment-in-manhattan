@@ -192,8 +192,8 @@ export default {
       // Utils
       /// Day slider
       dayIndexMap:{"MON": 0, "TUE": 1, "WED": 2, "THU": 3, "FRI": 4, "SAT": 5, "SUN": 6},
-      hourSliderValue: undefined,
-      daySliderValue: undefined,
+      hourSliderValue: 2,
+      daySliderValue: 1,
       daySliderOption:{
         width: 'auto',
         tooltip: "hover",
@@ -402,9 +402,6 @@ export default {
       this.onDataReady();
     },
     onDataReady: function(){
-      
-      this.$refs.hourSlider.setIndex(12);
-      this.$refs.daySlider.setIndex(3);
       if(this.data1Ready == true && this.data2Ready == true && this.mapIsReady == true){
         this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
@@ -427,7 +424,6 @@ export default {
       }
     },
     setIdx: function(hourIdx, dayIdx){
-      console.log(hourIdx, dayIdx)
       this.$refs.hourSlider.setIndex(hourIdx);
       this.$refs.daySlider.setIndex(dayIdx);
     },
@@ -505,7 +501,6 @@ export default {
     },
     updateGraph: function(){
       var that = this;
-      console.log('updategraph')
 
       var svg = d3.select("svg");
       svg.append("g")
@@ -616,32 +611,25 @@ export default {
     }
   },
   watch: {
-    currPage:{
-      handler: function(){
+    currPage: function(){
         var that = this;
         that.setIdx(that.hourList[that.currPage], that.dayIndexMap[that.dayList[that.currPage]]);
 
         that.currTitle = that.StoryTitle[that.currPage];
         that.currContext = that.StoryContext[that.currPage];
-      }
     },
-    hourSliderValue: {
-      handler: function(){
+    hourSliderValue:function(){
         var that = this;
         that.currHour = +that.hourSliderValue;
         that.updateGraph();
         that.updateSentiment();
-      }
     },
-    daySliderValue: {
-      handler: function(){
+    daySliderValue: function(){
         var that = this;
         that.currDay = +that.dayIndexMap[that.daySliderValue];
         that.updateGraph();
         that.updateSentiment();
-      }
     },
-    immediate: true,
   },
 }
 </script>

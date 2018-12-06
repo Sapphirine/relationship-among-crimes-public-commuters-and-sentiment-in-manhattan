@@ -397,7 +397,6 @@ export default {
   },
   methods: {
     onDataReady: function(){
-      console.log(this.data1Ready, this.data2Ready, this.data3Ready)
       if(this.data1Ready == true && this.data2Ready == true && this.data3Ready == true){
         this.$refs.hourSlider.setIndex(0);
         this.$refs.daySlider.setIndex(0);
@@ -420,7 +419,6 @@ export default {
       }
     },
     setIdx: function(hourIdx, dayIdx){
-      console.log(hourIdx, dayIdx)
       this.$refs.hourSlider.setIndex(hourIdx);
       this.$refs.daySlider.setIndex(dayIdx);
     },
