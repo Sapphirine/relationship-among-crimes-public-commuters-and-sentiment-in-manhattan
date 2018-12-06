@@ -6,8 +6,8 @@
     <div class="container-fluid">
       <div class="row">
         <div class="mapHolder" style="padding-left:46px">
-          <h3 id="criminal_map">Criminal Heatmap</h3>
-          <h3 id="traffic_map">Population Heatmap</h3>
+          <h3 id="criminal_map">Heatmap of Crimes</h3>
+          <h3 id="traffic_map">Heatmap of Commuters</h3>
           <h3 id="sentiment_chart">Sentiment</h3>
           <ManhattanAndNeighborMap
             @precinctSelected="onPrecinctSelected"
