@@ -8,7 +8,6 @@
           <div class="chartHolder">
           </div>
         </div>
-        
 
         <div class="col-md-3" style="padding-left: 40px;padding-right: 35px;">
           <div class="row cliente ">
@@ -45,8 +44,8 @@
       <div class="sliderHolder my-3 cliente" style="margin-left: 15px;margin-right: 4px; padding-top:3px; padding-bottom:1px;">
         <div class="row">
           <div class="col-md-1">
-              <div  style="float:right"><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
-              <div  style="float:right"><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
+              <div  style=""><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
+              <div  style=""><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
           </div>
           <div class="col-md-10">
             <div class="row">
@@ -769,12 +768,4 @@ path {
   opacity: 0.8;
 }
 
-.col-container {
-    display: table;
-    width: 100%;
-}
-.col-cell {
-    display: table-cell;
-    padding: 16px;
-}
 </style>

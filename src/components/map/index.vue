@@ -14,26 +14,71 @@
             @precinctDeselected="onPrecinctDeselected"
             @mapIsReady="onMapIsReady"
           />
-        </div>
-        <div class="col-md-3" style="padding-left:60px">
-          <div class="row cliente">
-            <div class="sentimentHolder ">
-              <canvas id="sentiment-chart" class="" width="310" height="310"></canvas>
+          <div class="tooltipHolder">
+            <Tooltip
+              v-if="currPrecinct"
+              :title="currentPrecinctTitle"
+              :description="currentPrecinctDescription"
+            />
+          </div>
+          <div class = "row my-3">
+            <div class="col-md-12 cliente">
+              <div class="row ">
+                <div class="col-md-1">
+                    <div  style=""><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
+                    <div  style=""><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
+                </div>
+                <div class="col-md-10">
+                  <div class="row">
+                    <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+                      <vue-slider 
+                        ref="hourSlider"
+                        v-model="hourSliderValue"
+                        v-bind="hourSliderOption"
+                      >
+                      </vue-slider>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+                      <vue-slider 
+                        ref="daySlider"
+                        v-model="daySliderValue"
+                        v-bind="daySliderOption"
+                      >
+                      </vue-slider>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <button id="playBtn" class="btn btn-primary  btn-lg" style="margin-top: 7px;margin-left: -17px;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
+                </div> 
+              </div>
             </div>
           </div>
-          <div class="row  mt-4 cliente" >
-            <div class="card bg-light" style="width: 315px; height:260px">
-              <div class="card-header">
+        </div>
+
+        <div class="col-md-3" style="padding-left: 60px;padding-right: 35px;">
+          <div class="row cliente ">
+            <div class="sentimentHolder" style="height:300px">
+              <canvas id="sentiment-chart"></canvas>
+            </div>
+          </div>
+          <div class="row  my-4 cliente" style="height: calc(100% - (300px + 45px); ">
+            <div class="card bg-light ">
+              <div class="card-header" style="max-height: calc(100% - 45px);padding-bottom: 8px;padding-top: 8px;">
                 {{currTitle}}
               </div>
               <div class="card-body" id="storyContextCardBody">
-                <p class="card-text">
-                  <textarea v-model="currContext" class="form-control" id="storyContextTextArea" readonly></textarea>
+                <p class="card-text" style="height:100%">
+                  <div class="text-center">
+                    {{currContext}}
+                  </div>
                 </p>
               </div>
               <div class="card-footer" style="padding:0.35rem 1.25rem;">
                 <small class="text-muted">
-                  <button type="button" class="btn btn-secondary " style="float:left;  border-radius:50%; max-height:267px;" v-on:click="switchToPrevPage"><font-awesome-icon icon="arrow-left" class=""/></button>
+                  <button type="button" class="btn btn-secondary " style="float:left;  border-radius:50%" v-on:click="switchToPrevPage"><font-awesome-icon icon="arrow-left" class=""/></button>
 
                   <center class="text-monospace" style="padding-top:10px; display:inline-block">{{currPage}} / {{totalPage}}</center>
 
@@ -45,46 +90,6 @@
         </div>
       </div>
       
-      <div class="tooltipHolder">
-        <Tooltip
-          v-if="currPrecinct"
-          :title="currentPrecinctTitle"
-          :description="currentPrecinctDescription"
-        />
-      </div>
-      <div class="sliderHolder my-3 cliente" style="margin-left: 15px;margin-right: 4px; padding-top:3px; padding-bottom:1px;">
-        <div class="row">
-          <div class="col-md-1">
-              <div  style="float:right"><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
-              <div  style="float:right"><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
-          </div>
-          <div class="col-md-10">
-            <div class="row">
-              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-                <vue-slider 
-                  ref="hourSlider"
-                  v-model="hourSliderValue"
-                  v-bind="hourSliderOption"
-                >
-                </vue-slider>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-                <vue-slider 
-                  ref="daySlider"
-                  v-model="daySliderValue"
-                  v-bind="daySliderOption"
-                >
-                </vue-slider>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary  btn-lg" style="margin-top: 7px;margin-left: -17px;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
-          </div> 
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -151,9 +156,9 @@ export default {
 
         "As people are working, with low commute in the city, they have a low mood around  65% of them feel upset. The criminals focusing on the Washington Square indicates that mostly, the  target of criminal is the tourist.",
 
-        "Context: the commute and the crime happens around the mid town, where is the major work place in the city. it is the most difficult time in the whole week with highest negative percentage. Yes, nobody likes working.",
+        "Context: the commute and the crime happens around the mid town, where is the major work place in the city. It is the most difficult time in the whole week with highest negative percentage. Yes, nobody likes working.",
 
-        "With no crime, no transportation, there is a sharp increase of negative mood in the early morning of Thursday. Usually, it is called Morning Depression, with feeling of intense frustrated and empty. Circadian rhythms disruption is often the main causes of morning depression.",
+        "With less crime and traffic, only a sharp increase of negative mood in the early morning of Thursday. Circadian rhythms disruption is often the main causes of morning depression.",
 
         "Finally struggle to end the working. It is time to have fun! So people move around the city, especially to the hell’s kitchen to find delicious food. Everybody is delighted. What’s about the job? Forget it! It’s time to drink!",
 
@@ -340,7 +345,7 @@ export default {
       .attr('width', width)
       .attr('height', height)
       .style("position", "absolute")
-      .style("top", svg_offset_criminal.top.toString() + "px")
+      // .style("top", svg_offset_criminal.top.toString() + "px")
       .style("left", svg_offset_criminal.left.toString() + "px")
 
     var canvasLayer_traffic = d3.select("#map_traffic_col")
@@ -349,7 +354,7 @@ export default {
       .attr('width', width)
       .attr('height', height)
       .style("position", "absolute")
-      .style("top", svg_offset_traffic.top.toString() + "px")
+      // .style("top", svg_offset_traffic.top.toString() + "px")
       .style("left", svg_offset_traffic.left.toString() + "px")
 
     that.canvas_criminal = canvasLayer_criminal.node();
@@ -432,6 +437,10 @@ export default {
     },
     createChart(chartId) {
       var canvas = document.getElementById(chartId);
+      canvas.style.width='100%';
+      canvas.style.height='100%';
+      canvas.width  = canvas.offsetWidth;
+      canvas.height  = canvas.offsetHeight;
       this.sentimentDonutChart = new Chart(canvas, {
         type: this.donut_config.type,
         data: this.donut_config.data,

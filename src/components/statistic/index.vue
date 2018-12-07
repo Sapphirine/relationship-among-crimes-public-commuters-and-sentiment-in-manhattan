@@ -6,7 +6,7 @@
       <div class="statisticInfoHolder" style="margin-left: 15px;margin-right: 4px;" >
         <div class="row">
           <div class="col-sm-6 " >
-            <div class="mapHolder cliente">
+            <div class="mapHolder cliente" style="height:100%">
               <ManhattanPrecinctMap
                 @precinctSelected="onPrecinctSelected"
                 @precinctDeselected="onPrecinctDeselected"
@@ -119,8 +119,8 @@
       <div class="sliderHolder my-3 cliente" style="margin-left: 15px;margin-right: 4px; padding-top:3px; padding-bottom:1px;">
         <div class="row">
           <div class="col-md-1">
-              <div  style="float:right"><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
-              <div  style="float:right"><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
+              <div  style=""><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
+              <div  style=""><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
           </div>
           <div class="col-md-10">
             <div class="row">
