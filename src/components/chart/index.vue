@@ -9,11 +9,6 @@
           </div>
         </div>
         
-        <div class="mapHolder" style="position:absolute; left:240px">
-          <ManhattanAreaMap
-            @mapIsReady="onMapIsReady"
-          />
-        </div>
 
         <div class="col-md-3" style="padding-left: 40px;padding-right: 35px;">
           <div class="row cliente ">
@@ -89,8 +84,8 @@ import vueSlider from 'vue-slider-component';
 import * as d3 from 'd3';
 import * as d3Legend from 'd3-svg-legend';
 const chart = require("../donut_chart.js").default;
-import Tour from "bootstrap-tour";
-
+const polygonCenter = require('geojson-polygon-center');
+const topojson = require('topojson');
 const manhattanAreaMap = require("./manhattan_area_map.vue").default;
 const pearsonCorrelation = require("./ pearsoncorrelation.js");
 
@@ -117,6 +112,12 @@ const precinct_area_map = {"1": 0, "5":0, "6":0, "7":0, "9":0,
                            "10":1, "13":1, "14":1, "17":1, "18":1, 
                            "19":2, "20":2, "22":2, "23":3, "24":2, 
                            "25":3, "26":3, "28":3, "30":3, "32":3, "33":3, "34":3}
+
+const downtown = ["1", "5", "6", "7", "9"];
+const midtown = ["10", "13", "14", "17", "18"];
+const uptown = ["19", "20", "22", "24"];
+const uppertown = ["23", "25", "26", "28", "30", "32", "33", "34"];
+const color_arr = ["rgb(214, 39, 40)", "rgb(44, 160, 44)", "rgb(31, 119, 180)", "rgb(255, 127, 14)"];
 
 export default {
   components: {
@@ -319,7 +320,6 @@ export default {
     that.radiusScale = d3.scaleSqrt().domain([0, rMax]).range([0, 40]);
     that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-
     var xAxis = d3.axisBottom().scale(that.xScale);
     var yAxis = d3.axisLeft().scale(that.yScale);
 
@@ -388,6 +388,59 @@ export default {
       .attr("text-anchor", "end")
       .attr("x", that.width)
       .attr("y", 78);
+
+    const projection = d3.geoMercator()
+                         .center([-73.9735, 40.78])
+                         .scale(40000)
+                         .translate([that.width/2, that.height/2]);
+    var path = d3.geoPath().projection(projection);
+
+    d3.json("static/data/police_precincts.geojson")
+      .then(function(geoJson) {
+        svg.append('g')
+          .attr("class", "test")
+          .attr("transform", "translate(-250,-220)")
+          .selectAll('.precinct')
+          .data(function(){
+            var features = geoJson.features;
+            var resFeatures = [];
+            for(var i = 0; i < features.length; i++){
+              if(manhattan_precinct.includes(features[i].properties.Precinct.toString()) == true){
+                resFeatures.push(features[i]);
+              }
+            }
+            return resFeatures;
+          })
+          .enter()
+          .append("path")
+          .attr("class", "precinct")
+          .attr("class", function(d){
+            return "nb" + d.properties.Precinct;
+          })
+          .attr("d", path)
+          .classed("precinct", true)
+          .style("fill", function(d){
+            let curr_precinct = d.properties.Precinct.toString();
+            let color = undefined;
+            if(downtown.includes(curr_precinct)){
+              color = color_arr[0];
+            }
+            else if(midtown.includes(curr_precinct)){
+              color = color_arr[1];
+            }
+            else if(uppertown.includes(curr_precinct)){
+              color = color_arr[2];
+            }
+            else{
+              color = color_arr[3];
+            }
+            return color;
+          })
+          .style("opacity", 0.8);
+
+        that.mapIsReady = true;;
+        that.onDataReady();
+      });
 
     that.pearson_text.text("0.00");
 
