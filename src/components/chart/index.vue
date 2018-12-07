@@ -48,7 +48,7 @@
 
         <div class="col-md-3" style="padding-left: 60px;padding-right: 35px;">
           <div class="row cliente ">
-            <div class="sentimentHolder" style="height:300px">
+            <div class="sentimentHolder" style="height:300px;margin: 0px auto;">
               <canvas id="sentiment-chart"></canvas>
             </div>
           </div>
@@ -771,4 +771,9 @@ path {
   opacity: 0.8;
 }
 
+canvas
+{
+    display: block;
+    margin: 0 auto;
+}
 </style>
