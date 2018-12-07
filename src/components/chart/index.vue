@@ -16,14 +16,14 @@
         </div>
 
         <div class="col-md-3" style="padding-left: 40px;padding-right: 35px;">
-          <div class="row cliente">
-            <div class="sentimentHolder ">
-              <canvas id="sentiment-chart" class="" width="310" height="310"></canvas>
+          <div class="row cliente ">
+            <div class="sentimentHolder" style="height:300px">
+              <canvas id="sentiment-chart"></canvas>
             </div>
           </div>
-          <div class="row  mt-4 cliente" >
-            <div class="card bg-light" style="width: 315px; height:290px">
-              <div class="card-header">
+          <div class="row  mt-4 cliente" style="height: calc(100% - (300px + 31px); ">
+            <div class="card bg-light ">
+              <div class="card-header" style="max-height:calc(100% - 31px)">
                 {{currTitle}}
               </div>
               <div class="card-body" id="storyContextCardBody">
@@ -467,6 +467,10 @@ export default {
     },
     createChart(chartId) {
       var canvas = document.getElementById(chartId);
+      canvas.style.width='100%';
+      canvas.style.height='100%';
+      canvas.width  = canvas.offsetWidth;
+      canvas.height  = canvas.offsetHeight;
       this.sentimentDonutChart = new Chart(canvas, {
         type: this.donut_config.type,
         data: this.donut_config.data,
@@ -714,7 +718,12 @@ path {
   opacity: 0.8;
 }
 
-html, body, .container-fluid {
-  height: 100%;
+.col-container {
+    display: table;
+    width: 100%;
+}
+.col-cell {
+    display: table-cell;
+    padding: 16px;
 }
 </style>
