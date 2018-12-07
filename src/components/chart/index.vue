@@ -28,7 +28,9 @@
               </div>
               <div class="card-body" id="storyContextCardBody">
                 <p class="card-text" style="height:100%">
-                  <textarea v-model="currContext" class="form-control text-center" id="storyContextTextArea" readonly></textarea>
+                  <div class="text-center">
+                    {{currContext}}
+                  </div>
                 </p>
               </div>
               <div class="card-footer" style="padding:0.35rem 1.25rem;">
@@ -710,5 +712,9 @@ path {
 
 .legendGeographic rect{
   opacity: 0.8;
+}
+
+html, body, .container-fluid {
+  height: 100%;
 }
 </style>
