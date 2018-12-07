@@ -21,9 +21,9 @@
               <canvas id="sentiment-chart"></canvas>
             </div>
           </div>
-          <div class="row  mt-4 cliente" style="height: calc(100% - (300px + 31px); ">
+          <div class="row  mt-4 cliente" style="height: calc(100% - (300px + 30px); ">
             <div class="card bg-light ">
-              <div class="card-header" style="max-height:calc(100% - 31px)">
+              <div class="card-header" style="max-height: calc(100% - 30px);padding-bottom: 8px;padding-top: 8px;">
                 {{currTitle}}
               </div>
               <div class="card-body" id="storyContextCardBody">
@@ -168,7 +168,7 @@ export default {
       // Story
       StoryTitle: [
         "Plot of Crime and Population",
-        "Random events",
+        "Random Events",
         "Risky Night Shift",
         "Scattered Cloud",
         "Weekend Safety",
@@ -176,13 +176,13 @@ export default {
       StoryContext: [
         "This visualizationis the bubble plot of # of crimes and # commuters, the size of bubble denotes the # of residents, and color of bubbles represents the area. We measure the correlation using pearson algo.",
 
-        "The time that crimes happen in a random chance. The mindless and purposeless crimes are accompanied with mass communications and less obvious motive baffles investigators. However , the crimes can have more effects at the time lacks the clear clarification of sentiments and motivations.",
+        "The time that crimes happen in a random chance. The purposeless crimes are accompanied with mass communications and less obvious motive baffles investigators. However, the crimes can have more effects at the time lacks the clear clarification of sentiments.",
 
         "With highest Pearson correlation with value of 0.92 between the commuters and crime, indicates that when there is a shift, there may be a crime happens. People are in negative mood, both make sense for the victims and offenders.",
 
         "Happy weekend is coming, everybody is exciting to move around the city. The population of commuters arrives at the peak. It seems that there is no body cares too much about safety.",
 
-        "Relaxing time with high commuters.  A lot of people come to crowd in the downtown. And there is also a risk of unexpected dangers happens Be careful! When you have fun, the criminals may also have fun",
+        "Relaxing time with high commuters.  A lot of people come to crowd in the downtown. And there is also a risk of unexpected dangers happens Be careful! When you have fun, the criminals may also have fun.",
       ],
       hourList: [2, 22, 4, 15, 12],
       dayList: ["FRI", "TUE", "THU", "FRI", "SAT"],
