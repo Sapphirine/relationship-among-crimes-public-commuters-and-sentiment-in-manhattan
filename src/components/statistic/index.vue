@@ -442,7 +442,6 @@ export default {
         this.$refs.daySlider.setIndex(0);
         d3.select(".nb1").dispatch("click");
         setTimeout(function(){
-          console.log("testset")
           d3.select(".nb1").dispatch("mouseout")
         }, 
         1000);

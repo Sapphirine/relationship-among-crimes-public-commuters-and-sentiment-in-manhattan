@@ -27,8 +27,8 @@
                 {{currTitle}}
               </div>
               <div class="card-body" id="storyContextCardBody">
-                <p class="card-text">
-                  <textarea v-model="currContext" class="form-control" id="storyContextTextArea" readonly></textarea>
+                <p class="card-text" style="height:100%">
+                  <textarea v-model="currContext" class="form-control text-center" id="storyContextTextArea" readonly></textarea>
                 </p>
               </div>
               <div class="card-footer" style="padding:0.35rem 1.25rem;">
@@ -693,8 +693,7 @@ path {
 
 #storyContextTextArea{
   resize: none;
-  height: 190px;
-  width: 300px;
+  height:100%;
   padding: 1px 1px 1px 1px;
 }
 
