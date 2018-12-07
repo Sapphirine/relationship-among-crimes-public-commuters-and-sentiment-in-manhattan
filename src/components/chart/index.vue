@@ -86,7 +86,6 @@ import * as d3Legend from 'd3-svg-legend';
 const chart = require("../donut_chart.js").default;
 const polygonCenter = require('geojson-polygon-center');
 const topojson = require('topojson');
-const manhattanAreaMap = require("./manhattan_area_map.vue").default;
 const pearsonCorrelation = require("./ pearsoncorrelation.js");
 
 const margin = {
@@ -121,7 +120,6 @@ const color_arr = ["rgb(214, 39, 40)", "rgb(44, 160, 44)", "rgb(31, 119, 180)", 
 
 export default {
   components: {
-    ManhattanAreaMap: manhattanAreaMap,
     vueSlider,
   },
   name: 'chart-plot-page',
