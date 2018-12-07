@@ -3,21 +3,58 @@
     <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
 
     <div class="container-fluid">
-      <div class="row" style="padding-left:30px">
-        <div class="col-md-9 cliente">
-          <div class="chartHolder">
+      <div class="row " style="padding-left:30px">
+        <div class="col-md-*">
+          <div class="row">
+            <div class="chartHolder cliente">
+            </div>
+          </div>
+          <div class = "row my-3">
+            <div class="col-md-12 cliente">
+              <div class="row ">
+                <div class="col-md-1">
+                    <div  style=""><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
+                    <div  style=""><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
+                </div>
+                <div class="col-md-10">
+                  <div class="row">
+                    <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+                      <vue-slider 
+                        ref="hourSlider"
+                        v-model="hourSliderValue"
+                        v-bind="hourSliderOption"
+                      >
+                      </vue-slider>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
+                      <vue-slider 
+                        ref="daySlider"
+                        v-model="daySliderValue"
+                        v-bind="daySliderOption"
+                      >
+                      </vue-slider>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <button id="playBtn" class="btn btn-primary  btn-lg" style="margin-top: 7px;margin-left: -17px;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
+                </div> 
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="col-md-3" style="padding-left: 40px;padding-right: 35px;">
+        <div class="col-md-3" style="padding-left: 60px;padding-right: 35px;">
           <div class="row cliente ">
             <div class="sentimentHolder" style="height:300px">
               <canvas id="sentiment-chart"></canvas>
             </div>
           </div>
-          <div class="row  mt-4 cliente" style="height: calc(100% - (300px + 30px); ">
+          <div class="row  mt-4 cliente" style="height: calc(100% - (300px + 45px); ">
             <div class="card bg-light ">
-              <div class="card-header" style="max-height: calc(100% - 30px);padding-bottom: 8px;padding-top: 8px;">
+              <div class="card-header" style="max-height: calc(100% - 45px);padding-bottom: 8px;padding-top: 8px;">
                 {{currTitle}}
               </div>
               <div class="card-body" id="storyContextCardBody">
@@ -38,40 +75,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="sliderHolder my-3 cliente" style="margin-left: 15px;margin-right: 4px; padding-top:3px; padding-bottom:1px;">
-        <div class="row">
-          <div class="col-md-1">
-              <div  style=""><h4><span class="badge badge-pill badge-primary">Time </span> </h4></div>
-              <div  style=""><h4> <span class="badge badge-pill badge-primary">Day </span> </h4></div>
-          </div>
-          <div class="col-md-10">
-            <div class="row">
-              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-                <vue-slider 
-                  ref="hourSlider"
-                  v-model="hourSliderValue"
-                  v-bind="hourSliderOption"
-                >
-                </vue-slider>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ml-auto mr-auto"  style="padding-left:0px; padding-right:0px">
-                <vue-slider 
-                  ref="daySlider"
-                  v-model="daySliderValue"
-                  v-bind="daySliderOption"
-                >
-                </vue-slider>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary  btn-lg" style="margin-top: 7px;margin-left: -17px;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
-          </div> 
         </div>
       </div>
     </div>
