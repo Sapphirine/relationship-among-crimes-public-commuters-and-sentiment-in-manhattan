@@ -6,9 +6,6 @@
     <div class="container-fluid">
       <div class="row">
         <div class="mapHolder" style="padding-left:46px">
-          <h3 id="criminal_map">Heatmap of Crimes</h3>
-          <h3 id="traffic_map">Heatmap of Commuters</h3>
-          <h3 id="sentiment_chart">Sentiment</h3>
           <ManhattanAndNeighborMap
             @precinctSelected="onPrecinctSelected"
             @precinctDeselected="onPrecinctDeselected"
@@ -622,6 +619,10 @@ circle{
 .q7 { fill:rgb(204, 25, 25) }
 .q8 { fill:rgb(204, 0, 0) }
 
+
+#app{
+  margin-top: 30px;
+}
 
 .cliente {
   border: #cdcdcd medium solid;

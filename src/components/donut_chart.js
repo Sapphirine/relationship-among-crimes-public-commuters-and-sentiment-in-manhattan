@@ -72,6 +72,8 @@ Chart.controllers.doughnutLabels = Chart.controllers.doughnut.extend({
           if (vm.circumference > 0.0015) { // Trying to hide label when it doesn't fit in segment
             ctx.beginPath();
             ctx.font = helpers.fontString(opts.defaultFontSize, opts.defaultFontStyle, opts.defaultFontFamily);
+            ctx.font = ctx.font.replace(/\d+px/, (parseInt(ctx.font.match(/\d+px/)) + 5) + "px");
+
             ctx.fillStyle = "#190707";
             ctx.textBaseline = "top";
             ctx.textAlign = "center";
@@ -80,7 +82,7 @@ Chart.controllers.doughnutLabels = Chart.controllers.doughnut.extend({
             ctx.fillText(segmentLabel.toFixed(2) + "%", labelPos.x, labelPos.y);
           
           //display in the center the total sum of all segments
-          ctx.fillText('Sentiment', vm.x, vm.y-5, 200);
+          ctx.fillText('Sentiment', vm.x, vm.y-10, 200);
           }
           
       }
