@@ -39,10 +39,13 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 - Download and extract from really large archive dataset.
 
-- 2014-02: https://archive.org/details/archiveteam-twitter-stream-2014-02 (33.8GB)
-- 2014-03: https://archive.org/details/archiveteam-twitter-stream-2014-03 (46.2GB)
-- 2014-04: https://archive.org/details/archiveteam-twitter-stream-2014-04 (45.1GB)
-- 2014-05: https://archive.org/details/archiveteam-twitter-stream-2014-05 (44.7GB)
+  - 2014-02: https://archive.org/details/archiveteam-twitter-stream-2014-02 (33.8GB)
+  - 2014-03: https://archive.org/details/archiveteam-twitter-stream-2014-03 (46.2GB)
+  - 2014-04: https://archive.org/details/archiveteam-twitter-stream-2014-04 (45.1GB)
+  - 2014-05: https://archive.org/details/archiveteam-twitter-stream-2014-05 (44.7GB)
+ 
+- Process the data and extract twitter in New York and tweet time.
+
 
 ### 4. Number of residents
 
