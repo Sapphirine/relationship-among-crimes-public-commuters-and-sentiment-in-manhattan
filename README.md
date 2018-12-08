@@ -49,7 +49,7 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 - Midtown: https://www.google.com/maps/place/Midtown,+New+York,+NY/@40.7505189,-74.0014333,14z/data=!3m1!4b1!4m5!3m4!1s0x89c25901a4127ca9:0xbecdcc9081d6cfdb!8m2!3d40.7549309!4d-73.9840195
 
-- Uptown and Uppertown (same in google, but different in wiki (https://en.wikipedia.org/wiki/List_of_Manhattan_neighborhoods), we use the way to seperate uptown and uppertown in wiki.): https://www.google.com/maps/place/Upper+Manhattan,+New+York,+NY/@40.8305616,-73.9759374,13z/data=!3m1!4b1!4m5!3m4!1s0x89c2f6131f319d63:0x158166d40c6168ed!8m2!3d40.8240478!4d-73.9447643
+- Uptown and Uppertown (same in google, but different in [!wiki](https://en.wikipedia.org/wiki/List_of_Manhattan_neighborhoods), we use the way to seperate uptown and uppertown in wiki.): https://www.google.com/maps/place/Upper+Manhattan,+New+York,+NY/@40.8305616,-73.9759374,13z/data=!3m1!4b1!4m5!3m4!1s0x89c2f6131f319d63:0x158166d40c6168ed!8m2!3d40.8240478!4d-73.9447643
 
 
 
