@@ -101,7 +101,7 @@ export default {
           })
           .style("opacity", 0.8)
           .on('mouseover', function(d) {
-            d3.select(this).transition().duration(500).style("stroke-width", 3);
+            d3.select(this).transition().duration(500).style("stroke-width", 5);
           })
           .on('click', function(d) {
             d3.selectAll(".precinct").transition().duration(100).style("stroke-width", 1).style("stroke-opacity", 1).style("fill", function(d){
@@ -121,7 +121,7 @@ export default {
               }
               return color;
             })
-            d3.select(this).transition().duration(100).style("stroke-width", 5).style("stroke-opacity", .5).style("fill", "#ddd")
+            d3.select(this).transition().duration(100).style("stroke-width", 10).style("stroke-opacity", .5).style("fill", "#ddd")
             that.$emit('precinctSelected', +d.properties.Precinct)
           })
           .on('mouseout', function(d) {

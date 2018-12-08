@@ -145,7 +145,12 @@
             </div>
           </div>
           <div class="col-md-1">
-            <button id="playBtn" class="btn btn-primary  btn-lg" style="margin-top: 7px;margin-left: -17px;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
+            <button id="playBtn" :class="[isPlay ? 'd-none' : '', 'btn', 'btn-primary',  'btn-lg']" style="margin-top: 7px;margin-left: -17px;" v-on:click="playOrPauseAnimation(true)">
+              <div ><font-awesome-icon icon="play" class="ml-1"/></div>
+            </button>
+            <button id="playBtn" :class="[isPlay ? '' : 'd-none' , 'btn', 'btn-primary',  'btn-lg']" style="margin-top: 7px;margin-left: -17px;" v-on:click="playOrPauseAnimation(false)">
+              <div ><font-awesome-icon icon="pause" class="ml-1"/></div>
+            </button>
           </div> 
         </div>
       </div>
@@ -185,6 +190,10 @@ export default {
       currHour: 1,
       currPrecinct: undefined,
       mapIsReady: false,
+
+      curr_play_hour: 0,
+      curr_play_day: 0,
+      isPlay: false,
 
       // Criminal and traffic data
       combine_data: undefined,
@@ -656,18 +665,25 @@ export default {
     animation: function(){
       var that = this;
       var pauseSec = 1000;
-      that.animationSet1(0, pauseSec)
-    },
-    animationSet1: function(day, pauseSec){
-      var that = this;
-      that.$refs.daySlider.setIndex(day);
-      if(day >= 6){
-        return;
+
+      if(that.isPlay == true){
+        if(that.curr_play_day < 6){
+          that.curr_play_day += 1;
+        }
+        else{
+          that.curr_play_day = 0;
+          that.isPlay = false;
+        }
+        that.$refs.daySlider.setIndex(that.curr_play_day);
+        setTimeout(that.animation, pauseSec);
       }
-      setTimeout(function(){
-        day += 1;
-        that.animationSet1(day, pauseSec);
-      }, pauseSec);
+    },
+    playOrPauseAnimation: function(is_play){
+      this.isPlay = is_play;
+
+      if(this.isPlay == true){
+        this.animation();
+      }
     },
   },
 }

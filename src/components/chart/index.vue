@@ -39,7 +39,12 @@
                   </div>
                 </div>
                 <div class="col-md-1">
-                  <button id="playBtn" class="btn btn-primary  btn-lg" style="margin-top: 7px;margin-left: -17px;" v-on:click="animation"><font-awesome-icon icon="play" class="ml-1"/></button>
+                  <button id="playBtn" :class="[isPlay ? 'd-none' : '', 'btn', 'btn-primary',  'btn-lg']" style="margin-top: 7px;margin-left: -17px;" v-on:click="playOrPauseAnimation(true)">
+                    <div ><font-awesome-icon icon="play" class="ml-1"/></div>
+                  </button>
+                  <button id="playBtn" :class="[isPlay ? '' : 'd-none' , 'btn', 'btn-primary',  'btn-lg']" style="margin-top: 7px;margin-left: -17px;" v-on:click="playOrPauseAnimation(false)">
+                    <div ><font-awesome-icon icon="pause" class="ml-1"/></div>
+                  </button>
                 </div> 
               </div>
             </div>
@@ -155,6 +160,10 @@ export default {
       currHour: 1,
       mapIsReady: false,
 
+      curr_play_hour: 0,
+      curr_play_day: 0,
+      isPlay: false,
+
       // Criminal and traffic data
       combine_data: undefined,
       maxNbCriminal: 0,
@@ -175,7 +184,7 @@ export default {
         "Weekend Safety",
       ],
       StoryContext: [
-        "This visualizationis the bubble plot of # of crimes and # commuters, the size of bubble denotes the # of residents, and color of bubbles represents the area. We measure the correlation using pearson algo.",
+        "This visualizationis the bubble plot of number of crimes and number commuters, the size of bubble denotes the number of residents, and color of bubbles represents the area. We measure the correlation using pearson algo.",
 
         "The time that crimes happen in a random chance. The purposeless crimes are accompanied with mass communications and less obvious motive baffles investigators. However, the crimes can have more effects at the time lacks the clear clarification of sentiments.",
 
@@ -345,7 +354,7 @@ export default {
       .attr("text-anchor", "end")
       .attr("x", that.width)
       .attr("y", that.height - 6)
-      .text("# of commuters");
+      .text("Number of commuters");
 
     svg.append("text")
       .attr("class", "y label")
@@ -353,7 +362,7 @@ export default {
       .attr("y", 6)
       .attr("dy", ".75em")
       .attr("transform", "rotate(-90)")
-      .text("# of crimes");
+      .text("Number of crimes");
     
      svg.append("text")
       .attr("class", "desc_text")
@@ -483,23 +492,31 @@ export default {
     animation: function(){
       var that = this;
       var pauseSec = 300;
-      that.animationSet1(0, 0, pauseSec)
-    },
-    animationSet1: function(day, hour, pauseSec){
-      var that = this;
-      that.$refs.hourSlider.setIndex(hour);
-      that.$refs.daySlider.setIndex(day);
-      if(hour >= 24 && day >= 6){
-        return;
-      }
-      setTimeout(function(){
-        hour += 1;
-        if(hour >= 24 && day < 6){
-          hour = 0;
-          day += 1;
+
+      if(that.isPlay == true){
+        if(that.curr_play_hour < 23){
+          that.curr_play_hour += 1;
         }
-        that.animationSet1(day, hour, pauseSec);
-      }, pauseSec);
+        else if(that.curr_play_hour == 23 && that.curr_play_day < 6){
+          that.curr_play_hour = 0;
+          that.curr_play_day += 1;
+        }
+        else{
+          that.curr_play_hour = 0;
+          that.curr_play_day = 0;
+          that.isPlay = false;
+        }
+        that.$refs.hourSlider.setIndex(that.curr_play_hour);
+        that.$refs.daySlider.setIndex(that.curr_play_day);
+        setTimeout(that.animation, pauseSec);
+      }
+    },
+    playOrPauseAnimation: function(is_play){
+      this.isPlay = is_play;
+
+      if(this.isPlay == true){
+        this.animation();
+      }
     },
     leastSquares: function(xSeries, ySeries) {
       var reduceSumFunc = function(prev, cur) { return prev + cur; };
