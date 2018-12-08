@@ -3,13 +3,13 @@
     <div class="row">
       <div id="map_criminal_col" class="cliente">
         <h3>Heatmap of Crimes</h3>
-        <svg id="map_svg_criminal" width="500" height="600"></svg>
+        <svg id="map_svg_criminal" width="500" height="580"></svg>
       </div>
       <div class="ml-3 mr-3">
       </div>
       <div id="map_traffic_col" class="cliente">
         <h3>Heatmap of Commuters</h3>
-        <svg id="map_svg_traffic" width="500" height="600"></svg>
+        <svg id="map_svg_traffic" width="500" height="580"></svg>
       </div>
     </div>
   </div>
