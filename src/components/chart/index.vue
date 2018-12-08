@@ -39,12 +39,14 @@
                   </div>
                 </div>
                 <div class="col-md-1">
-                  <button id="playBtn" :class="[isPlay ? 'd-none' : '', 'btn', 'btn-primary',  'btn-lg']" style="margin-top: 7px;margin-left: -17px;" v-on:click="playOrPauseAnimation(true)">
-                    <div ><font-awesome-icon icon="play" class="ml-1"/></div>
-                  </button>
-                  <button id="playBtn" :class="[isPlay ? '' : 'd-none' , 'btn', 'btn-primary',  'btn-lg']" style="margin-top: 7px;margin-left: -17px;" v-on:click="playOrPauseAnimation(false)">
-                    <div ><font-awesome-icon icon="pause" class="ml-1"/></div>
-                  </button>
+                  <div id="playAndPauseBtnDiv">
+                    <button id="playBtn" :class="[isPlay ? 'd-none' : '', 'btn', 'btn-primary',  'btn-lg']" v-on:click="playOrPauseAnimation(true)">
+                      <div ><font-awesome-icon icon="play" class=""/></div>
+                    </button>
+                    <button id="pauseBtn" :class="[isPlay ? '' : 'd-none' , 'btn', 'btn-primary',  'btn-lg']" v-on:click="playOrPauseAnimation(false)">
+                      <div ><font-awesome-icon icon="pause" class=""/></div>
+                    </button>
+                  </div>
                 </div> 
               </div>
             </div>
@@ -738,9 +740,15 @@ path {
   stroke-opacity: 0.2;
 }
 
-#playBtn{
+#playBtn,#pauseBtn{
   border: 1px solid black;
   border-radius: 50%;
+}
+#playAndPauseBtnDiv{
+  height:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center
 }
 
 .regression {
