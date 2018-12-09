@@ -49,10 +49,10 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 ### 4. Number of residents (1MB)
 
-Similar as what has done in this website: https://popfactfinder.planning.nyc.gov/?lastreport=census#12.79/40.77387/-73.95082
+Population / Age / Sex: Decennial Census - Census 2010 - https://www1.nyc.gov/site/planning/data-maps/nyc-population/census-2010.page
 
-- Population / Age / Sex: Decennial Census - Census 2010 - https://www1.nyc.gov/site/planning/data-maps/nyc-population/census-2010.page
-
+> Similar as what has done in this website: https://popfactfinder.planning.nyc.gov/?lastreport=census#12.79/40.77387/-73.95082
+> 
 > Decennial Census
 > Every ten years the U. S. Census Bureau conducts a decennial census, primarily for purposes of congressional reapportionment. These censuses count every person in the country and collect only the most basic demographic and housing characteristics (like, age, sex, race, and housing tenure). The decennial census provides the most accurate and detailed understanding about the count and distribution of the U. S. population. It is also important to note that private information (such as names and addresses) collected through the census is protected under Title 13 of U. S. Code. To ensure census participant confidentiality, data are never published below the block-level. Consequently, census blocks are the smallest geography used in New York City Population FactFinder (PFF). Beyond census blocks, PFF also re-publishes decennial census data from 2000 and 2010 at the census tract-, Neighborhood Tabulation Area-, and Public Use Microdata Area-levels.
 
