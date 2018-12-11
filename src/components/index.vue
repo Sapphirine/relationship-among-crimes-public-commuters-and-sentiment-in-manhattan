@@ -48,7 +48,7 @@ export default {
   name: 'Index Page',
   data: function() {
     return {
-      title: "Relationship between the number of crimes and the number of commuters in Manhattan"
+      title: "Relationship among Crimes, Commuters, and Sentiment in Manhattan"
     }
   }
 }

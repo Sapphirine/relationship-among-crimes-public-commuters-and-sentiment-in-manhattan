@@ -371,7 +371,7 @@ export default {
       .attr("text-anchor", "end")
       .attr("x", 240)
       .attr("y", 10)
-      .text("Geographic")
+      .text("Geo Location")
 
      svg.append("text")
       .attr("class", "desc_text")
