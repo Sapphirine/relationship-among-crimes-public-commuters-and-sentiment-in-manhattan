@@ -1,8 +1,10 @@
-# relationship-between-population-flow-and-criminal-rate-in-manhattan
+## Main Steps
 
-> A Vue.js project
+1. Map Plot (Heatmap)
+2. Chart Plot
+3. Statistic Plot
 
-## Build Setup
+## Commands
 
 ``` bash
 # install dependencies
@@ -16,13 +18,58 @@ npm run build
 
 # build for production and view the bundle analyzer report
 npm run build --report
+
+# Run it in public in GCP.
+HOST='0.0.0.0' PORT=8080 npm start
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Datasets (total size: XX GB)
+
+### 1. Commuters
+
+- MTA
+- Taxis
+
+### 2. Crimes
+
+- Crime: [2014-2015 Crimes reported in all 5 boroughs of New York City](https://www.kaggle.com/adamschroeder/crimes-new-york-city#Crime_Column_Description.csv)
+
+### 3. Sentiment
+
+- Download and extract from really large archive dataset (all month twitter information).
+
+  - 2014-02: https://archive.org/details/archiveteam-twitter-stream-2014-02 (33.8GB)
+  - 2014-03: https://archive.org/details/archiveteam-twitter-stream-2014-03 (46.2GB)
+  - 2014-04: https://archive.org/details/archiveteam-twitter-stream-2014-04 (45.1GB)
+  - 2014-05: https://archive.org/details/archiveteam-twitter-stream-2014-05 (44.7GB)
+ 
+- Process the data and extract twitter in New York and tweet time.
 
 
-# Public access in GCP
+### 4. Number of residents (1MB)
 
-```
-  HOST='0.0.0.0' PORT=8080 npm start
-```
+Population / Age / Sex: Decennial Census - Census 2010 - https://www1.nyc.gov/site/planning/data-maps/nyc-population/census-2010.page
+
+> Similar as what has done in this website: https://popfactfinder.planning.nyc.gov/?lastreport=census#12.79/40.77387/-73.95082
+> 
+> Decennial Census
+> Every ten years the U. S. Census Bureau conducts a decennial census, primarily for purposes of congressional reapportionment. These censuses count every person in the country and collect only the most basic demographic and housing characteristics (like, age, sex, race, and housing tenure). The decennial census provides the most accurate and detailed understanding about the count and distribution of the U. S. population. It is also important to note that private information (such as names and addresses) collected through the census is protected under Title 13 of U. S. Code. To ensure census participant confidentiality, data are never published below the block-level. Consequently, census blocks are the smallest geography used in New York City Population FactFinder (PFF). Beyond census blocks, PFF also re-publishes decennial census data from 2000 and 2010 at the census tract-, Neighborhood Tabulation Area-, and Public Use Microdata Area-levels.
+
+### 5. Geographic of Manhattan (precinct map)
+
+According [wiki](https://en.wikipedia.org/wiki/List_of_Manhattan_neighborhoods) the following approximate definitions are used:
+
+Upper Manhattan is the area above 96th Street.
+Uptown Manhattan is the area above 59th Street;
+Midtown Manhattan is the area between 34th Street and 59th Street.
+Downtown Manhattan is the area below 14th Street; 
+Lower Manhattan is the area below Chambers Street. (We didn't sperate Downtown and Lower Manhattan)
+
+- Downtown: https://www.google.com/maps/place/Lower+Manhattan,+New+York,+NY/@40.7215259,-74.0129994,14z/data=!3m1!4b1!4m5!3m4!1s0x89c259885419838b:0x2d39c2f6ed6db3c!8m2!3d40.7218345!4d-73.9998354
+
+- Midtown: https://www.google.com/maps/place/Midtown,+New+York,+NY/@40.7505189,-74.0014333,14z/data=!3m1!4b1!4m5!3m4!1s0x89c25901a4127ca9:0xbecdcc9081d6cfdb!8m2!3d40.7549309!4d-73.9840195
+
+- Uptown and Uppertown (same in google, but different in [wiki](https://en.wikipedia.org/wiki/List_of_Manhattan_neighborhoods), we use the way to seperate uptown and uppertown in wiki.): https://www.google.com/maps/place/Upper+Manhattan,+New+York,+NY/@40.8305616,-73.9759374,13z/data=!3m1!4b1!4m5!3m4!1s0x89c2f6131f319d63:0x158166d40c6168ed!8m2!3d40.8240478!4d-73.9447643
+
+![Manhattan_neighborhoods](https://upload.wikimedia.org/wikipedia/commons/5/5a/Manhattan_neighborhoods.png)
