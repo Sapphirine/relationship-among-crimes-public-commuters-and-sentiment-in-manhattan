@@ -43,6 +43,9 @@ HOST='0.0.0.0' PORT=8080 npm start
   - 2014-03: https://archive.org/details/archiveteam-twitter-stream-2014-03 (46.2GB)
   - 2014-04: https://archive.org/details/archiveteam-twitter-stream-2014-04 (45.1GB)
   - 2014-05: https://archive.org/details/archiveteam-twitter-stream-2014-05 (44.7GB)
+  - 2014-10: https://archive.org/details/archiveteam-twitter-stream-2014-10 (47.6GB)
+  - 2014-11: https://archive.org/details/archiveteam-twitter-stream-2014-11 (47.5GB)
+  - 2014-12: https://archive.org/details/archiveteam-twitter-stream-2014-12 (48.8GB)
  
 - Process the data and extract twitter in New York and tweet time.
 
