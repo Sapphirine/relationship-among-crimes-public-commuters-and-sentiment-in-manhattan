@@ -127,6 +127,12 @@ const uptown = ["19", "20", "22", "24"];
 const uppertown = ["23", "25", "26", "28", "30", "32", "33", "34"];
 const color_arr = ["rgb(214, 39, 40)", "rgb(44, 160, 44)", "rgb(31, 119, 180)", "rgb(255, 127, 14)"];
 
+const legend_x = [100, 100, 100, 100];
+const legend_y = [20, 45, 70, 95];
+const legend_text = ["Uppertown", "UpTown", "Midtown", "Downtown"];
+const legend_color = ["rgb(31, 119, 180)", "rgb(255, 127, 14)", "rgb(44, 160, 44)", "rgb(214, 39, 40)"];
+
+
 export default {
   components: {
     vueSlider,
@@ -329,7 +335,9 @@ export default {
     that.xScale = d3.scaleLinear().domain([xMin, xMax]).range([0, that.width]);
     that.yScale = d3.scaleLinear().domain([yMin, yMax]).range([that.height, 0]);
     that.radiusScale = d3.scaleSqrt().domain([0, rMax]).range([0, 40]);
-    that.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+    that.colorScale = d3.scaleOrdinal()
+        .domain([0, 1, 2, 3])
+        .range([color_arr[0], color_arr[1], color_arr[3], color_arr[2]]);
 
     var xAxis = d3.axisBottom().scale(that.xScale);
     var yAxis = d3.axisLeft().scale(that.yScale);
@@ -399,6 +407,39 @@ export default {
       .attr("text-anchor", "end")
       .attr("x", that.width)
       .attr("y", 78);
+
+
+    for(var i = 0; i < 4; i++){
+      svg.append('rect')
+      .attr('x', legend_x[i])
+      .attr('y', legend_y[i])
+      .attr('width', 50)
+      .attr('height', 20)
+      .style('fill', legend_color[i])
+      .style('stroke', 'black')
+      .style('stroke-width', '.3px')
+      .style('opacity', '0.8');
+
+      svg.append('text')
+      .attr('x', legend_x[i] + 60)
+      .attr('y', legend_y[i] + 15)
+      .text(legend_text[i])
+     }
+
+    svg.append("g")
+      .attr("class", "legendSize")
+      .attr("transform", "translate(380, 40)");
+
+    var legendSize = d3Legend.legendSize()
+      .scale(that.radiusScale)
+      .shape('circle')
+      .shapePadding(15)
+      .labelOffset(20)
+      .orient('horizontal')
+      .labels(["", "50000", "100000", "150000", "200000"]);
+
+    svg.select(".legendSize")
+      .call(legendSize);
 
     const projection = d3.geoMercator()
                          .center([-73.9735, 40.78])
@@ -579,39 +620,9 @@ export default {
       var that = this;
 
       var svg = d3.select("svg");
-      svg.select(".legendGeographic").remove();
-      svg.select(".legendSize").remove();
-
-      svg.append("g")
-        .attr("class", "legendGeographic")
-        .attr("transform", "translate(140,50)");
-
-      var legendGeographic = d3Legend.legendColor()
-          .shapeWidth(30)
-          .cells(2)
-          .orient("verticle")
-          .scale(that.colorScale) 
-          .labels(["Uppertown", "UpTown", "Midtown", "Downtown"]);
-
-      svg.select(".legendGeographic")
-        .call(legendGeographic);
-
-      svg.append("g")
-        .attr("class", "legendSize")
-        .attr("transform", "translate(410, 60)");
-
-      var legendSize = d3Legend.legendSize()
-        .scale(that.radiusScale)
-        .shape('circle')
-        .shapePadding(15)
-        .labelOffset(20)
-        .orient('horizontal')
-        .labels(["", "50000", "100000", "150000", "200000"]);
-
-      svg.select(".legendSize")
-        .call(legendSize);
       let criminal_arr = [];
       let traffic_arr = [];
+
       if(that.isEmpty(that.gdots_dict)){
         var svg = d3.select("svg")
                     .append("g")
@@ -628,7 +639,7 @@ export default {
             .attr("r", that.radiusScale(val.population));
 
           that.gdots_dict[val.precinct].append("title").text("precinct_#" + val.precinct.toString());
-
+  
           criminal_arr.push(val.criminal);
           traffic_arr.push(val.traffic);
         }
@@ -675,6 +686,7 @@ export default {
           .attr("y2", that.yScale(y2))
       }
       let rho = pearsonCorrelation.pearsonCorrelation(criminal_arr, traffic_arr);
+      
       that.pearson_text.transition().text(rho.toFixed(2));
     }
   },
@@ -720,7 +732,7 @@ text {
 
 .pearson_text{
   font: 500 45px "Helvetica Neue";
-  fill: #ddd;
+  fill: #FF5733;
 }
 
 .desc_text{
