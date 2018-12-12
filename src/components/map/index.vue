@@ -1,7 +1,7 @@
 <template>
   <div class="criminalMap">
 
-    <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
+    <h1 style="position:absolute; top:3px;left: 50%;-webkit-transform: translateX(-50%);transform: translateX(-50%); color:white">{{title}}</h1>
 
     <div class="container-fluid">
       <div class="row">
@@ -114,10 +114,10 @@ export default {
     Tooltip: tooltip,
     vueSlider,
   },
-  name: 'map-plot-page',
+  name: 'heatmap-chart-page',
   data: function() {
     return {
-      title: 'Map Plot',
+      title: 'Heatmap Chart',
 
       // Commom
       projection: undefined,

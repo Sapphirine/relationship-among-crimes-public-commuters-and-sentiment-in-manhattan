@@ -1,6 +1,6 @@
 <template>
   <div class="chart_plot">
-    <h1 style="position:absolute; top:3px; left:45%; color:white">{{title}}</h1>
+    <h1 style="position:absolute; top:3px;left: 50%;-webkit-transform: translateX(-50%);transform: translateX(-50%); color:white">{{title}}</h1>
 
     <div class="container-fluid">
       <div class="row " style="padding-left:30px">
@@ -137,10 +137,10 @@ export default {
   components: {
     vueSlider,
   },
-  name: 'chart-plot-page',
+  name: 'bubble-chart-page',
   data: function() {
     return {
-      title: "Chart Plot",
+      title: "Bubble Chart",
 
       // Axis property
       width: svgWidth - margin.right,
