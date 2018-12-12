@@ -37,7 +37,7 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 ### 3. Sentiment
 
-- Download and extract from really large archive dataset (all month twitter information).
+- Download and extract from really large archive dataset (all month twitter information). (https://archive.org/details/twitterstream?and[]=year%3A%222014%22)
 
   - 2014-02: https://archive.org/details/archiveteam-twitter-stream-2014-02 (33.8GB)
   - 2014-03: https://archive.org/details/archiveteam-twitter-stream-2014-03 (46.2GB)
