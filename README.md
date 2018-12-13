@@ -1,4 +1,4 @@
-## Main Steps
+## Visualization
 
 1. Heatmap Chart
 2. Bubble Chart
