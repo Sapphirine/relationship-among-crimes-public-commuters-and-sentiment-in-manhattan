@@ -98,17 +98,17 @@
               <canvas id="correlationLineCanvas"></canvas>
               <div id="correlationDataText">
                 <div id="dataContainer">
-                  <div style="text-align:left">Min pearson correlation:<span style="float:right">{{min_pearson}} ({{min_pearson_time}} h)</span></div>
+                  <div style="text-align:left">Min pearson correlation:<span style="float:right">{{min_pearson}}</span></div>
 
-                  <div style="text-align:left">Max pearson correlation:<span style="float:right">{{max_pearson}} ({{max_pearson_time}} h)</span></div>
+                  <div style="text-align:left">Max pearson correlation:<span style="float:right">{{max_pearson}}</span></div>
                   
-                  <div style="text-align:left">Min kendall correlation:<span style="float:right">{{min_kendall}} ({{min_kendall_time}} h)</span></div>
+                  <div style="text-align:left">Min kendall correlation:<span style="float:right">{{min_kendall}}</span></div>
                   
-                  <div style="text-align:left">Max kendall correlation:<span style="float:right">{{max_kendall}} ({{max_kendall_time}} h)</span></div>
+                  <div style="text-align:left">Max kendall correlation:<span style="float:right">{{max_kendall}}</span></div>
                   
-                  <div style="text-align:left">Min spearman correlation:<span style="float:right">{{min_spearman}} ({{min_spearman_time}} h)</span></div>
+                  <div style="text-align:left">Min spearman correlation:<span style="float:right">{{min_spearman}}</span></div>
 
-                  <div style="text-align:left">Max spearman correlation:<span style="float:right">{{max_spearman}} ({{max_spearman_time}} h)</span></div>
+                  <div style="text-align:left">Max spearman correlation:<span style="float:right">{{max_spearman}}</span></div>
                 </div>
               </div>
             </div>
