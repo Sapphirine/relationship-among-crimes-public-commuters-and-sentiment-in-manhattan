@@ -26,7 +26,7 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 ## Datasets (total size: ~350 GB)
 
-### 1. Commuters
+### 1. Commuters (25.9GB)
 
 - MTA (subway): 
 
@@ -36,11 +36,11 @@ HOST='0.0.0.0' PORT=8080 npm start
        
 - Taxis: [2014 Yellow Taxi Trip Data](https://data.cityofnewyork.us/Transportation/2014-Yellow-Taxi-Trip-Data/gn7m-em8n) (25GB)
 
-### 2. Crimes
+### 2. Crimes (53MB)
 
 - Crime: [2014-2015 Crimes reported in all 5 boroughs of New York City](https://www.kaggle.com/adamschroeder/crimes-new-york-city#Crime_Column_Description.csv) (53MB)
 
-### 3. Sentiment
+### 3. Sentiment (313.7GB)
 
 - Download and extract from really large archive dataset (all month twitter information). (https://archive.org/details/twitterstream?and[]=year%3A%222014%22)
 
