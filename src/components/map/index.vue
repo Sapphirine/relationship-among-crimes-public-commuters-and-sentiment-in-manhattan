@@ -526,7 +526,7 @@ export default {
     },
     animation: function(){
       var that = this;
-      var pauseSec = 300;
+      var pauseSec = 250;
 
       if(that.isPlay == true){
         if(that.curr_play_hour < 23){
