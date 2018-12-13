@@ -129,7 +129,7 @@ const color_arr = ["rgb(214, 39, 40)", "rgb(44, 160, 44)", "rgb(31, 119, 180)", 
 
 const legend_x = [100, 100, 100, 100];
 const legend_y = [20, 45, 70, 95];
-const legend_text = ["Uppertown", "UpTown", "Midtown", "Downtown"];
+const legend_text = ["Uppertown", "Uptown", "Midtown", "Downtown"];
 const legend_color = ["rgb(31, 119, 180)", "rgb(255, 127, 14)", "rgb(44, 160, 44)", "rgb(214, 39, 40)"];
 
 
