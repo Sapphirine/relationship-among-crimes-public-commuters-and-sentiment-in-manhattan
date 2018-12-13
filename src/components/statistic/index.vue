@@ -70,7 +70,7 @@
           <div class="col-sm-3">
             <div class="card cliente">
               <div id="title">
-                <h4>Positive Sentiment Trend</h4>
+                <h4>Sentiment Trend</h4>
               </div>
               <canvas id="sentimentLineCanvas"></canvas>
               <div id="sentimentPosDataText">
