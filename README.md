@@ -38,7 +38,7 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 ### 2. Crimes
 
-- Crime: [2014-2015 Crimes reported in all 5 boroughs of New York City](https://www.kaggle.com/adamschroeder/crimes-new-york-city#Crime_Column_Description.csv)
+- Crime: [2014-2015 Crimes reported in all 5 boroughs of New York City](https://www.kaggle.com/adamschroeder/crimes-new-york-city#Crime_Column_Description.csv) (53MB)
 
 ### 3. Sentiment
 
