@@ -1,8 +1,8 @@
 ## Main Steps
 
-1. Map Plot (Heatmap)
-2. Chart Plot
-3. Statistic Plot
+1. Heatmap Chart
+2. Bubble Chart
+3. Statistic Chart
 
 ## Commands
 
