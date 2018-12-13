@@ -391,7 +391,7 @@ export default {
      svg.append("text")
       .attr("class", "desc_text")
       .attr("text-anchor", "end")
-      .attr("x", that.width - 50)
+      .attr("x", that.width - 70)
       .attr("y", 10)
       .text("Linear Correlation")
 
