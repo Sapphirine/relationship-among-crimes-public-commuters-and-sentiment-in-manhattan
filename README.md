@@ -24,7 +24,7 @@ HOST='0.0.0.0' PORT=8080 npm start
 ```
 
 
-## Datasets (total size: ~350 GB)
+## Datasets (total size: ~339.6 GB)
 
 ### 1. Commuters (25.9GB)
 
