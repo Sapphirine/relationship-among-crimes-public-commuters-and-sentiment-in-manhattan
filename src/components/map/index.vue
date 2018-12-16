@@ -160,7 +160,7 @@ export default {
         "Nightmare",
       ],
       StoryContext: [
-        "The heapmaps show dynamic crimes and commuters of Manhattan aggregated by precinct. Twitter roughly shows sentiment of people hour-by-hour in an average week.",
+        "The heapmaps show dynamic crimes and public commuters of Manhattan aggregated by precinct. Twitter roughly shows sentiment of people hour-by-hour in an average week.",
 
         "As people are working, with low commute in the city, they have a low mood around  65% of them feel upset. The criminals focusing on the Washington Square indicates that mostly, the  target of criminal is the tourist.",
 

@@ -26,7 +26,7 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 ## Datasets (total size: ~339.6 GB)
 
-### 1. Commuters (25.9GB)
+### 1. Public Commuters (25.9GB)
 
 - MTA (subway): 
 
@@ -34,7 +34,7 @@ HOST='0.0.0.0' PORT=8080 npm start
         
    - [New York City MTA Station Location](http://web.mta.info/developers/data/nyct/subway/Stations.csv) (very small)
        
-- Taxis: [2014 Yellow Taxi Trip Data](https://data.cityofnewyork.us/Transportation/2014-Yellow-Taxi-Trip-Data/gn7m-em8n) (25GB)
+- Taxis: [NYC 2014 Yellow Taxi Trip Data](https://data.cityofnewyork.us/Transportation/2014-Yellow-Taxi-Trip-Data/gn7m-em8n) (25GB)
 
 ### 2. Crimes (53MB)
 

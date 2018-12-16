@@ -192,15 +192,15 @@ export default {
         "Weekend Safety",
       ],
       StoryContext: [
-        "This visualizationis the bubble plot of number of crimes and number commuters, the size of bubble denotes the number of residents, and color of bubbles represents the area. We measure the correlation using pearson algo.",
+        "This visualizationis the bubble plot of number of crimes and number public commuters, the size of bubble denotes the number of residents, and color of bubbles represents the area. We measure the correlation using pearson algo.",
 
         "The time that crimes happen in a random chance. The purposeless crimes are accompanied with mass communications and less obvious motive baffles investigators. However, the crimes can have more effects at the time lacks the clear clarification of sentiments.",
 
-        "With highest Pearson correlation with value of 0.92 between the commuters and crime, indicates that when there is a shift, there may be a crime happens. People are in negative mood, both make sense for the victims and offenders.",
+        "With highest Pearson correlation with value of 0.92 between the public commuters and crime, indicates that when there is a shift, there may be a crime happens. People are in negative mood, both make sense for the victims and offenders.",
 
-        "Happy weekend is coming, everybody is exciting to move around the city. The population of commuters arrives at the peak. It seems that there is no body cares too much about safety.",
+        "Happy weekend is coming, everybody is exciting to move around the city. The population of public commuters arrives at the peak. It seems that there is no body cares too much about safety.",
 
-        "Relaxing time with high commuters.  A lot of people come to crowd in the downtown. And there is also a risk of unexpected dangers happens Be careful! When you have fun, the criminals may also have fun.",
+        "Relaxing time with high public commuters.  A lot of people come to crowd in the downtown. And there is also a risk of unexpected dangers happens Be careful! When you have fun, the criminals may also have fun.",
       ],
       hourList: [2, 22, 4, 15, 12],
       dayList: ["FRI", "TUE", "THU", "FRI", "SAT"],

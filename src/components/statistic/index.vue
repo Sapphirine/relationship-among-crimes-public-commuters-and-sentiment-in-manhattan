@@ -47,20 +47,20 @@
             </div>
             <div class="card cliente">
               <div id="title">
-                <h4>Commuter Trend</h4>
+                <h4>Public Commuter Trend</h4>
               </div>
               <canvas id="trafficLineCanvas"></canvas>
               <div id="crimeDataText">
                 <div id="dataContainer">
-                  <div style="text-align:left">Current number of commuters:<span style="float:right">{{curr_traffic}}</span></div>
+                  <div style="text-align:left">Current number of public commuters:<span style="float:right">{{curr_traffic}}</span></div>
                   
-                  <div style="text-align:left">Min number of commuters:<span style="float:right">{{min_traffic}}</span></div>
+                  <div style="text-align:left">Min number of public commuters:<span style="float:right">{{min_traffic}}</span></div>
 
-                  <div style="text-align:left">Max number of commuters:<span style="float:right">{{max_traffic}}</span></div>
+                  <div style="text-align:left">Max number of public commuters:<span style="float:right">{{max_traffic}}</span></div>
                   
-                  <div style="text-align:left">Time of min number of commuters:<span style="float:right">{{min_traffic_time}} h</span></div>
+                  <div style="text-align:left">Time of min number of public commuters:<span style="float:right">{{min_traffic_time}} h</span></div>
                   
-                  <div style="text-align:left">Time of max number of commuters:<span style="float:right">{{max_traffic_time}} h</span></div>
+                  <div style="text-align:left">Time of max number of public commuters:<span style="float:right">{{max_traffic_time}} h</span></div>
                   
                   <div style="text-align:left">Ratio of Max to Min:<span style="float:right">{{max_traffic_change}}</span></div>
                 </div>
@@ -533,7 +533,7 @@ export default {
           labels: ["0h","1h","2h","3h","4h","5h","6h","7h","8h","9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h", "22h", "23h"],
           datasets: [{ 
               data: that.getCombineDayData(that.currDay, "traffic", that.currPrecinct),
-              label: "# of commuter",
+              label: "# of public commuter",
               borderColor: "#3e95cd",
               fill: true
             },
