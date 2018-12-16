@@ -26,7 +26,11 @@ HOST='0.0.0.0' PORT=8080 npm start
 
 ## Datasets (total size: ~339.6 GB)
 
-### 1. Public Commuters (25.9GB)
+### 1. Crimes (53MB)
+
+- Crime: [2014-2015 Crimes reported in all 5 boroughs of New York City](https://www.kaggle.com/adamschroeder/crimes-new-york-city#Crime_Column_Description.csv) (53MB)
+
+### 2. Public Commuters (25.9GB)
 
 - MTA (subway): 
 
@@ -36,9 +40,6 @@ HOST='0.0.0.0' PORT=8080 npm start
        
 - Taxis: [NYC 2014 Yellow Taxi Trip Data](https://data.cityofnewyork.us/Transportation/2014-Yellow-Taxi-Trip-Data/gn7m-em8n) (25GB)
 
-### 2. Crimes (53MB)
-
-- Crime: [2014-2015 Crimes reported in all 5 boroughs of New York City](https://www.kaggle.com/adamschroeder/crimes-new-york-city#Crime_Column_Description.csv) (53MB)
 
 ### 3. Sentiment (313.7GB)
 
