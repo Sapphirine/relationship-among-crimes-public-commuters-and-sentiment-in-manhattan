@@ -1,0 +1,9 @@
+node_modules/*
+*/node_modules/*
+relationship-between-population-flow-and-criminal-rate-in-manhattan/src/components/criminal_map/criminal_data_preprocessing/NYPD_Complaint_Data_Historic.csv
+relationship-between-population-flow-and-criminal-rate-in-manhattan/src/components/criminal_map/criminal_data_preprocessing/NYPD_crime_group_by_date.csv
+src/components/criminal_data_preprocessing/NYPD_crime_group_by_date.csv
+src/components/criminal_data_preprocessing/NYPD_Complaint_Data_Historic.csv
+src/components/map/criminal_data_preprocessing/NYPD_Complaint_Data_Historic.csv
+src/components/map/criminal_data_preprocessing/NYPD_crime_group_by_date.csv
+static/data/test.py
