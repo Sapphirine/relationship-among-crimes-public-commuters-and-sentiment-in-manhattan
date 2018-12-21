@@ -16,6 +16,12 @@
 ## Commands
 
 ``` bash
+# Clone repository
+git clone git@github.com:zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan.git
+
+# Make sure you have install git-lfs: https://github.com/git-lfs/git-lfs/wiki/Installation
+git lfs pull
+
 # install dependencies
 npm install
 
@@ -27,7 +33,10 @@ npm run build
 
 # Run it in public in GCP.
 HOST='0.0.0.0' PORT=8080 npm start
+
 ```
+
+
 ## Diagrams
 
 ### System Diagram
