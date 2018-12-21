@@ -11,16 +11,13 @@
 ### Project Proposal: [PDF](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_ProjectProposal.pdf) [PPT](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_ProjectProposal.pptx) [Youtube](https://youtu.be/vOyisfkSr_E)
 
 
-### Final Presentation: [PDF](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pdf) [PPT](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pptx) [Youtube]()
+### Final Presentation: [PDF](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pdf) [PPT](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pptx) [Youtube](https://www.youtube.com/watch?v=PE6IpygEul0)
 
 ## Commands
 
 ``` bash
 # Clone repository
 git clone git@github.com:zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan.git
-
-# Make sure you have install git-lfs: https://github.com/git-lfs/git-lfs/wiki/Installation
-git lfs pull
 
 # install dependencies
 npm install
