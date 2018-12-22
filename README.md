@@ -11,7 +11,7 @@
 ### Project Proposal: [PDF](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_ProjectProposal.pdf) [PPT](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_ProjectProposal.pptx) [Youtube](https://youtu.be/vOyisfkSr_E)
 
 
-### Final Presentation: [PDF](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pdf) [PPT](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pptx) [Youtube](https://www.youtube.com/watch?v=PE6IpygEul0) [Report](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/Relationship_among_Crimes__Commuters__and_Sentiment_in_Manhattan.pdf)
+### Final Presentation: [PDF](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pdf) [PPT](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/BigData_FinalPresentation.pptx) [Youtube](https://youtu.be/B2OQi1AzYzk) [Report](https://github.com/zhichengMLE/relationship-among-crimes-public-commuters-and-sentiment-in-manhattan/blob/master/_reports/Relationship_among_Crimes__Commuters__and_Sentiment_in_Manhattan.pdf)
 
 
 
